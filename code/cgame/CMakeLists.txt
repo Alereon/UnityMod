@@ -31,6 +31,8 @@ set(MVCGAMEHEADERS
 	"${SRCDir}/qcommon/tags.h"
 
 	"${SRCDir}/ghoul2/g2.h"
+
+	"${SRCDir}/cgame/cg_unity.h"
 )
 
 set(MVCGAMESOURCES
@@ -81,6 +83,8 @@ set(MVCGAMESOURCES
 	"${SRCDir}/game/q_shared.c"
 	
 	"${SRCDir}/ui/ui_shared.c"
+
+	"${SRCDir}/cgame/cg_unity.c"
 )
 
 set(MVCGAMEASM
