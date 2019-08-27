@@ -5,6 +5,7 @@
 #include "../game/bg_public.h"
 #include "cg_public.h"
 #include "../ui/keycodes.h" // basejk doesn't make use of the keycodes in cgame, but it still has api functions that could
+#include "cg_unity.h"
 
 
 // The entire cgame module is unloaded and reloaded on each level change,
@@ -1567,6 +1568,12 @@ extern	vmCvar_t		cg_debugBB;
 /*
 Ghoul2 Insert End
 */
+
+//[/Alereon] - UnityMod new cvars.
+extern	vmCvar_t		Uni_DrawClock;
+extern	vmCvar_t		Uni_DrawClockX;
+extern	vmCvar_t		Uni_DrawClockY;
+extern	vmCvar_t		Uni_DrawClockScale;
 
 //
 // cg_main.c

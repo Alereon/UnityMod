@@ -4353,6 +4353,9 @@ static void CG_Draw2D( void ) {
 
 	CG_DrawLagometer();
 
+	//[/Alereon] - Calling UnityMod's HUD functions.
+	Uni_CG_DrawClock();
+
 	if (!cg_paused.integer) {
 		CG_DrawUpperRight();
 	}

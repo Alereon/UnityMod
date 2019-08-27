@@ -587,6 +587,13 @@ vmCvar_t	cg_drawPlayerSprites;
 vmCvar_t	cg_MVSDK;
 vmCvar_t	mvsdk_cgFlags;
 
+
+//[/Alereon] - UnityMod cvars.
+vmCvar_t	Uni_DrawClock;
+vmCvar_t	Uni_DrawClockX;
+vmCvar_t	Uni_DrawClockY;
+vmCvar_t	Uni_DrawClockScale;
+
 typedef struct {
 	vmCvar_t	*vmCvar;
 	char		*cvarName;
@@ -750,6 +757,12 @@ Ghoul2 Insert Start
 /*
 Ghoul2 Insert End
 */
+
+//[/Alereon] - UnityMod new cvars.
+	{ &Uni_DrawClock, "Uni_DrawClock", "1", CVAR_ARCHIVE },
+	{ &Uni_DrawClockX, "Uni_DrawClockX", "581", CVAR_ARCHIVE },
+	{ &Uni_DrawClockY, "Uni_DrawClockY", "310", CVAR_ARCHIVE },
+	{ &Uni_DrawClockScale, "Uni_DrawClockScale", "0.7", CVAR_ARCHIVE },
 };
 
 static int  cvarTableSize = sizeof( cvarTable ) / sizeof( cvarTable[0] );
