@@ -3409,6 +3409,15 @@ static void CG_PlayerSprites( centity_t *cent ) {
 		CG_PlayerFloatSprite( cent, cgs.media.balloonShader );
 		return;
 	}
+
+	//[Alereon] - Draw the sprite above your buddies.
+	if ((cgs.clientinfo[cg.clientNum].unityMod.player.buddies & (1 << cent->currentState.clientNum)) && Uni_drawBuddies.integer & 1)
+	{
+		 CG_PlayerFloatSprite(cent, cgs.media.buddyShader);
+		 return;
+	}
+	//[/Alereon]
+
 /*
 	if ( cent->currentState.eFlags & EF_AWARD_IMPRESSIVE ) {
 		CG_PlayerFloatSprite( cent, cgs.media.medalImpressive );
@@ -7619,6 +7628,18 @@ doEssentialThree:
 		
 		trap_R_AddRefEntityToScene( &legs );
 	}
+
+	if ((cgs.clientinfo[cg.clientNum].unityMod.player.buddies & (1 << cent->currentState.clientNum)) && Uni_drawBuddies.integer >= 2)
+	{
+		legs.shaderRGBA[0] = 0;
+		legs.shaderRGBA[1] = 255;
+		legs.shaderRGBA[2] = 0;
+
+		legs.renderfx |= RF_MINLIGHT;
+		legs.customShader = cgs.media.sightShell;
+		trap_R_AddRefEntityToScene(&legs);
+	}
+
 
 	// Electricity
 	//------------------------------------------------

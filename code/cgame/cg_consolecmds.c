@@ -452,7 +452,10 @@ static consoleCommand_t	commands[] = {
 	{ "invnext", CG_NextInventory_f },
 	{ "invprev", CG_PrevInventory_f },
 	{ "forcenext", CG_NextForcePower_f },
-	{ "forceprev", CG_PrevForcePower_f }
+	{ "forceprev", CG_PrevForcePower_f },
+	//[/Alereon] - UnityMod console commands.
+	{ "buddy", Uni_CG_Buddies },
+	{ "buddylist", Uni_CG_BuddyList }
 };
 
 

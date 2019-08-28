@@ -589,10 +589,11 @@ vmCvar_t	mvsdk_cgFlags;
 
 
 //[/Alereon] - UnityMod cvars.
-vmCvar_t	Uni_DrawClock;
-vmCvar_t	Uni_DrawClockX;
-vmCvar_t	Uni_DrawClockY;
-vmCvar_t	Uni_DrawClockScale;
+vmCvar_t	Uni_drawClock;
+vmCvar_t	Uni_drawClockX;
+vmCvar_t	Uni_drawClockY;
+vmCvar_t	Uni_drawClockScale;
+vmCvar_t	Uni_drawBuddies;
 
 typedef struct {
 	vmCvar_t	*vmCvar;
@@ -759,10 +760,11 @@ Ghoul2 Insert End
 */
 
 //[/Alereon] - UnityMod new cvars.
-	{ &Uni_DrawClock, "Uni_DrawClock", "1", CVAR_ARCHIVE },
-	{ &Uni_DrawClockX, "Uni_DrawClockX", "581", CVAR_ARCHIVE },
-	{ &Uni_DrawClockY, "Uni_DrawClockY", "310", CVAR_ARCHIVE },
-	{ &Uni_DrawClockScale, "Uni_DrawClockScale", "0.7", CVAR_ARCHIVE },
+	{ &Uni_drawClock, "Uni_drawClock", "0", CVAR_ARCHIVE },
+	{ &Uni_drawClockX, "Uni_drawClockX", "0", CVAR_ARCHIVE },
+	{ &Uni_drawClockY, "Uni_drawClockY", "310", CVAR_ARCHIVE },
+	{ &Uni_drawClockScale, "Uni_drawClockScale", "0.7", CVAR_ARCHIVE },
+	{ &Uni_drawBuddies, "Uni_drawBuddies", "0", CVAR_ARCHIVE },
 };
 
 static int  cvarTableSize = sizeof( cvarTable ) / sizeof( cvarTable[0] );
@@ -1240,6 +1242,9 @@ static void CG_RegisterSounds( void ) {
 	cgs.media.surfaceExplosionShader	= trap_R_RegisterShader( "surfaceExplosion" );
 
 	cgs.media.disruptorShader			= trap_R_RegisterShader( "gfx/effects/burn");
+
+	//[/Alereon] - UnityMod shader registering.
+	cgs.media.buddyShader = trap_R_RegisterShader("gfx/misc/buddy");
 
 	if (cg_buildScript.integer)
 	{

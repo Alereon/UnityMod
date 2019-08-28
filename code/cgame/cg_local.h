@@ -542,6 +542,9 @@ typedef struct {
 	int				torsoAnim;
 
 	mvversion_t		jk2gameplay;
+
+	unityMod_t		unityMod;
+
 } clientInfo_t;
 
 
@@ -1220,6 +1223,9 @@ typedef struct {
 	sfxHandle_t	zoomEnd;
 	sfxHandle_t	disruptorZoomLoop;
 
+	//[/Alereon] UnityMod shaders.
+	qhandle_t	buddyShader;
+
 } cgMedia_t;
 
 
@@ -1570,10 +1576,11 @@ Ghoul2 Insert End
 */
 
 //[/Alereon] - UnityMod new cvars.
-extern	vmCvar_t		Uni_DrawClock;
-extern	vmCvar_t		Uni_DrawClockX;
-extern	vmCvar_t		Uni_DrawClockY;
-extern	vmCvar_t		Uni_DrawClockScale;
+extern	vmCvar_t		Uni_drawClock;
+extern	vmCvar_t		Uni_drawClockX;
+extern	vmCvar_t		Uni_drawClockY;
+extern	vmCvar_t		Uni_drawClockScale;
+extern	vmCvar_t		Uni_drawBuddies;
 
 //
 // cg_main.c
