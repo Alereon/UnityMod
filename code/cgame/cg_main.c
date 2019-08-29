@@ -594,6 +594,7 @@ vmCvar_t	Uni_drawClockX;
 vmCvar_t	Uni_drawClockY;
 vmCvar_t	Uni_drawClockScale;
 vmCvar_t	Uni_drawBuddies;
+vmCvar_t	Uni_noChat;
 
 typedef struct {
 	vmCvar_t	*vmCvar;
@@ -765,6 +766,7 @@ Ghoul2 Insert End
 	{ &Uni_drawClockY, "Uni_drawClockY", "310", CVAR_ARCHIVE },
 	{ &Uni_drawClockScale, "Uni_drawClockScale", "0.7", CVAR_ARCHIVE },
 	{ &Uni_drawBuddies, "Uni_drawBuddies", "0", CVAR_ARCHIVE },
+	{ &Uni_noChat, "Uni_noChat", "0", CVAR_ARCHIVE },
 };
 
 static int  cvarTableSize = sizeof( cvarTable ) / sizeof( cvarTable[0] );
