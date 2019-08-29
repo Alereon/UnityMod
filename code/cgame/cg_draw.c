@@ -1842,10 +1842,10 @@ static float CG_DrawFPS( float y ) {
 CG_DrawTimer
 =================
 */
-static float CG_DrawTimer( float y ) {
+static float CG_DrawTimer(float y) {
 	char		*s;
 	int			w;
-	int			mins, seconds, tens;
+	int			mins, seconds, tens, hours, days;
 	int			msec;
 
 	msec = cg.time - cgs.levelStartTime;
@@ -1856,7 +1856,20 @@ static float CG_DrawTimer( float y ) {
 	tens = seconds / 10;
 	seconds -= tens * 10;
 
-	s = va( "%i:%i%i", mins, tens, seconds );
+	if (cg_drawTimer.integer == 1)
+	{
+		s = va("%i:%i%i", mins, tens, seconds);
+	}
+	else if (cg_drawTimer.integer >= 2) //[Alereon /] - Draws the amount of time the server has been running on the current map in days/hours/mins/seconds format.
+	{
+		hours = mins / 60;
+		mins -= hours * 60;
+		days = hours / 24;
+		hours -= days * 24;
+
+		s = va("%i:%i:%i:%i%i", days, hours, mins, tens, seconds);
+	}
+	
 	w = CG_DrawStrlen( s ) * BIGCHAR_WIDTH;
 
 	CG_DrawBigString(cgs.screenWidth - 5 - w, y + 2, s, 1.0f);
