@@ -7309,7 +7309,7 @@ stillDoSaber:
 
 			duelEnt = &cg_entities[cg.snap->ps.duelIndex];
 			
-			if (duelEnt)
+			if (duelEnt && Uni_duelGlow.integer)
 			{
 				vec3_t vecSub;
 				float subLen = 0;

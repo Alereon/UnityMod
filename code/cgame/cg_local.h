@@ -1583,6 +1583,7 @@ extern	vmCvar_t		Uni_drawClockScale;
 extern	vmCvar_t		Uni_drawBuddies;
 extern	vmCvar_t		Uni_noChat;
 extern	vmCvar_t		Uni_chatBleep;
+extern	vmCvar_t		Uni_duelGlow;
 
 //
 // cg_main.c
