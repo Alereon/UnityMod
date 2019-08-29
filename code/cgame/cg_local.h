@@ -1223,7 +1223,7 @@ typedef struct {
 	sfxHandle_t	zoomEnd;
 	sfxHandle_t	disruptorZoomLoop;
 
-	//[/Alereon] UnityMod shaders.
+	//[Alereon /] - UnityMod shaders.
 	qhandle_t	buddyShader;
 
 } cgMedia_t;
@@ -1575,7 +1575,7 @@ extern	vmCvar_t		cg_debugBB;
 Ghoul2 Insert End
 */
 
-//[/Alereon] - UnityMod new cvars.
+//[Alereon /] - UnityMod new cvars.
 extern	vmCvar_t		Uni_drawClock;
 extern	vmCvar_t		Uni_drawClockX;
 extern	vmCvar_t		Uni_drawClockY;

@@ -588,7 +588,7 @@ vmCvar_t	cg_MVSDK;
 vmCvar_t	mvsdk_cgFlags;
 
 
-//[/Alereon] - UnityMod cvars.
+//[Alereon /] - UnityMod cvars.
 vmCvar_t	Uni_drawClock;
 vmCvar_t	Uni_drawClockX;
 vmCvar_t	Uni_drawClockY;
@@ -759,7 +759,7 @@ Ghoul2 Insert Start
 Ghoul2 Insert End
 */
 
-//[/Alereon] - UnityMod new cvars.
+	//[Alereon /] - UnityMod new cvars.
 	{ &Uni_drawClock, "Uni_drawClock", "0", CVAR_ARCHIVE },
 	{ &Uni_drawClockX, "Uni_drawClockX", "0", CVAR_ARCHIVE },
 	{ &Uni_drawClockY, "Uni_drawClockY", "310", CVAR_ARCHIVE },
@@ -1243,7 +1243,7 @@ static void CG_RegisterSounds( void ) {
 
 	cgs.media.disruptorShader			= trap_R_RegisterShader( "gfx/effects/burn");
 
-	//[/Alereon] - UnityMod shader registering.
+	//[Alereon /] - UnityMod shader registering.
 	cgs.media.buddyShader = trap_R_RegisterShader("gfx/misc/buddy");
 
 	if (cg_buildScript.integer)
