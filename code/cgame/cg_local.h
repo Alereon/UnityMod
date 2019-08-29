@@ -1582,6 +1582,7 @@ extern	vmCvar_t		Uni_drawClockY;
 extern	vmCvar_t		Uni_drawClockScale;
 extern	vmCvar_t		Uni_drawBuddies;
 extern	vmCvar_t		Uni_noChat;
+extern	vmCvar_t		Uni_chatBleep;
 
 //
 // cg_main.c
