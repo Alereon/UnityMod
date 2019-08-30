@@ -1576,10 +1576,27 @@ Ghoul2 Insert End
 */
 
 //[Alereon /] - UnityMod new cvars.
+//[Alereon /] - HUD.
 extern	vmCvar_t		Uni_drawClock;
 extern	vmCvar_t		Uni_drawClockX;
 extern	vmCvar_t		Uni_drawClockY;
 extern	vmCvar_t		Uni_drawClockScale;
+
+//[Alereon /] - RGB.
+extern	vmCvar_t		Uni_allowRGB;
+extern	vmCvar_t		Uni_gripArmColourR;
+extern	vmCvar_t		Uni_gripArmColourG;
+extern	vmCvar_t		Uni_gripArmColourB;
+extern	vmCvar_t		Uni_protectColourR;
+extern	vmCvar_t		Uni_protectColourG;
+extern	vmCvar_t		Uni_protectColourB;
+extern	vmCvar_t		Uni_absorbColourR;
+extern	vmCvar_t		Uni_absorbColourG;
+extern	vmCvar_t		Uni_absorbColourB;
+extern	vmCvar_t		Uni_throwColourR;
+extern	vmCvar_t		Uni_throwColourG;
+extern	vmCvar_t		Uni_throwColourB;
+
 extern	vmCvar_t		Uni_drawBuddies;
 extern	vmCvar_t		Uni_noChat;
 extern	vmCvar_t		Uni_chatBleep;

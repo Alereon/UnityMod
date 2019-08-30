@@ -3629,10 +3629,21 @@ void CG_ForcePushBlur( vec3_t org )
 	ex->pos.trTime = cg.time;
 	ex->pos.trType = TR_LINEAR;
 	VectorScale( cg.refdef.viewaxis[1], 55, ex->pos.trDelta );
-		
-	ex->color[0] = 24;
-	ex->color[1] = 32;
-	ex->color[2] = 40;
+
+	//[Alereon] - RGB throw.
+	if (Uni_allowRGB.integer)
+	{
+		ex->color[0] = Com_Clampi(0, 255, Uni_throwColourR.integer);
+		ex->color[1] = Com_Clampi(0, 255, Uni_throwColourG.integer);
+		ex->color[2] = Com_Clampi(0, 255, Uni_throwColourB.integer);
+	}
+	//[Alereon /]
+	else
+	{
+		ex->color[0] = 24;
+		ex->color[1] = 32;
+		ex->color[2] = 40;
+	}
 	ex->refEntity.customShader = trap_R_RegisterShader( "gfx/effects/forcePush" );
 
 	ex = CG_AllocLocalEntity();
@@ -3647,9 +3658,20 @@ void CG_ForcePushBlur( vec3_t org )
 	ex->pos.trType = TR_LINEAR;
 	VectorScale( cg.refdef.viewaxis[1], -55, ex->pos.trDelta );
 		
-	ex->color[0] = 24;
-	ex->color[1] = 32;
-	ex->color[2] = 40;
+	//[Alereon] - RGB throw.
+	if (Uni_allowRGB.integer)
+	{
+		ex->color[0] = Com_Clampi(0, 255, Uni_throwColourR.integer);
+		ex->color[1] = Com_Clampi(0, 255, Uni_throwColourG.integer);
+		ex->color[2] = Com_Clampi(0, 255, Uni_throwColourB.integer);
+	}
+	//[Alereon /]
+	else
+	{
+		ex->color[0] = 24;
+		ex->color[1] = 32;
+		ex->color[2] = 40;
+	}
 	ex->refEntity.customShader = trap_R_RegisterShader( "gfx/effects/forcePush" );
 }
 
@@ -3669,13 +3691,24 @@ void CG_ForceGripEffect( vec3_t org )
 	ex->pos.trType = TR_LINEAR;
 	VectorScale( cg.refdef.viewaxis[1], 55, ex->pos.trDelta );
 		
-	ex->color[0] = 200+((wv*255));
-	if (ex->color[0] > 255)
+	//[Alereon] - RGB grip.
+	if (Uni_allowRGB.integer)
 	{
-		ex->color[0] = 255;
+		ex->color[0] = Com_Clampi(0, 255, Uni_gripArmColourR.integer);
+		ex->color[1] = Com_Clampi(0, 255, Uni_gripArmColourG.integer);
+		ex->color[2] = Com_Clampi(0, 255, Uni_gripArmColourB.integer);
 	}
-	ex->color[1] = 0;
-	ex->color[2] = 0;
+	//[Alereon /]
+	else
+	{
+		ex->color[0] = 200 + ((wv * 255));
+		if (ex->color[0] > 255)
+		{
+			ex->color[0] = 255;
+		}
+		ex->color[1] = 0;
+		ex->color[2] = 0;
+	}
 	ex->refEntity.customShader = trap_R_RegisterShader( "gfx/effects/forcePush" );
 
 	ex = CG_AllocLocalEntity();
@@ -3697,9 +3730,21 @@ void CG_ForceGripEffect( vec3_t org )
 		ex->color[0] = 255;
 	}
 	*/
-	ex->color[0] = 255;
-	ex->color[1] = 255;
-	ex->color[2] = 255;
+
+	//[Alereon] - RGB grip.
+	if (Uni_allowRGB.integer)
+	{
+		ex->color[0] = Com_Clampi(0, 255, Uni_gripArmColourR.integer);
+		ex->color[1] = Com_Clampi(0, 255, Uni_gripArmColourG.integer);
+		ex->color[2] = Com_Clampi(0, 255, Uni_gripArmColourB.integer);
+	}
+	//[Alereon /]
+	else
+	{
+		ex->color[0] = 255;
+		ex->color[1] = 255;
+		ex->color[2] = 255;
+	}
 	ex->refEntity.customShader = cgs.media.redSaberGlowShader;//trap_R_RegisterShader( "gfx/effects/forcePush" );
 }
 
@@ -6716,16 +6761,27 @@ doEssentialTwo:
 				cent->grip_arm.customShader = trap_R_RegisterShader( "gfx/misc/red_portashield" );
 				
 				cent->grip_arm.renderfx |= RF_RGB_TINT;
-				cent->grip_arm.shaderRGBA[0] = 255 - (wv*900);
-				if (cent->grip_arm.shaderRGBA[0] < 30)
+				//[Alereon] - RGB grip.
+				if (Uni_allowRGB.integer)
 				{
-					cent->grip_arm.shaderRGBA[0] = 30;
+					cent->grip_arm.shaderRGBA[0] = Com_Clampi(0, 255, Uni_gripArmColourR.integer);
+					cent->grip_arm.shaderRGBA[1] = Com_Clampi(0, 255, Uni_gripArmColourG.integer);
+					cent->grip_arm.shaderRGBA[2] = Com_Clampi(0, 255, Uni_gripArmColourB.integer);
 				}
-				if (cent->grip_arm.shaderRGBA[0] > 255)
+				//[Alereon /]
+				else
 				{
-					cent->grip_arm.shaderRGBA[0] = 255;
+					cent->grip_arm.shaderRGBA[0] = 255 - (wv * 900);
+					if (cent->grip_arm.shaderRGBA[0] < 30)
+					{
+						cent->grip_arm.shaderRGBA[0] = 30;
+					}
+					if (cent->grip_arm.shaderRGBA[0] > 255)
+					{
+						cent->grip_arm.shaderRGBA[0] = 255;
+					}
+					cent->grip_arm.shaderRGBA[1] = cent->grip_arm.shaderRGBA[2] = cent->grip_arm.shaderRGBA[0];
 				}
-				cent->grip_arm.shaderRGBA[1] = cent->grip_arm.shaderRGBA[2] = cent->grip_arm.shaderRGBA[0];
 				
 				trap_R_AddRefEntityToScene( &cent->grip_arm );
 			}
@@ -7534,10 +7590,22 @@ doEssentialThree:
 	//can tell it apart from the JM/duel shaders, but it's still very obvious.
 	if (cent->currentState.forcePowersActive & (1 << FP_PROTECT))
 	{ //aborb is represented by green..
-		legs.shaderRGBA[0] = 0;
-		legs.shaderRGBA[1] = 255;
-		legs.shaderRGBA[2] = 0;
-		legs.shaderRGBA[3] = 254;
+		//[Alereon] - RGB protect.
+		if (Uni_allowRGB.integer)
+		{
+			legs.shaderRGBA[0] = Com_Clampi(0, 255, Uni_protectColourR.integer);
+			legs.shaderRGBA[1] = Com_Clampi(0, 255, Uni_protectColourG.integer);
+			legs.shaderRGBA[2] = Com_Clampi(0, 255, Uni_protectColourB.integer);
+			legs.shaderRGBA[3] = 254;
+		}
+		//[Alereon /]
+		else
+		{
+			legs.shaderRGBA[0] = 0;
+			legs.shaderRGBA[1] = 255;
+			legs.shaderRGBA[2] = 0;
+			legs.shaderRGBA[3] = 254;
+		}
 
 		legs.renderfx &= ~RF_RGB_TINT;
 		legs.renderfx &= ~RF_FORCE_ENT_ALPHA;
@@ -7549,10 +7617,22 @@ doEssentialThree:
 	//Showing only when the power has been active (absorbed something) recently now, instead of always.
 	if ( (cgs.clientinfo[cent->currentState.number].jk2gameplay == VERSION_1_02 && cent->currentState.forcePowersActive & (1 << FP_ABSORB)) || (cgs.clientinfo[cent->currentState.number].jk2gameplay != VERSION_1_02 && cg_entities[cent->currentState.number].teamPowerEffectTime > cg.time && cg_entities[cent->currentState.number].teamPowerType == TFP_ABSORB) )
 	{ //aborb is represented by blue..
-		legs.shaderRGBA[0] = 0;
-		legs.shaderRGBA[1] = 0;
-		legs.shaderRGBA[2] = 255;
-		legs.shaderRGBA[3] = 254;
+		//[Alereon] - RGB absorb.
+		if (Uni_allowRGB.integer)
+		{
+			legs.shaderRGBA[0] = Com_Clampi(0, 255, Uni_absorbColourR.integer);
+			legs.shaderRGBA[1] = Com_Clampi(0, 255, Uni_absorbColourG.integer);
+			legs.shaderRGBA[2] = Com_Clampi(0, 255, Uni_absorbColourB.integer);
+			legs.shaderRGBA[3] = 254;
+		}
+		//[Alereon /]
+		else
+		{
+			legs.shaderRGBA[0] = 0;
+			legs.shaderRGBA[1] = 0;
+			legs.shaderRGBA[2] = 255;
+			legs.shaderRGBA[3] = 254;
+		}
 
 		legs.renderfx &= ~RF_RGB_TINT;
 		legs.renderfx &= ~RF_FORCE_ENT_ALPHA;

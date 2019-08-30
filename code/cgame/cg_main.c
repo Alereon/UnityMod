@@ -589,10 +589,27 @@ vmCvar_t	mvsdk_cgFlags;
 
 
 //[Alereon /] - UnityMod cvars.
+//[Alereon /] - Hud.
 vmCvar_t	Uni_drawClock;
 vmCvar_t	Uni_drawClockX;
 vmCvar_t	Uni_drawClockY;
 vmCvar_t	Uni_drawClockScale;
+
+//[Alereon /] - RGB.
+vmCvar_t	Uni_allowRGB;
+vmCvar_t	Uni_gripArmColourR;
+vmCvar_t	Uni_gripArmColourG;
+vmCvar_t	Uni_gripArmColourB;
+vmCvar_t	Uni_protectColourR;
+vmCvar_t	Uni_protectColourG;
+vmCvar_t	Uni_protectColourB;
+vmCvar_t	Uni_absorbColourR;
+vmCvar_t	Uni_absorbColourG;
+vmCvar_t	Uni_absorbColourB;
+vmCvar_t	Uni_throwColourR;
+vmCvar_t	Uni_throwColourG;
+vmCvar_t	Uni_throwColourB;
+
 vmCvar_t	Uni_drawBuddies;
 vmCvar_t	Uni_noChat;
 vmCvar_t	Uni_chatBleep;
@@ -763,10 +780,27 @@ Ghoul2 Insert End
 */
 
 	//[Alereon /] - UnityMod new cvars.
+	//[Alereon /] - HUD.
 	{ &Uni_drawClock, "Uni_drawClock", "0", CVAR_ARCHIVE },
 	{ &Uni_drawClockX, "Uni_drawClockX", "0", CVAR_ARCHIVE },
 	{ &Uni_drawClockY, "Uni_drawClockY", "310", CVAR_ARCHIVE },
 	{ &Uni_drawClockScale, "Uni_drawClockScale", "0.7", CVAR_ARCHIVE },
+
+	//[Alereon /] - RGB.
+	{ &Uni_allowRGB, "Uni_allowRGB", "1", CVAR_ARCHIVE },
+	{ &Uni_gripArmColourR, "Uni_gripArmColourR", "255", CVAR_ARCHIVE },
+	{ &Uni_gripArmColourG, "Uni_gripArmColourG", "0", CVAR_ARCHIVE },
+	{ &Uni_gripArmColourB, "Uni_gripArmColourB", "0", CVAR_ARCHIVE },
+	{ &Uni_protectColourR, "Uni_protectColourR", "0", CVAR_ARCHIVE },
+	{ &Uni_protectColourG, "Uni_protectColourG", "255", CVAR_ARCHIVE },
+	{ &Uni_protectColourB, "Uni_protectColourB", "0", CVAR_ARCHIVE },
+	{ &Uni_absorbColourR, "Uni_absorbColourR", "0", CVAR_ARCHIVE },
+	{ &Uni_absorbColourG, "Uni_absorbColourG", "0", CVAR_ARCHIVE },
+	{ &Uni_absorbColourB, "Uni_absorbColourB", "255", CVAR_ARCHIVE },
+	{ &Uni_throwColourR, "Uni_throwColourR", "24", CVAR_ARCHIVE },
+	{ &Uni_throwColourG, "Uni_throwColourG", "32", CVAR_ARCHIVE },
+	{ &Uni_throwColourB, "Uni_throwColourB", "40", CVAR_ARCHIVE },
+
 	{ &Uni_drawBuddies, "Uni_drawBuddies", "0", CVAR_ARCHIVE },
 	{ &Uni_noChat, "Uni_noChat", "0", CVAR_ARCHIVE },
 	{ &Uni_chatBleep, "Uni_chatBleep", "1", CVAR_ARCHIVE },
