@@ -1581,6 +1581,7 @@ extern	vmCvar_t		Uni_drawClock;
 extern	vmCvar_t		Uni_drawClockX;
 extern	vmCvar_t		Uni_drawClockY;
 extern	vmCvar_t		Uni_drawClockScale;
+extern	vmCvar_t		Uni_expandScoreboard;
 
 //[Alereon /] - RGB.
 extern	vmCvar_t		Uni_allowRGB;

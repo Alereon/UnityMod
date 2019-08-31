@@ -595,6 +595,8 @@ vmCvar_t	Uni_drawClockX;
 vmCvar_t	Uni_drawClockY;
 vmCvar_t	Uni_drawClockScale;
 
+vmCvar_t	Uni_expandScoreboard;
+
 //[Alereon /] - RGB.
 vmCvar_t	Uni_allowRGB;
 vmCvar_t	Uni_gripArmColourR;
@@ -785,6 +787,7 @@ Ghoul2 Insert End
 	{ &Uni_drawClockX, "Uni_drawClockX", "0", CVAR_ARCHIVE },
 	{ &Uni_drawClockY, "Uni_drawClockY", "310", CVAR_ARCHIVE },
 	{ &Uni_drawClockScale, "Uni_drawClockScale", "0.7", CVAR_ARCHIVE },
+	{ &Uni_expandScoreboard, "Uni_expandScoreboard", "0", CVAR_ARCHIVE },
 
 	//[Alereon /] - RGB.
 	{ &Uni_allowRGB, "Uni_allowRGB", "1", CVAR_ARCHIVE },
