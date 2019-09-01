@@ -1136,6 +1136,13 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		{ //starting the duel
 			if (es->eventParm == 2)
 			{
+				//[Kevin] - Duel start.
+				if (Uni_duelMessages.integer && cg.clientNum == es->number)
+				{
+					trap_SendConsoleCommand(va("say %s\n", Uni_duelStartMessage.string));
+				}
+				//[/Kevin]
+
 				CG_CenterPrint( CG_GetStripEdString("SVINGAME", "BEGIN_DUEL"), 120, GIANTCHAR_WIDTH*2 );				
 				trap_S_StartLocalSound( cgs.media.countFightSound, CHAN_ANNOUNCER );
 			}
@@ -1147,6 +1154,13 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		else
 		{ //ending the duel
 			CG_StartMusic(qtrue);
+
+			//[Kevin] - Duel end.
+			if (Uni_duelMessages.integer && cg.clientNum == es->number)
+			{
+				trap_SendConsoleCommand(va("say %s\n", Uni_duelEndMessage.string));
+			}
+			//[/Kevin]
 		}
 		break;
 

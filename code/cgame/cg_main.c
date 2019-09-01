@@ -594,7 +594,7 @@ vmCvar_t	Uni_drawClock;
 vmCvar_t	Uni_drawClockX;
 vmCvar_t	Uni_drawClockY;
 vmCvar_t	Uni_drawClockScale;
-
+vmCvar_t	Uni_noChat;
 vmCvar_t	Uni_expandScoreboard;
 
 //[Alereon /] - RGB.
@@ -612,10 +612,15 @@ vmCvar_t	Uni_throwColourR;
 vmCvar_t	Uni_throwColourG;
 vmCvar_t	Uni_throwColourB;
 
-vmCvar_t	Uni_drawBuddies;
-vmCvar_t	Uni_noChat;
-vmCvar_t	Uni_chatBleep;
+//[Kevin /] - Duel
 vmCvar_t	Uni_duelGlow;
+vmCvar_t	Uni_duelMessages;
+vmCvar_t	Uni_duelStartMessage;
+vmCvar_t	Uni_duelEndMessage;
+
+//[Kevin /] - Other
+vmCvar_t	Uni_drawBuddies;
+vmCvar_t	Uni_chatBleep;
 
 typedef struct {
 	vmCvar_t	*vmCvar;
@@ -788,6 +793,7 @@ Ghoul2 Insert End
 	{ &Uni_drawClockY, "Uni_drawClockY", "310", CVAR_ARCHIVE },
 	{ &Uni_drawClockScale, "Uni_drawClockScale", "0.7", CVAR_ARCHIVE },
 	{ &Uni_expandScoreboard, "Uni_expandScoreboard", "0", CVAR_ARCHIVE },
+	{ &Uni_noChat, "Uni_noChat", "0", CVAR_ARCHIVE },
 
 	//[Alereon /] - RGB.
 	{ &Uni_allowRGB, "Uni_allowRGB", "1", CVAR_ARCHIVE },
@@ -804,10 +810,15 @@ Ghoul2 Insert End
 	{ &Uni_throwColourG, "Uni_throwColourG", "32", CVAR_ARCHIVE },
 	{ &Uni_throwColourB, "Uni_throwColourB", "40", CVAR_ARCHIVE },
 
-	{ &Uni_drawBuddies, "Uni_drawBuddies", "0", CVAR_ARCHIVE },
-	{ &Uni_noChat, "Uni_noChat", "0", CVAR_ARCHIVE },
-	{ &Uni_chatBleep, "Uni_chatBleep", "1", CVAR_ARCHIVE },
+	//[Kevin /] - Duel
 	{ &Uni_duelGlow, "Uni_duelGlow", "1", CVAR_ARCHIVE },
+	{ &Uni_duelMessages, "Uni_duelMessages", "0", CVAR_ARCHIVE },
+	{ &Uni_duelStartMessage, "Uni_duelStartMessage", "^1G^7ood ^1l^7uck^1!", CVAR_ARCHIVE },
+	{ &Uni_duelEndMessage, "Uni_duelEndMessage", "^1G^7ood ^1f^7ight^1!", CVAR_ARCHIVE },
+
+	//[Kevin /] - Other
+	{ &Uni_drawBuddies, "Uni_drawBuddies", "0", CVAR_ARCHIVE },
+	{ &Uni_chatBleep, "Uni_chatBleep", "1", CVAR_ARCHIVE },
 };
 
 static int  cvarTableSize = sizeof( cvarTable ) / sizeof( cvarTable[0] );

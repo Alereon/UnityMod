@@ -1581,6 +1581,7 @@ extern	vmCvar_t		Uni_drawClock;
 extern	vmCvar_t		Uni_drawClockX;
 extern	vmCvar_t		Uni_drawClockY;
 extern	vmCvar_t		Uni_drawClockScale;
+extern	vmCvar_t		Uni_noChat;
 extern	vmCvar_t		Uni_expandScoreboard;
 
 //[Alereon /] - RGB.
@@ -1598,10 +1599,15 @@ extern	vmCvar_t		Uni_throwColourR;
 extern	vmCvar_t		Uni_throwColourG;
 extern	vmCvar_t		Uni_throwColourB;
 
-extern	vmCvar_t		Uni_drawBuddies;
-extern	vmCvar_t		Uni_noChat;
-extern	vmCvar_t		Uni_chatBleep;
+//[Kevin /] - Duel.
 extern	vmCvar_t		Uni_duelGlow;
+extern	vmCvar_t		Uni_duelMessages;
+extern	vmCvar_t		Uni_duelStartMessage;
+extern	vmCvar_t		Uni_duelEndMessage;
+
+//[Kevin /] - Other.
+extern	vmCvar_t		Uni_drawBuddies;
+extern	vmCvar_t		Uni_chatBleep;
 
 //
 // cg_main.c
