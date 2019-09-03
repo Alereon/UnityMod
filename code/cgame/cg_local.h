@@ -1604,6 +1604,7 @@ extern	vmCvar_t		Uni_duelGlow;
 extern	vmCvar_t		Uni_duelMessages;
 extern	vmCvar_t		Uni_duelStartMessage;
 extern	vmCvar_t		Uni_duelEndMessage;
+extern	vmCvar_t		Uni_duelMusic;
 
 //[Kevin /] - Other.
 extern	vmCvar_t		Uni_drawBuddies;

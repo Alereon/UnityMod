@@ -129,6 +129,9 @@ char *HolocronIcons[] = {
 int forceModelModificationCount = -1;
 int widescreenModificationCount = -1;
 
+//[Alereon /] Duel music.
+int uniDuelMusicModificationCount = -1;
+
 void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum );
 void CG_Shutdown( void );
 
@@ -617,6 +620,7 @@ vmCvar_t	Uni_duelGlow;
 vmCvar_t	Uni_duelMessages;
 vmCvar_t	Uni_duelStartMessage;
 vmCvar_t	Uni_duelEndMessage;
+vmCvar_t	Uni_duelMusic;
 
 //[Kevin /] - Other
 vmCvar_t	Uni_drawBuddies;
@@ -815,6 +819,7 @@ Ghoul2 Insert End
 	{ &Uni_duelMessages, "Uni_duelMessages", "0", CVAR_ARCHIVE },
 	{ &Uni_duelStartMessage, "Uni_duelStartMessage", "^1G^7ood ^1l^7uck^1!", CVAR_ARCHIVE },
 	{ &Uni_duelEndMessage, "Uni_duelEndMessage", "^1G^7ood ^1f^7ight^1!", CVAR_ARCHIVE },
+	{ &Uni_duelMusic, "Uni_duelMusic", "1", CVAR_ARCHIVE },
 
 	//[Kevin /] - Other
 	{ &Uni_drawBuddies, "Uni_drawBuddies", "0", CVAR_ARCHIVE },
@@ -845,6 +850,9 @@ void CG_RegisterCvars( void ) {
 	forceModelModificationCount = cg_forceModel.modificationCount;
 
 	widescreenModificationCount = cg_widescreen.modificationCount;
+
+	//[Alereon /] = Duel music.
+	uniDuelMusicModificationCount = Uni_duelMusic.modificationCount;
 
 	trap_Cvar_Register(NULL, "model", DEFAULT_MODEL, CVAR_USERINFO | CVAR_ARCHIVE );
 	//trap_Cvar_Register(NULL, "headmodel", DEFAULT_MODEL, CVAR_USERINFO | CVAR_ARCHIVE );
@@ -955,6 +963,20 @@ void CG_UpdateCvars( void ) {
 		widescreenModificationCount = cg_widescreen.modificationCount;
 		CG_UpdateWidescreen();
 	}
+
+	//[Alereon] - Duel music.
+	if (uniDuelMusicModificationCount != Uni_duelMusic.modificationCount) {
+		uniDuelMusicModificationCount = Uni_duelMusic.modificationCount;
+		if (cg.snap->ps.duelInProgress) {
+			if (Uni_duelMusic.integer) {
+				trap_S_StartBackgroundTrack("music/mp/duel.mp3", "music/mp/duel.mp3", qfalse);
+			}
+			else {
+				CG_StartMusic(qtrue);
+			}
+		}
+	}
+	//[/Alereon]
 }
 
 int CG_CrosshairPlayer( void ) {

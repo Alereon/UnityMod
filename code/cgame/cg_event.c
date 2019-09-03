@@ -1132,6 +1132,8 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 			break;
 		}
 
+		CG_Printf("eventParm: %d\n", es->eventParm);
+
 		if (es->eventParm)
 		{ //starting the duel
 			if (es->eventParm == 2)
@@ -1148,7 +1150,12 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 			}
 			else
 			{
-				trap_S_StartBackgroundTrack( "music/mp/duel.mp3", "music/mp/duel.mp3", qfalse );
+				//[Alereon] - Duel music
+				if (Uni_duelMusic.integer)
+				{
+					trap_S_StartBackgroundTrack("music/mp/duel.mp3", "music/mp/duel.mp3", qfalse);
+				}
+				//[/Alereon]
 			}
 		}
 		else
