@@ -27,7 +27,10 @@ typedef struct {
 typedef struct {
 	unityPlayer_t player;
 
+	qboolean mapChange;
 } unityMod_t;
+
+extern unityMod_t unity;
 
 /*
 =================

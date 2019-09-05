@@ -200,7 +200,12 @@ static void CG_ShaderStateChanged( const char *o ) {
 				strncpy(timeOffset, t, o-t);
 				timeOffset[o-t] = 0;
 				o++;
-				trap_R_RemapShader( originalShader, newShader, timeOffset );
+
+				//[Alereon] - Block shader remaps.
+				if (!Uni_blockShaderRemaps.integer) {
+					trap_R_RemapShader(originalShader, newShader, timeOffset);
+				}
+				//[/Alereon]
 			}
 		} else {
 			break;

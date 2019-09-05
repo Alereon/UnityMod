@@ -2,6 +2,8 @@
 
 #include "cg_local.h"
 
+unityMod_t unity;
+
 /*
 =================
 HUD Functions.

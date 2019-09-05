@@ -1132,8 +1132,6 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 			break;
 		}
 
-		CG_Printf("eventParm: %d\n", es->eventParm);
-
 		if (es->eventParm)
 		{ //starting the duel
 			if (es->eventParm == 2)

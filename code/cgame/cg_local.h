@@ -1609,6 +1609,7 @@ extern	vmCvar_t		Uni_duelMusic;
 //[Kevin /] - Other.
 extern	vmCvar_t		Uni_drawBuddies;
 extern	vmCvar_t		Uni_chatBleep;
+extern	vmCvar_t		Uni_blockShaderRemaps;
 
 //
 // cg_main.c

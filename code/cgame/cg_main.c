@@ -129,8 +129,11 @@ char *HolocronIcons[] = {
 int forceModelModificationCount = -1;
 int widescreenModificationCount = -1;
 
-//[Alereon /] Duel music.
+//[Alereon /] - Duel music.
 int uniDuelMusicModificationCount = -1;
+
+//[Alereon /] - Block shader remaps.
+int uniBlockShaderRemapsModificationCount = -1;
 
 void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum );
 void CG_Shutdown( void );
@@ -625,6 +628,7 @@ vmCvar_t	Uni_duelMusic;
 //[Kevin /] - Other
 vmCvar_t	Uni_drawBuddies;
 vmCvar_t	Uni_chatBleep;
+vmCvar_t	Uni_blockShaderRemaps;
 
 typedef struct {
 	vmCvar_t	*vmCvar;
@@ -824,6 +828,7 @@ Ghoul2 Insert End
 	//[Kevin /] - Other
 	{ &Uni_drawBuddies, "Uni_drawBuddies", "0", CVAR_ARCHIVE },
 	{ &Uni_chatBleep, "Uni_chatBleep", "1", CVAR_ARCHIVE },
+	{ &Uni_blockShaderRemaps, "Uni_blockShaderRemaps", "0", CVAR_ARCHIVE },
 };
 
 static int  cvarTableSize = sizeof( cvarTable ) / sizeof( cvarTable[0] );
@@ -851,8 +856,11 @@ void CG_RegisterCvars( void ) {
 
 	widescreenModificationCount = cg_widescreen.modificationCount;
 
-	//[Alereon /] = Duel music.
+	//[Alereon /] - Duel music.
 	uniDuelMusicModificationCount = Uni_duelMusic.modificationCount;
+
+	//[Alereon /] - Block shader remaps.
+	uniBlockShaderRemapsModificationCount = Uni_blockShaderRemaps.modificationCount;
 
 	trap_Cvar_Register(NULL, "model", DEFAULT_MODEL, CVAR_USERINFO | CVAR_ARCHIVE );
 	//trap_Cvar_Register(NULL, "headmodel", DEFAULT_MODEL, CVAR_USERINFO | CVAR_ARCHIVE );
@@ -977,6 +985,17 @@ void CG_UpdateCvars( void ) {
 		}
 	}
 	//[/Alereon]
+
+	//[Alereon] - Block shader remaps.
+	if (uniBlockShaderRemapsModificationCount != Uni_blockShaderRemaps.modificationCount) {
+		uniBlockShaderRemapsModificationCount = Uni_blockShaderRemaps.modificationCount;
+		if (!unity.mapChange) {
+			trap_SendConsoleCommand("vid_restart\n");
+		}
+		unity.mapChange = qfalse;
+	}
+	//[Alereon]
+
 }
 
 int CG_CrosshairPlayer( void ) {
@@ -2565,6 +2584,8 @@ Will perform callbacks to make the loading info screen update.
 */
 void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 	const char	*s;
+	//[Alereon /] - Block shader remaps.
+	char map[MAX_QPATH];
 	int i = 0;
 	
 	// MVSDK: Let's detect which version of the engine we are running in...
@@ -2811,6 +2832,15 @@ Ghoul2 Insert End
 
 	trap_CM_LoadMap( cgs.mapname );
 
+	//[Alereon] - Block shader remaps.
+	trap_Cvar_VariableStringBuffer("Uni_mapName", map, sizeof(map));
+
+	if (strlen(map) && Q_stricmp(map, cgs.mapname)) {
+		trap_Cvar_Set("Uni_blockShaderRemaps", "0");
+		unity.mapChange = qtrue;
+	}
+	//[/Alereon]
+
 	String_Init();
 
 	cg.loading = qtrue;		// force players to load instead of defer
@@ -2869,6 +2899,9 @@ void CG_Shutdown( void )
 
 	// some mods may need to do cleanup work here,
 	// like closing files or archiving session data
+
+	//[Alereon /] - Block shader remaps.
+	trap_Cvar_Set("uni_mapName", cgs.mapname);
 }
 
 
