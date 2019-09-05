@@ -171,3 +171,42 @@ void Uni_CG_BuddyList( void )
 			UNI_SYMBOL_COLOR);
 	}
 }
+
+//[Kevin /] - Draw inventory items live on the HUD.
+void Uni_CG_DrawItemsOnHud( void )
+{
+	int count    = -1;
+	int invsteps = 32;
+	int iconSize = Uni_itemsOnHudScale.integer;
+
+	trap_R_SetColor(NULL);
+
+	if (iconSize > 50)
+	{
+		iconSize = 50;
+	}
+
+	if (Uni_itemsOnHud.integer)
+	{
+		if ((cg.snap->ps.stats[STAT_HOLDABLE_ITEMS] & (1 << HI_MEDPAC)))
+		{
+			count++;
+			CG_DrawPic(Uni_itemsOnHudX.integer - iconSize, Uni_itemsOnHudY.integer + (invsteps * count), iconSize, iconSize, trap_R_RegisterShaderNoMip("gfx/hud/i_icon_bacta"));
+		}
+		if ((cg.snap->ps.stats[STAT_HOLDABLE_ITEMS] & (1 << HI_SENTRY_GUN)))
+		{
+			count++;
+			CG_DrawPic(Uni_itemsOnHudX.integer - iconSize, Uni_itemsOnHudY.integer + (invsteps * count), iconSize, iconSize, trap_R_RegisterShaderNoMip("gfx/hud/i_icon_sentrygun"));
+		}
+		if ((cg.snap->ps.stats[STAT_HOLDABLE_ITEMS] & (1 << HI_SHIELD)))
+		{
+			count++;
+			CG_DrawPic(Uni_itemsOnHudX.integer - iconSize, Uni_itemsOnHudY.integer + (invsteps * count), iconSize, iconSize, trap_R_RegisterShaderNoMip("gfx/hud/i_icon_shieldwall"));
+		}
+		if ((cg.snap->ps.stats[STAT_HOLDABLE_ITEMS] & (1 << HI_SEEKER)))
+		{
+			count++;
+			CG_DrawPic(Uni_itemsOnHudX.integer - iconSize, Uni_itemsOnHudY.integer + (invsteps * count), iconSize, iconSize, trap_R_RegisterShaderNoMip("gfx/hud/i_icon_seeker"));
+		}
+	}
+}

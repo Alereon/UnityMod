@@ -40,6 +40,7 @@ UnityMod function prototypes.
 
 //[Alereon /] - HUD.
 void Uni_CG_DrawClock( void );
+void Uni_CG_DrawItemsOnHud( void );
 
 
 //[Alereon /] - Console commands.

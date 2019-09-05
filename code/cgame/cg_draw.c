@@ -4318,6 +4318,8 @@ static void CG_Draw2D( void ) {
 				CG_DrawStats();
 			}
 
+			Uni_CG_DrawItemsOnHud(); //[Kevin /] - Inventory items on the HUD.
+
 			//Do we want to use this system again at some point?
 			//CG_DrawReward();
 		}

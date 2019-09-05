@@ -1583,6 +1583,10 @@ extern	vmCvar_t		Uni_drawClockY;
 extern	vmCvar_t		Uni_drawClockScale;
 extern	vmCvar_t		Uni_noChat;
 extern	vmCvar_t		Uni_expandScoreboard;
+extern	vmCvar_t		Uni_itemsOnHud;
+extern	vmCvar_t		Uni_itemsOnHudX;
+extern	vmCvar_t		Uni_itemsOnHudY;
+extern	vmCvar_t		Uni_itemsOnHudScale;
 
 //[Alereon /] - RGB.
 extern	vmCvar_t		Uni_allowRGB;
