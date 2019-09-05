@@ -4318,8 +4318,6 @@ static void CG_Draw2D( void ) {
 				CG_DrawStats();
 			}
 
-			Uni_CG_DrawItemsOnHud(); //[Kevin /] - Inventory items on the HUD.
-
 			//Do we want to use this system again at some point?
 			//CG_DrawReward();
 		}
@@ -4369,7 +4367,8 @@ static void CG_Draw2D( void ) {
 	CG_DrawLagometer();
 
 	//[Alereon /] - Calling UnityMod's HUD functions.
-	Uni_CG_DrawClock();
+	Uni_CG_DrawClock(); //[Alereon /] - Clock.
+	Uni_CG_DrawItemsOnHud(); //[Kevin /] - Inventory items on the HUD.
 
 	if (!cg_paused.integer) {
 		CG_DrawUpperRight();

@@ -10,6 +10,7 @@ HUD Functions.
 =================
 */
 
+//[Alereon /] - Draws a clock on the screen.
 void Uni_CG_DrawClock( void )
 {
 	char	*time;
@@ -45,6 +46,35 @@ void Uni_CG_DrawClock( void )
 		time = va("%d%s%s%02d %s", h, (t.tm_sec % 2) ? UNI_SYMBOL_COLOR ":" : " ", UNI_TEXT_COLOR, t.tm_min, pm);
 
 		CG_Text_Paint(cgs.screenWidth - CG_Text_Width(time, Uni_drawClockScale.value, FONT_SMALL) - Uni_drawClockX.integer, Uni_drawClockY.integer, Uni_drawClockScale.value, colorWhite, time, 0, 0, 0, FONT_SMALL);
+	}
+
+	trap_R_SetColor(NULL);
+}
+
+//[Kevin /] - Draw inventory items live on the HUD.
+void Uni_CG_DrawItemsOnHud( void )
+{
+	int count = -1;
+	int iconSize = Uni_drawItemsOnHudScale.integer;
+	int i;
+
+	if (!Uni_drawItemsOnHud.integer)
+	{
+		return;
+	}
+
+	if (iconSize > 50)
+	{
+		iconSize = 50;
+	}
+
+	for (i = 0; i < HI_NUM_HOLDABLE; i++)
+	{
+		if (cg.snap->ps.stats[STAT_HOLDABLE_ITEMS] & (1 << i))
+		{
+			count++;
+			CG_DrawPic(cgs.screenWidth - iconSize - Uni_drawItemsOnHudX.integer, Uni_drawItemsOnHudY.integer + (32 * count), iconSize, iconSize, cgs.media.invenIcons[i]);
+		}
 	}
 
 	trap_R_SetColor(NULL);
@@ -169,44 +199,5 @@ void Uni_CG_BuddyList( void )
 		CG_Printf("%sYou have no buddies at the moment%s.\n", 
 			UNI_TEXT_COLOR,
 			UNI_SYMBOL_COLOR);
-	}
-}
-
-//[Kevin /] - Draw inventory items live on the HUD.
-void Uni_CG_DrawItemsOnHud( void )
-{
-	int count    = -1;
-	int invsteps = 32;
-	int iconSize = Uni_itemsOnHudScale.integer;
-
-	trap_R_SetColor(NULL);
-
-	if (iconSize > 50)
-	{
-		iconSize = 50;
-	}
-
-	if (Uni_itemsOnHud.integer)
-	{
-		if ((cg.snap->ps.stats[STAT_HOLDABLE_ITEMS] & (1 << HI_MEDPAC)))
-		{
-			count++;
-			CG_DrawPic(Uni_itemsOnHudX.integer - iconSize, Uni_itemsOnHudY.integer + (invsteps * count), iconSize, iconSize, trap_R_RegisterShaderNoMip("gfx/hud/i_icon_bacta"));
-		}
-		if ((cg.snap->ps.stats[STAT_HOLDABLE_ITEMS] & (1 << HI_SENTRY_GUN)))
-		{
-			count++;
-			CG_DrawPic(Uni_itemsOnHudX.integer - iconSize, Uni_itemsOnHudY.integer + (invsteps * count), iconSize, iconSize, trap_R_RegisterShaderNoMip("gfx/hud/i_icon_sentrygun"));
-		}
-		if ((cg.snap->ps.stats[STAT_HOLDABLE_ITEMS] & (1 << HI_SHIELD)))
-		{
-			count++;
-			CG_DrawPic(Uni_itemsOnHudX.integer - iconSize, Uni_itemsOnHudY.integer + (invsteps * count), iconSize, iconSize, trap_R_RegisterShaderNoMip("gfx/hud/i_icon_shieldwall"));
-		}
-		if ((cg.snap->ps.stats[STAT_HOLDABLE_ITEMS] & (1 << HI_SEEKER)))
-		{
-			count++;
-			CG_DrawPic(Uni_itemsOnHudX.integer - iconSize, Uni_itemsOnHudY.integer + (invsteps * count), iconSize, iconSize, trap_R_RegisterShaderNoMip("gfx/hud/i_icon_seeker"));
-		}
 	}
 }

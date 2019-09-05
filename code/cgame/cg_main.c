@@ -602,10 +602,10 @@ vmCvar_t	Uni_drawClockY;
 vmCvar_t	Uni_drawClockScale;
 vmCvar_t	Uni_noChat;
 vmCvar_t	Uni_expandScoreboard;
-vmCvar_t	Uni_itemsOnHud;
-vmCvar_t	Uni_itemsOnHudX;
-vmCvar_t	Uni_itemsOnHudY;
-vmCvar_t	Uni_itemsOnHudScale;
+vmCvar_t	Uni_drawItemsOnHud;
+vmCvar_t	Uni_drawItemsOnHudX;
+vmCvar_t	Uni_drawItemsOnHudY;
+vmCvar_t	Uni_drawItemsOnHudScale;
 
 //[Alereon /] - RGB.
 vmCvar_t	Uni_allowRGB;
@@ -806,10 +806,10 @@ Ghoul2 Insert End
 	{ &Uni_drawClockScale, "Uni_drawClockScale", "0.7", CVAR_ARCHIVE },
 	{ &Uni_expandScoreboard, "Uni_expandScoreboard", "0", CVAR_ARCHIVE },
 	{ &Uni_noChat, "Uni_noChat", "0", CVAR_ARCHIVE },
-	{ &Uni_itemsOnHud, "Uni_itemsOnHud", "0", CVAR_ARCHIVE },
-	{ &Uni_itemsOnHudX, "Uni_itemsOnHudX", "640", CVAR_ARCHIVE },
-	{ &Uni_itemsOnHudY, "Uni_itemsOnHudY", "144", CVAR_ARCHIVE },
-	{ &Uni_itemsOnHudScale, "Uni_itemsOnHudScale", "32", CVAR_ARCHIVE },
+	{ &Uni_drawItemsOnHud, "Uni_drawItemsOnHud", "0", CVAR_ARCHIVE },
+	{ &Uni_drawItemsOnHudX, "Uni_itemsOnHudX", "0", CVAR_ARCHIVE },
+	{ &Uni_drawItemsOnHudY, "Uni_itemsOnHudY", "144", CVAR_ARCHIVE },
+	{ &Uni_drawItemsOnHudScale, "Uni_itemsOnHudScale", "32", CVAR_ARCHIVE },
 
 	//[Alereon /] - RGB.
 	{ &Uni_allowRGB, "Uni_allowRGB", "1", CVAR_ARCHIVE },
