@@ -998,7 +998,7 @@ void CG_UpdateCvars( void ) {
 	if (uniBlockShaderRemapsModificationCount != Uni_blockShaderRemaps.modificationCount) {
 		uniBlockShaderRemapsModificationCount = Uni_blockShaderRemaps.modificationCount;
 		if (!unity.mapChange) {
-			trap_SendConsoleCommand("vid_restart\n");
+				trap_SendConsoleCommand("vid_restart\n");
 		}
 		unity.mapChange = qfalse;
 	}

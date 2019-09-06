@@ -180,6 +180,7 @@ static void CG_ShaderStateChanged( const char *o ) {
 	char newShader[MAX_QPATH];
 	char timeOffset[16];
 	char *n,*t;
+	qboolean headLine = qtrue;
 
 	while (o && *o) {
 		n = strstr(o, "=");
@@ -205,11 +206,36 @@ static void CG_ShaderStateChanged( const char *o ) {
 				if (!Uni_blockShaderRemaps.integer) {
 					trap_R_RemapShader(originalShader, newShader, timeOffset);
 				}
+				else {
+					if (headLine) {
+						CG_Printf("%s%s %sBlocked shader remaps %s%s\n\n",
+							UNI_SYMBOL_COLOR,
+							UNI_START_SYMBOL,
+							UNI_TEXT_COLOR,
+							UNI_SYMBOL_COLOR,
+							UNI_END_SYMBOL);
+						headLine = qfalse;
+					}
+					CG_Printf("%s%s %s%s %s%s %s%s %s%s\n",
+						UNI_SYMBOL_COLOR,
+						UNI_START_SYMBOL,
+						UNI_TEXT_COLOR,
+						originalShader,
+						UNI_SYMBOL_COLOR,
+						UNI_SEPARATOR,
+						UNI_TEXT_COLOR,
+						newShader,
+						UNI_SYMBOL_COLOR,
+						UNI_END_SYMBOL);
+				}
 				//[/Alereon]
 			}
 		} else {
 			break;
 		}
+	}
+	if (!headLine) {
+		CG_Printf("\n");
 	}
 }
 
