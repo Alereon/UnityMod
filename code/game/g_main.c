@@ -599,6 +599,8 @@ void G_RegisterCvars( void ) {
 	level.warmupModificationCount = g_warmup.modificationCount;
 
 	MV_UpdateSvFlags();
+
+	Unity_UpdateSvFlags();
 }
 
 /*
@@ -686,6 +688,34 @@ void MV_UpdateSvFlags( void )
 	// Remember the old value
 	lastValue = intValue;
 }
+
+void Unity_UpdateSvFlags(void)
+{
+	// unity_svFlags - Used to inform clients about additional unitymod serverside-features or the compatibility to clientside-features
+	// The concept is identical to the mvsdk_svFlags, but we're using an own string to prevent incompatibilities.
+	static int lastValue = 0;
+	int intValue = 0;
+
+	// Check for the features and determine the flags
+	intValue |= UNITY_SVFLAG_PRIORITY_SHADERSTATE;
+
+	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	// !!! Forks of UnityMod should NOT modify the unity_svFlags                            !!!
+	// !!! Removal, replacement or adding of new flags might lead to incompatibilities     !!!
+	// !!! Forks should define their own infostring, but they can send it through CS_MVSDK !!!
+	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+	// Check if we have to update anything or if we can return already
+	if (intValue == lastValue) return;
+
+	// Update the configstring
+	MV_UpdateMvsdkConfigstring("unity_svFlags", va("%i", intValue));
+
+	// Remember the old value
+	lastValue = intValue;
+}
+
+
 
 /*
 ============

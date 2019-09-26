@@ -1840,9 +1840,9 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 
 	case EV_PLAYER_TELEPORT_OUT:
 		//[Alereon] - Remove buddy when he disconnects.
-		if (cgs.clientinfo[cg.clientNum].unityMod.player.buddies & (1 << cent->currentState.clientNum))
+		if (unity.buddies & (1 << cent->currentState.clientNum))
 		{
-			cgs.clientinfo[cg.clientNum].unityMod.player.buddies ^= (1 << cent->currentState.clientNum);
+			unity.buddies ^= (1 << cent->currentState.clientNum);
 		}
 		//[/Alereon]
 		DEBUGNAME("EV_PLAYER_TELEPORT_OUT");

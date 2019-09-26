@@ -51,6 +51,9 @@
 // mvsdk_cgFlags
 #define MVSDK_CGFLAG_SUBMODEL_WORKAROUND    (1)             // Set by the client in mvsdk_cgFlags to inform the server that it has a workaround for up to 255 submodels (instead of default 127)
 
+//[Alereon /] - UnityMod Flags
+#define UNITY_SVFLAG_PRIORITY_SHADERSTATE	1
+
 //
 // config strings are a general means of communicating variable length strings
 // from the server to all connected clients.
@@ -88,6 +91,8 @@
 #define CS_CLIENT_JEDIMASTER	28		// current jedi master
 #define CS_CLIENT_DUELWINNER	29		// current duel round winner - needed for printing at top of scoreboard
 #define CS_CLIENT_DUELISTS		30		// client numbers for both current duelists. Needed for a number of client-side things.
+
+#define	CS_PRIORITY_SHADERSTATE	31
 
 // these are also in be_aas_def.h - argh (rjr)
 #define	CS_MODELS				32

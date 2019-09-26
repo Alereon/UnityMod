@@ -1675,5 +1675,10 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 	if ( cg_stats.integer ) {
 		CG_Printf( "cg.clientFrame:%i\n", cg.clientFrame );
 	}
+
+	//[Alereon] - Remaps
+	if (unity.remapsUpdated)
+		Uni_CG_ShaderRemaps();
+	//[/Alereon]
 }
 

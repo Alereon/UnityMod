@@ -543,8 +543,6 @@ typedef struct {
 
 	mvversion_t		jk2gameplay;
 
-	unityMod_t		unityMod;
-
 } clientInfo_t;
 
 
@@ -1413,7 +1411,8 @@ Ghoul2 Insert End
 	cgEffects_t		effects;
 
 	int				mvsdk_svFlags;
-
+	//[Alereon /] - UnityMod svFlags
+	int				unity_svFlags;
 } cgs_t;
 
 //==============================================================================
@@ -1614,6 +1613,7 @@ extern	vmCvar_t		Uni_duelMusic;
 extern	vmCvar_t		Uni_drawBuddies;
 extern	vmCvar_t		Uni_chatBleep;
 extern	vmCvar_t		Uni_blockShaderRemaps;
+extern	vmCvar_t		Uni_printShaderInformation;
 
 //
 // cg_main.c
@@ -1913,7 +1913,7 @@ void CG_LoadVoiceChats( void );
 void CG_VoiceChatLocal( int mode, qboolean voiceOnly, int clientNum, int color, const char *cmd );
 void CG_PlayBufferedVoiceChats( void );
 void CG_UpdateConfigString( int num, qboolean init );
-
+void CG_ShaderStateChanged(const char *o, qboolean priority);
 //
 // cg_playerstate.c
 //

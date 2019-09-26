@@ -633,6 +633,7 @@ vmCvar_t	Uni_duelMusic;
 vmCvar_t	Uni_drawBuddies;
 vmCvar_t	Uni_chatBleep;
 vmCvar_t	Uni_blockShaderRemaps;
+vmCvar_t	Uni_printShaderInformation;
 
 typedef struct {
 	vmCvar_t	*vmCvar;
@@ -807,9 +808,9 @@ Ghoul2 Insert End
 	{ &Uni_expandScoreboard, "Uni_expandScoreboard", "0", CVAR_ARCHIVE },
 	{ &Uni_noChat, "Uni_noChat", "0", CVAR_ARCHIVE },
 	{ &Uni_drawItemsOnHud, "Uni_drawItemsOnHud", "0", CVAR_ARCHIVE },
-	{ &Uni_drawItemsOnHudX, "Uni_itemsOnHudX", "0", CVAR_ARCHIVE },
-	{ &Uni_drawItemsOnHudY, "Uni_itemsOnHudY", "144", CVAR_ARCHIVE },
-	{ &Uni_drawItemsOnHudScale, "Uni_itemsOnHudScale", "32", CVAR_ARCHIVE },
+	{ &Uni_drawItemsOnHudX, "Uni_drawItemsOnHudX", "0", CVAR_ARCHIVE },
+	{ &Uni_drawItemsOnHudY, "Uni_drawItemsOnHudY", "144", CVAR_ARCHIVE },
+	{ &Uni_drawItemsOnHudScale, "Uni_drawItemsOnHudScale", "32", CVAR_ARCHIVE },
 
 	//[Alereon /] - RGB.
 	{ &Uni_allowRGB, "Uni_allowRGB", "1", CVAR_ARCHIVE },
@@ -837,6 +838,7 @@ Ghoul2 Insert End
 	{ &Uni_drawBuddies, "Uni_drawBuddies", "0", CVAR_ARCHIVE },
 	{ &Uni_chatBleep, "Uni_chatBleep", "1", CVAR_ARCHIVE },
 	{ &Uni_blockShaderRemaps, "Uni_blockShaderRemaps", "0", CVAR_ARCHIVE },
+	{ &Uni_printShaderInformation, "Uni_printShaderInformation", "0", CVAR_ARCHIVE },
 };
 
 static int  cvarTableSize = sizeof( cvarTable ) / sizeof( cvarTable[0] );
@@ -998,11 +1000,22 @@ void CG_UpdateCvars( void ) {
 	if (uniBlockShaderRemapsModificationCount != Uni_blockShaderRemaps.modificationCount) {
 		uniBlockShaderRemapsModificationCount = Uni_blockShaderRemaps.modificationCount;
 		if (!unity.mapChange) {
+			if ( (!Uni_blockShaderRemaps.integer && Uni_CG_CountRemaps(REMAP_PRIORITY)) || (Uni_blockShaderRemaps.integer && Uni_CG_CountRemaps(REMAP_REGULAR)) )
+			{
+				// When enabling remaps we count the priority remaps. If we have priority remaps we have to do a vid_restart to clean them.
+				// When disabling remaps we count regular remaps and do a vid_restart if we regular remaps.
+				// Only vid_restart if there is remaps to clear.
 				trap_SendConsoleCommand("vid_restart\n");
+			}
+			else
+			{
+				// Let's just parse all remaps again.
+				Uni_CG_ShaderRemaps();
+			}
 		}
 		unity.mapChange = qfalse;
 	}
-	//[Alereon]
+	//[/Alereon]
 
 }
 
@@ -2579,6 +2592,7 @@ void MV_UpdateCgFlags( void )
 void MV_LoadSettings( const char *info )
 { // Load additional settings (like svFlags) if the server supports additional mvsdk features
 	cgs.mvsdk_svFlags = atoi(Info_ValueForKey( info, "mvsdk_svFlags" ));
+	cgs.unity_svFlags = atoi(Info_ValueForKey( info, "unity_svFlags"));
 }
 
 

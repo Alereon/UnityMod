@@ -3411,7 +3411,7 @@ static void CG_PlayerSprites( centity_t *cent ) {
 	}
 
 	//[Alereon] - Draw the sprite above your buddies.
-	if ((cgs.clientinfo[cg.clientNum].unityMod.player.buddies & (1 << cent->currentState.clientNum)) && Uni_drawBuddies.integer & 1)
+	if ((unity.buddies & (1 << cent->currentState.clientNum)) && Uni_drawBuddies.integer & 1)
 	{
 		 CG_PlayerFloatSprite(cent, cgs.media.buddyShader);
 		 return;
@@ -7709,7 +7709,7 @@ doEssentialThree:
 		trap_R_AddRefEntityToScene( &legs );
 	}
 
-	if ((cgs.clientinfo[cg.clientNum].unityMod.player.buddies & (1 << cent->currentState.clientNum)) && Uni_drawBuddies.integer >= 2)
+	if ((unity.buddies & (1 << cent->currentState.clientNum)) && Uni_drawBuddies.integer >= 2)
 	{
 		legs.shaderRGBA[0] = 0;
 		legs.shaderRGBA[1] = 255;

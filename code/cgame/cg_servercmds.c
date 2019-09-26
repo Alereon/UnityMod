@@ -175,12 +175,11 @@ static void CG_ParseServerinfo( const char *info ) {
 CG_ShaderStateChanged
 =====================
 */
-static void CG_ShaderStateChanged( const char *o ) {
+void CG_ShaderStateChanged( const char *o, qboolean priority ) {
 	char originalShader[MAX_QPATH];
 	char newShader[MAX_QPATH];
 	char timeOffset[16];
 	char *n,*t;
-	qboolean headLine = qtrue;
 
 	while (o && *o) {
 		n = strstr(o, "=");
@@ -202,40 +201,13 @@ static void CG_ShaderStateChanged( const char *o ) {
 				timeOffset[o-t] = 0;
 				o++;
 
-				//[Alereon] - Block shader remaps.
-				if (!Uni_blockShaderRemaps.integer) {
-					trap_R_RemapShader(originalShader, newShader, timeOffset);
-				}
-				else {
-					if (headLine) {
-						CG_Printf("%s%s %sBlocked shader remaps %s%s\n\n",
-							UNI_SYMBOL_COLOR,
-							UNI_START_SYMBOL,
-							UNI_TEXT_COLOR,
-							UNI_SYMBOL_COLOR,
-							UNI_END_SYMBOL);
-						headLine = qfalse;
-					}
-					CG_Printf("%s%s %s%s %s%s %s%s %s%s\n",
-						UNI_SYMBOL_COLOR,
-						UNI_START_SYMBOL,
-						UNI_TEXT_COLOR,
-						originalShader,
-						UNI_SYMBOL_COLOR,
-						UNI_SEPARATOR,
-						UNI_TEXT_COLOR,
-						newShader,
-						UNI_SYMBOL_COLOR,
-						UNI_END_SYMBOL);
-				}
-				//[/Alereon]
+				//[Daggolin] - Handle remaps and only do an action now if we can't delay it.
+				if ( Uni_CG_HandleRemap(originalShader, newShader, atof(timeOffset), priority) )
+					trap_R_RemapShader( originalShader, newShader, timeOffset );
 			}
 		} else {
 			break;
 		}
-	}
-	if (!headLine) {
-		CG_Printf("\n");
 	}
 }
 
@@ -399,7 +371,12 @@ void CG_UpdateConfigString( int num, qboolean init )
 			}
 			break;
 		case CS_SHADERSTATE:
-			CG_ShaderStateChanged( str );
+			unity.remapsUpdated = qtrue;
+			break;
+		case CS_PRIORITY_SHADERSTATE:
+			if (cgs.unity_svFlags & UNITY_SVFLAG_PRIORITY_SHADERSTATE) {
+				unity.remapsUpdated = qtrue;
+			}
 			break;
 		case CS_ITEMS:
 			for ( i = 1 ; i < bg_numItems ; i++ ) {

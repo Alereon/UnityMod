@@ -15,8 +15,24 @@ typedef struct {
 int remapCount = 0;
 shaderRemap_t remappedShaders[MAX_SHADER_REMAPS];
 
-void AddRemap(const char *oldShader, const char *newShader, float timeOffset) {
+//[Alereon] - Serverside example of priority remaps.
+int priorityRemapCount = 0;
+shaderRemap_t PriorityremappedShaders[MAX_SHADER_REMAPS];
+//[Alereon/]
+
+void AddRemap(const char *oldShader, const char *newShader, float timeOffset, qboolean priority) {
 	int i;
+
+	//[Alereon] - Serverside example of priority remaps.
+	if (priority)
+		for (i = 0; i < priorityRemapCount; i++) {
+			if (Q_stricmp(oldShader, PriorityremappedShaders[i].oldShader) == 0) {
+				// found it, just update this one
+				strcpy(PriorityremappedShaders[i].newShader, newShader);
+				PriorityremappedShaders[i].timeOffset = timeOffset;
+			}
+		}
+	//[Alereon/]
 
 	for (i = 0; i < remapCount; i++) {
 		if (Q_stricmp(oldShader, remappedShaders[i].oldShader) == 0) {
@@ -27,6 +43,15 @@ void AddRemap(const char *oldShader, const char *newShader, float timeOffset) {
 		}
 	}
 	if (remapCount < MAX_SHADER_REMAPS) {
+		//[Alereon] - Serverside example of priority remaps.
+		if (priority)
+		{
+			strcpy(PriorityremappedShaders[priorityRemapCount].newShader, newShader);
+			strcpy(PriorityremappedShaders[priorityRemapCount].oldShader, oldShader);
+			PriorityremappedShaders[priorityRemapCount].timeOffset = timeOffset;
+			priorityRemapCount++;
+		}
+		//[Alereon/]
 		strcpy(remappedShaders[remapCount].newShader,newShader);
 		strcpy(remappedShaders[remapCount].oldShader,oldShader);
 		remappedShaders[remapCount].timeOffset = timeOffset;
@@ -46,6 +71,21 @@ const char *BuildShaderStateConfig(void) {
 	}
 	return buff;
 }
+
+//[Alereon] - Serverside example of priority remaps.
+const char *BuildPriorityShaderStateConfig(void) {
+	static char	buff[MAX_STRING_CHARS * 4];
+	char out[(MAX_QPATH * 2) + 5];
+	int i;
+
+	memset(buff, 0, MAX_STRING_CHARS);
+	for (i = 0; i < priorityRemapCount; i++) {
+		Com_sprintf(out, (MAX_QPATH * 2) + 5, "%s=%s:%5.2f@", PriorityremappedShaders[i].oldShader, PriorityremappedShaders[i].newShader, PriorityremappedShaders[i].timeOffset);
+		Q_strcat(buff, sizeof(buff), out);
+	}
+	return buff;
+}
+//[Alereon/]
 
 /*
 =========================================================================
@@ -305,7 +345,7 @@ void G_UseTargets( gentity_t *ent, gentity_t *activator ) {
 
 	if (ent->targetShaderName && ent->targetShaderNewName) {
 		float f = level.time * 0.001;
-		AddRemap(ent->targetShaderName, ent->targetShaderNewName, f);
+		AddRemap(ent->targetShaderName, ent->targetShaderNewName, f, qfalse);
 		trap_SetConfigstring(CS_SHADERSTATE, BuildShaderStateConfig());
 	}
 

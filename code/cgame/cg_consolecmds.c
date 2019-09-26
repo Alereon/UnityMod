@@ -455,7 +455,9 @@ static consoleCommand_t	commands[] = {
 	{ "forceprev", CG_PrevForcePower_f },
 	//[Alereon /] - UnityMod console commands.
 	{ "buddy", Uni_CG_Buddies },
-	{ "buddylist", Uni_CG_BuddyList }
+	{ "buddylist", Uni_CG_BuddyList },
+	{ "blockedRemaps", Uni_CG_ListBlockedRemaps },
+	{ "priorityRemaps", Uni_CG_ListPriorityRemaps },
 };
 
 

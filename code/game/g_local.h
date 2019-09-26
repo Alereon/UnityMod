@@ -626,8 +626,10 @@ char	*vtos( const vec3_t v );
 void G_AddPredictableEvent( gentity_t *ent, int event, int eventParm );
 void G_AddEvent( gentity_t *ent, int event, int eventParm );
 void G_SetOrigin( gentity_t *ent, vec3_t origin );
-void AddRemap(const char *oldShader, const char *newShader, float timeOffset);
+void AddRemap(const char *oldShader, const char *newShader, float timeOffset, qboolean priority);
 const char *BuildShaderStateConfig(void);
+const char *BuildPriorityShaderStateConfig(void);
+
 /*
 Ghoul2 Insert Start
 */
@@ -822,6 +824,7 @@ const char *G_GetStripEdString(char *refSection, char *refName);
 
 void MV_UpdateMvsdkConfigstring( char *key, char *value );
 void MV_UpdateSvFlags( void );
+void Unity_UpdateSvFlags(void);
 
 // On linux rand() behaves different than on Winodws or in a qvm, ...
 void mysrand( unsigned seed );
