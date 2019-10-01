@@ -15,15 +15,15 @@ typedef struct {
 int remapCount = 0;
 shaderRemap_t remappedShaders[MAX_SHADER_REMAPS];
 
-//[Alereon] - Serverside example of priority remaps.
+//[Unity] - Serverside example of priority remaps.
 int priorityRemapCount = 0;
 shaderRemap_t PriorityremappedShaders[MAX_SHADER_REMAPS];
-//[Alereon/]
+//[/Unity]
 
 void AddRemap(const char *oldShader, const char *newShader, float timeOffset, qboolean priority) {
 	int i;
 
-	//[Alereon] - Serverside example of priority remaps.
+	//[Unity] - Serverside example of priority remaps.
 	if (priority)
 		for (i = 0; i < priorityRemapCount; i++) {
 			if (Q_stricmp(oldShader, PriorityremappedShaders[i].oldShader) == 0) {
@@ -32,7 +32,7 @@ void AddRemap(const char *oldShader, const char *newShader, float timeOffset, qb
 				PriorityremappedShaders[i].timeOffset = timeOffset;
 			}
 		}
-	//[Alereon/]
+	//[/Unity]
 
 	for (i = 0; i < remapCount; i++) {
 		if (Q_stricmp(oldShader, remappedShaders[i].oldShader) == 0) {
@@ -43,7 +43,7 @@ void AddRemap(const char *oldShader, const char *newShader, float timeOffset, qb
 		}
 	}
 	if (remapCount < MAX_SHADER_REMAPS) {
-		//[Alereon] - Serverside example of priority remaps.
+		//[Unity] - Serverside example of priority remaps.
 		if (priority)
 		{
 			strcpy(PriorityremappedShaders[priorityRemapCount].newShader, newShader);
@@ -51,7 +51,7 @@ void AddRemap(const char *oldShader, const char *newShader, float timeOffset, qb
 			PriorityremappedShaders[priorityRemapCount].timeOffset = timeOffset;
 			priorityRemapCount++;
 		}
-		//[Alereon/]
+		//[/Unity]
 		strcpy(remappedShaders[remapCount].newShader,newShader);
 		strcpy(remappedShaders[remapCount].oldShader,oldShader);
 		remappedShaders[remapCount].timeOffset = timeOffset;
@@ -72,7 +72,7 @@ const char *BuildShaderStateConfig(void) {
 	return buff;
 }
 
-//[Alereon] - Serverside example of priority remaps.
+//[Unity] - Serverside example of priority remaps.
 const char *BuildPriorityShaderStateConfig(void) {
 	static char	buff[MAX_STRING_CHARS * 4];
 	char out[(MAX_QPATH * 2) + 5];
@@ -85,7 +85,7 @@ const char *BuildPriorityShaderStateConfig(void) {
 	}
 	return buff;
 }
-//[Alereon/]
+//[/Unity]
 
 /*
 =========================================================================

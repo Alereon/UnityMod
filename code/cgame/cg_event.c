@@ -1136,36 +1136,36 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		{ //starting the duel
 			if (es->eventParm == 2)
 			{
-				//[Kevin] - Duel start.
+				//[Unity] - Duel start.
 				if (Uni_duelMessages.integer && cg.clientNum == es->number)
 				{
 					trap_SendConsoleCommand(va("say %s\n", Uni_duelStartMessage.string));
 				}
-				//[/Kevin]
+				//[/Unity]
 
 				CG_CenterPrint( CG_GetStripEdString("SVINGAME", "BEGIN_DUEL"), 120, GIANTCHAR_WIDTH*2 );				
 				trap_S_StartLocalSound( cgs.media.countFightSound, CHAN_ANNOUNCER );
 			}
 			else
 			{
-				//[Alereon] - Duel music
+				//[Unity] - Duel music
 				if (Uni_duelMusic.integer)
 				{
 					trap_S_StartBackgroundTrack("music/mp/duel.mp3", "music/mp/duel.mp3", qfalse);
 				}
-				//[/Alereon]
+				//[/Unity]
 			}
 		}
 		else
 		{ //ending the duel
 			CG_StartMusic(qtrue);
 
-			//[Kevin] - Duel end.
+			//[Unity] - Duel end.
 			if (Uni_duelMessages.integer && cg.clientNum == es->number)
 			{
 				trap_SendConsoleCommand(va("say %s\n", Uni_duelEndMessage.string));
 			}
-			//[/Kevin]
+			//[/Unity]
 		}
 		break;
 
@@ -1839,12 +1839,12 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		break;
 
 	case EV_PLAYER_TELEPORT_OUT:
-		//[Alereon] - Remove buddy when he disconnects.
+		//[Unity] - Remove buddy when he disconnects.
 		if (unity.buddies & (1 << cent->currentState.clientNum))
 		{
 			unity.buddies ^= (1 << cent->currentState.clientNum);
 		}
-		//[/Alereon]
+		//[/Unity]
 		DEBUGNAME("EV_PLAYER_TELEPORT_OUT");
 		{
 			trace_t tr;

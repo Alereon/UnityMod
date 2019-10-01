@@ -1,4 +1,4 @@
-//[Alereon /] - cg_unity.h --  header file for UnityMod.
+// cg_unity.h -- header file for UnityMod.
 
 /*
 =================
@@ -6,7 +6,7 @@ UnityMod structs.
 =================
 */
 
-//[Kevin /] - Defines for mod symbols, colours, etc.
+// Defines for mod symbols, colours, etc.
 #define UNI_START_SYMBOL "::"
 #define UNI_END_SYMBOL   "::"
 #define UNI_SEPARATOR    "|"
@@ -17,7 +17,7 @@ UnityMod structs.
 #define UNI_CGAMENAME    "UnityMod"
 #define UNI_CGAMEVERSION UNI_SYMBOL_COLOR UNI_START_SYMBOL " " UNI_TEXT_COLOR UNI_CGAMENAME " " UNI_SYMBOL_COLOR UNI_END_SYMBOL
 
-//[Daggolin /] - Struct for tracking shader remaps.
+// Struct for tracking shader remaps.
 #define MAX_SHADER_REMAPS 256 // Classic game module only does 128 remaps, mods might increase this, but I am not aware of any that do, so doubling it should be enough...
 typedef struct {
 	char oldShader[MAX_QPATH];
@@ -32,13 +32,13 @@ typedef enum {
 	REMAP_PRIORITY
 } unityShaderRemapType_t;
 
-//[Alereon /] - Main struct for everything UnityMod related.
+// Main struct for everything UnityMod related.
 typedef struct {
-	//[Alereon /] - Local.
+	// Local.
 	int					buddies;
 	qboolean			mapChange;
 
-	//[Alereon /] - Remaps.
+	// Remaps.
 	qboolean			remapsUpdated;
 	unityShaderRemap_t	remaps[MAX_SHADER_REMAPS];
 	int					remapsCount;
@@ -52,18 +52,18 @@ UnityMod function prototypes.
 =================
 */
 
-//[Alereon /] - HUD.
+// HUD.
 void Uni_CG_DrawClock( void );
 void Uni_CG_DrawItemsOnHud( void );
 
 
-//[Alereon /] - Console commands.
+// Console commands.
 void Uni_CG_Buddies( void );
 void Uni_CG_BuddyList( void );
 void Uni_CG_ListBlockedRemaps( void );
 void Uni_CG_ListPriorityRemaps( void );
 
-//[Daggolin /] - Remaps.
+// Remaps.
 void Uni_CG_ShaderRemaps( void );
 int Uni_CG_HandleRemap( char *originalShader, char *newShader, float timeOffset, qboolean priority );
 void Uni_CG_HandleChangedRemaps( unityShaderRemapType_t mode );

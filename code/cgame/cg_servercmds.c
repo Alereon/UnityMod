@@ -201,7 +201,7 @@ void CG_ShaderStateChanged( const char *o, qboolean priority ) {
 				timeOffset[o-t] = 0;
 				o++;
 
-				//[Daggolin] - Handle remaps and only do an action now if we can't delay it.
+				//[Unity /] - Handle remaps and only do an action now if we can't delay it.
 				if ( Uni_CG_HandleRemap(originalShader, newShader, atof(timeOffset), priority) )
 					trap_R_RemapShader( originalShader, newShader, timeOffset );
 			}

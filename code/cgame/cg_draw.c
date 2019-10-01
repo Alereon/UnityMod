@@ -1860,7 +1860,7 @@ static float CG_DrawTimer(float y) {
 	{
 		s = va("%i:%i%i", mins, tens, seconds);
 	}
-	else if (cg_drawTimer.integer >= 2) //[Alereon /] - Draws the amount of time the server has been running on the current map in days/hours/mins/seconds format.
+	else if (cg_drawTimer.integer >= 2) //[Unity /] - Draws the amount of time the server has been running on the current map in days/hours/mins/seconds format.
 	{
 		hours = mins / 60;
 		mins -= hours * 60;
@@ -4366,9 +4366,9 @@ static void CG_Draw2D( void ) {
 
 	CG_DrawLagometer();
 
-	//[Alereon /] - Calling UnityMod's HUD functions.
-	Uni_CG_DrawClock(); //[Alereon /] - Clock.
-	Uni_CG_DrawItemsOnHud(); //[Kevin /] - Inventory items on the HUD.
+	//[Unity /] - Calling UnityMod's HUD functions.
+	Uni_CG_DrawClock(); // Clock.
+	Uni_CG_DrawItemsOnHud(); // Inventory items on the HUD.
 
 	if (!cg_paused.integer) {
 		CG_DrawUpperRight();

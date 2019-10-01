@@ -129,10 +129,10 @@ char *HolocronIcons[] = {
 int forceModelModificationCount = -1;
 int widescreenModificationCount = -1;
 
-//[Alereon /] - Duel music.
+//[Unity /] - Duel music.
 int uniDuelMusicModificationCount = -1;
 
-//[Alereon /] - Block shader remaps.
+//[Unity /] - Block shader remaps.
 int uniBlockShaderRemapsModificationCount = -1;
 
 void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum );
@@ -594,8 +594,8 @@ vmCvar_t	cg_MVSDK;
 vmCvar_t	mvsdk_cgFlags;
 
 
-//[Alereon /] - UnityMod cvars.
-//[Alereon /] - Hud.
+//[Unity /] - UnityMod cvars.
+//[Unity /] - Hud.
 vmCvar_t	Uni_drawClock;
 vmCvar_t	Uni_drawClockX;
 vmCvar_t	Uni_drawClockY;
@@ -607,7 +607,7 @@ vmCvar_t	Uni_drawItemsOnHudX;
 vmCvar_t	Uni_drawItemsOnHudY;
 vmCvar_t	Uni_drawItemsOnHudScale;
 
-//[Alereon /] - RGB.
+//[Unity /] - RGB.
 vmCvar_t	Uni_allowRGB;
 vmCvar_t	Uni_gripArmColourR;
 vmCvar_t	Uni_gripArmColourG;
@@ -622,14 +622,14 @@ vmCvar_t	Uni_throwColourR;
 vmCvar_t	Uni_throwColourG;
 vmCvar_t	Uni_throwColourB;
 
-//[Kevin /] - Duel
+//[Unity /] - Duel
 vmCvar_t	Uni_duelGlow;
 vmCvar_t	Uni_duelMessages;
 vmCvar_t	Uni_duelStartMessage;
 vmCvar_t	Uni_duelEndMessage;
 vmCvar_t	Uni_duelMusic;
 
-//[Kevin /] - Other
+//[Unity /] - Other
 vmCvar_t	Uni_drawBuddies;
 vmCvar_t	Uni_chatBleep;
 vmCvar_t	Uni_blockShaderRemaps;
@@ -799,8 +799,8 @@ Ghoul2 Insert Start
 Ghoul2 Insert End
 */
 
-	//[Alereon /] - UnityMod new cvars.
-	//[Alereon /] - HUD.
+	//[Unity /] - UnityMod new cvars.
+	//[Unity /] - HUD.
 	{ &Uni_drawClock, "Uni_drawClock", "0", CVAR_ARCHIVE },
 	{ &Uni_drawClockX, "Uni_drawClockX", "0", CVAR_ARCHIVE },
 	{ &Uni_drawClockY, "Uni_drawClockY", "310", CVAR_ARCHIVE },
@@ -812,7 +812,7 @@ Ghoul2 Insert End
 	{ &Uni_drawItemsOnHudY, "Uni_drawItemsOnHudY", "144", CVAR_ARCHIVE },
 	{ &Uni_drawItemsOnHudScale, "Uni_drawItemsOnHudScale", "32", CVAR_ARCHIVE },
 
-	//[Alereon /] - RGB.
+	//[Unity /] - RGB.
 	{ &Uni_allowRGB, "Uni_allowRGB", "1", CVAR_ARCHIVE },
 	{ &Uni_gripArmColourR, "Uni_gripArmColourR", "255", CVAR_ARCHIVE },
 	{ &Uni_gripArmColourG, "Uni_gripArmColourG", "0", CVAR_ARCHIVE },
@@ -827,14 +827,14 @@ Ghoul2 Insert End
 	{ &Uni_throwColourG, "Uni_throwColourG", "32", CVAR_ARCHIVE },
 	{ &Uni_throwColourB, "Uni_throwColourB", "40", CVAR_ARCHIVE },
 
-	//[Kevin /] - Duel
+	//[Unity /] - Duel
 	{ &Uni_duelGlow, "Uni_duelGlow", "1", CVAR_ARCHIVE },
 	{ &Uni_duelMessages, "Uni_duelMessages", "0", CVAR_ARCHIVE },
 	{ &Uni_duelStartMessage, "Uni_duelStartMessage", "^1G^7ood ^1l^7uck^1!", CVAR_ARCHIVE },
 	{ &Uni_duelEndMessage, "Uni_duelEndMessage", "^1G^7ood ^1f^7ight^1!", CVAR_ARCHIVE },
 	{ &Uni_duelMusic, "Uni_duelMusic", "1", CVAR_ARCHIVE },
 
-	//[Kevin /] - Other
+	//[Unity /] - Other
 	{ &Uni_drawBuddies, "Uni_drawBuddies", "0", CVAR_ARCHIVE },
 	{ &Uni_chatBleep, "Uni_chatBleep", "1", CVAR_ARCHIVE },
 	{ &Uni_blockShaderRemaps, "Uni_blockShaderRemaps", "0", CVAR_ARCHIVE },
@@ -866,10 +866,10 @@ void CG_RegisterCvars( void ) {
 
 	widescreenModificationCount = cg_widescreen.modificationCount;
 
-	//[Alereon /] - Duel music.
+	//[Unity /] - Duel music.
 	uniDuelMusicModificationCount = Uni_duelMusic.modificationCount;
 
-	//[Alereon /] - Block shader remaps.
+	//[Unity /] - Block shader remaps.
 	uniBlockShaderRemapsModificationCount = Uni_blockShaderRemaps.modificationCount;
 
 	trap_Cvar_Register(NULL, "model", DEFAULT_MODEL, CVAR_USERINFO | CVAR_ARCHIVE );
@@ -982,7 +982,7 @@ void CG_UpdateCvars( void ) {
 		CG_UpdateWidescreen();
 	}
 
-	//[Alereon] - Duel music.
+	//[Unity] - Duel music.
 	if (uniDuelMusicModificationCount != Uni_duelMusic.modificationCount) {
 		uniDuelMusicModificationCount = Uni_duelMusic.modificationCount;
 		if (cg.snap->ps.duelInProgress) {
@@ -994,9 +994,9 @@ void CG_UpdateCvars( void ) {
 			}
 		}
 	}
-	//[/Alereon]
+	//[/Unity]
 
-	//[Alereon] - Block shader remaps.
+	//[Unity] - Block shader remaps.
 	if (uniBlockShaderRemapsModificationCount != Uni_blockShaderRemaps.modificationCount) {
 		uniBlockShaderRemapsModificationCount = Uni_blockShaderRemaps.modificationCount;
 		if (!unity.mapChange) {
@@ -1015,7 +1015,7 @@ void CG_UpdateCvars( void ) {
 		}
 		unity.mapChange = qfalse;
 	}
-	//[/Alereon]
+	//[/Unity]
 
 }
 
@@ -1359,7 +1359,7 @@ static void CG_RegisterSounds( void ) {
 
 	cgs.media.disruptorShader			= trap_R_RegisterShader( "gfx/effects/burn");
 
-	//[Alereon /] - UnityMod shader registering.
+	//[Unity /] - UnityMod shader registering.
 	cgs.media.buddyShader = trap_R_RegisterShader("gfx/misc/buddy");
 
 	if (cg_buildScript.integer)
@@ -2606,7 +2606,7 @@ Will perform callbacks to make the loading info screen update.
 */
 void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 	const char	*s;
-	//[Alereon /] - Block shader remaps.
+	//[Unity /] - Block shader remaps.
 	char map[MAX_QPATH];
 	int i = 0;
 	
@@ -2854,14 +2854,14 @@ Ghoul2 Insert End
 
 	trap_CM_LoadMap( cgs.mapname );
 
-	//[Alereon] - Block shader remaps.
+	//[Unity] - Block shader remaps.
 	trap_Cvar_VariableStringBuffer("Uni_mapName", map, sizeof(map));
 
 	if (strlen(map) && Q_stricmp(map, cgs.mapname)) {
 		trap_Cvar_Set("Uni_blockShaderRemaps", "0");
 		unity.mapChange = qtrue;
 	}
-	//[/Alereon]
+	//[/Unity]
 
 	String_Init();
 
@@ -2922,7 +2922,7 @@ void CG_Shutdown( void )
 	// some mods may need to do cleanup work here,
 	// like closing files or archiving session data
 
-	//[Alereon /] - Block shader remaps.
+	//[Unity /] - Block shader remaps.
 	trap_Cvar_Set("Uni_mapName", cgs.mapname);
 }
 

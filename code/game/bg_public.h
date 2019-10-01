@@ -51,7 +51,7 @@
 // mvsdk_cgFlags
 #define MVSDK_CGFLAG_SUBMODEL_WORKAROUND    (1)             // Set by the client in mvsdk_cgFlags to inform the server that it has a workaround for up to 255 submodels (instead of default 127)
 
-//[Alereon /] - UnityMod Flags
+//[Unity /] - UnityMod Flags
 #define UNITY_SVFLAG_PRIORITY_SHADERSTATE	1
 
 //

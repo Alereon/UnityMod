@@ -387,7 +387,7 @@ qboolean CG_DrawOldScoreboard( void ) {
 	y = SB_TOP;
 
 	// If there are more than SB_MAXCLIENTS_NORMAL, use the interleaved scores
-	if ( cg.numScores > SB_MAXCLIENTS_NORMAL || Uni_expandScoreboard.integer ) //[Kevin /] - Expand the size of the scoreboard at will.
+	if ( cg.numScores > SB_MAXCLIENTS_NORMAL || Uni_expandScoreboard.integer ) //[Unity /] - Expand the size of the scoreboard at will.
 	{
 		maxClients = SB_MAXCLIENTS_INTER;
 		lineHeight = SB_INTER_HEIGHT;

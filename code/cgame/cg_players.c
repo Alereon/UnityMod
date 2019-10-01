@@ -3410,13 +3410,13 @@ static void CG_PlayerSprites( centity_t *cent ) {
 		return;
 	}
 
-	//[Alereon] - Draw the sprite above your buddies.
+	//[Unity] - Draw the sprite above your buddies.
 	if ((unity.buddies & (1 << cent->currentState.clientNum)) && Uni_drawBuddies.integer & 1)
 	{
 		 CG_PlayerFloatSprite(cent, cgs.media.buddyShader);
 		 return;
 	}
-	//[/Alereon]
+	//[/Unity]
 
 /*
 	if ( cent->currentState.eFlags & EF_AWARD_IMPRESSIVE ) {
@@ -3630,14 +3630,14 @@ void CG_ForcePushBlur( vec3_t org )
 	ex->pos.trType = TR_LINEAR;
 	VectorScale( cg.refdef.viewaxis[1], 55, ex->pos.trDelta );
 
-	//[Alereon] - RGB throw.
+	//[Unity] - RGB throw.
 	if (Uni_allowRGB.integer)
 	{
 		ex->color[0] = Com_Clampi(0, 255, Uni_throwColourR.integer);
 		ex->color[1] = Com_Clampi(0, 255, Uni_throwColourG.integer);
 		ex->color[2] = Com_Clampi(0, 255, Uni_throwColourB.integer);
 	}
-	//[Alereon /]
+	//[/Unity]
 	else
 	{
 		ex->color[0] = 24;
@@ -3658,14 +3658,14 @@ void CG_ForcePushBlur( vec3_t org )
 	ex->pos.trType = TR_LINEAR;
 	VectorScale( cg.refdef.viewaxis[1], -55, ex->pos.trDelta );
 		
-	//[Alereon] - RGB throw.
+	//[Unity] - RGB throw.
 	if (Uni_allowRGB.integer)
 	{
 		ex->color[0] = Com_Clampi(0, 255, Uni_throwColourR.integer);
 		ex->color[1] = Com_Clampi(0, 255, Uni_throwColourG.integer);
 		ex->color[2] = Com_Clampi(0, 255, Uni_throwColourB.integer);
 	}
-	//[Alereon /]
+	//[/Unity]
 	else
 	{
 		ex->color[0] = 24;
@@ -3691,14 +3691,14 @@ void CG_ForceGripEffect( vec3_t org )
 	ex->pos.trType = TR_LINEAR;
 	VectorScale( cg.refdef.viewaxis[1], 55, ex->pos.trDelta );
 		
-	//[Alereon] - RGB grip.
+	//[Unity] - RGB grip.
 	if (Uni_allowRGB.integer)
 	{
 		ex->color[0] = Com_Clampi(0, 255, Uni_gripArmColourR.integer);
 		ex->color[1] = Com_Clampi(0, 255, Uni_gripArmColourG.integer);
 		ex->color[2] = Com_Clampi(0, 255, Uni_gripArmColourB.integer);
 	}
-	//[Alereon /]
+	//[/Unity]
 	else
 	{
 		ex->color[0] = 200 + ((wv * 255));
@@ -3731,14 +3731,14 @@ void CG_ForceGripEffect( vec3_t org )
 	}
 	*/
 
-	//[Alereon] - RGB grip.
+	//[Unity] - RGB grip.
 	if (Uni_allowRGB.integer)
 	{
 		ex->color[0] = Com_Clampi(0, 255, Uni_gripArmColourR.integer);
 		ex->color[1] = Com_Clampi(0, 255, Uni_gripArmColourG.integer);
 		ex->color[2] = Com_Clampi(0, 255, Uni_gripArmColourB.integer);
 	}
-	//[Alereon /]
+	//[/Unity]
 	else
 	{
 		ex->color[0] = 255;
@@ -6761,14 +6761,14 @@ doEssentialTwo:
 				cent->grip_arm.customShader = trap_R_RegisterShader( "gfx/misc/red_portashield" );
 				
 				cent->grip_arm.renderfx |= RF_RGB_TINT;
-				//[Alereon] - RGB grip.
+				//[Unity] - RGB grip.
 				if (Uni_allowRGB.integer)
 				{
 					cent->grip_arm.shaderRGBA[0] = Com_Clampi(0, 255, Uni_gripArmColourR.integer);
 					cent->grip_arm.shaderRGBA[1] = Com_Clampi(0, 255, Uni_gripArmColourG.integer);
 					cent->grip_arm.shaderRGBA[2] = Com_Clampi(0, 255, Uni_gripArmColourB.integer);
 				}
-				//[Alereon /]
+				//[/Unity]
 				else
 				{
 					cent->grip_arm.shaderRGBA[0] = 255 - (wv * 900);
@@ -7590,7 +7590,7 @@ doEssentialThree:
 	//can tell it apart from the JM/duel shaders, but it's still very obvious.
 	if (cent->currentState.forcePowersActive & (1 << FP_PROTECT))
 	{ //aborb is represented by green..
-		//[Alereon] - RGB protect.
+		//[Unity] - RGB protect.
 		if (Uni_allowRGB.integer)
 		{
 			legs.shaderRGBA[0] = Com_Clampi(0, 255, Uni_protectColourR.integer);
@@ -7598,7 +7598,7 @@ doEssentialThree:
 			legs.shaderRGBA[2] = Com_Clampi(0, 255, Uni_protectColourB.integer);
 			legs.shaderRGBA[3] = 254;
 		}
-		//[Alereon /]
+		//[/Unity]
 		else
 		{
 			legs.shaderRGBA[0] = 0;
@@ -7617,7 +7617,7 @@ doEssentialThree:
 	//Showing only when the power has been active (absorbed something) recently now, instead of always.
 	if ( (cgs.clientinfo[cent->currentState.number].jk2gameplay == VERSION_1_02 && cent->currentState.forcePowersActive & (1 << FP_ABSORB)) || (cgs.clientinfo[cent->currentState.number].jk2gameplay != VERSION_1_02 && cg_entities[cent->currentState.number].teamPowerEffectTime > cg.time && cg_entities[cent->currentState.number].teamPowerType == TFP_ABSORB) )
 	{ //aborb is represented by blue..
-		//[Alereon] - RGB absorb.
+		//[Unity] - RGB absorb.
 		if (Uni_allowRGB.integer)
 		{
 			legs.shaderRGBA[0] = Com_Clampi(0, 255, Uni_absorbColourR.integer);
@@ -7625,7 +7625,7 @@ doEssentialThree:
 			legs.shaderRGBA[2] = Com_Clampi(0, 255, Uni_absorbColourB.integer);
 			legs.shaderRGBA[3] = 254;
 		}
-		//[Alereon /]
+		//[/Unity]
 		else
 		{
 			legs.shaderRGBA[0] = 0;

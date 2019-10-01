@@ -1,4 +1,4 @@
-//[Alereon /] - cg_unity.c -- custom functions used in UnityMod.
+// cg_unity.c -- custom functions used in UnityMod.
 
 #include "cg_local.h"
 
@@ -10,7 +10,7 @@ HUD Functions.
 =================
 */
 
-//[Alereon /] - Draws a clock on the screen.
+// Draws a clock on the screen.
 void Uni_CG_DrawClock( void )
 {
 	char	*time;
@@ -51,7 +51,7 @@ void Uni_CG_DrawClock( void )
 	trap_R_SetColor(NULL);
 }
 
-//[Kevin /] - Draw inventory items live on the HUD.
+// Draw inventory items live on the HUD.
 void Uni_CG_DrawItemsOnHud( void )
 {
 	int count = -1;
@@ -86,7 +86,7 @@ Console command Functions.
 =================
 */
 
-//[Alereon /] - Add/remove buddies.
+// Add/remove buddies.
 void Uni_CG_Buddies( void )
 {
 	int buddy;
@@ -163,7 +163,7 @@ void Uni_CG_Buddies( void )
 		UNI_END_SYMBOL);
 }
 
-//[Alereon /] - Print a list of your current buddies.
+// Print a list of your current buddies.
 void Uni_CG_BuddyList( void )
 {
 	int i;
@@ -200,7 +200,7 @@ void Uni_CG_BuddyList( void )
 	}
 }
 
-//[Kevin /] - Prints a list of current blocked regular remaps.
+// Prints a list of current blocked regular remaps.
 void Uni_CG_ListBlockedRemaps( void )
 {
 	if ( !Uni_blockShaderRemaps.integer )
@@ -211,7 +211,7 @@ void Uni_CG_ListBlockedRemaps( void )
 	Uni_CG_ListRemaps( REMAP_REGULAR );
 }
 
-//[Kevin /] - Prints a list of current priority remaps.
+// Prints a list of current priority remaps.
 void Uni_CG_ListPriorityRemaps( void )
 {
 	if ( !Uni_blockShaderRemaps.integer )
@@ -222,7 +222,7 @@ void Uni_CG_ListPriorityRemaps( void )
 	Uni_CG_ListRemaps( REMAP_PRIORITY );
 }
 
-//[Alereon /] - Handles priority/normal shader remaps.
+// Handles priority/normal shader remaps.
 void Uni_CG_ShaderRemaps( void )
 {
 	// Regular remaps.
@@ -239,7 +239,7 @@ void Uni_CG_ShaderRemaps( void )
 	unity.remapsUpdated = qfalse;
 }
 
-//[Daggolin /] - Shader remap handling.
+// Shader remap handling.
 int Uni_CG_HandleRemap( char *originalShader, char *newShader, float timeOffset, qboolean priority )
 {
 	unityShaderRemap_t *dst = NULL;

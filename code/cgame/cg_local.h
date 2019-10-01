@@ -1221,7 +1221,7 @@ typedef struct {
 	sfxHandle_t	zoomEnd;
 	sfxHandle_t	disruptorZoomLoop;
 
-	//[Alereon /] - UnityMod shaders.
+	//[Unity /] - UnityMod shaders.
 	qhandle_t	buddyShader;
 
 } cgMedia_t;
@@ -1411,7 +1411,7 @@ Ghoul2 Insert End
 	cgEffects_t		effects;
 
 	int				mvsdk_svFlags;
-	//[Alereon /] - UnityMod svFlags
+	//[Unity /] - UnityMod svFlags
 	int				unity_svFlags;
 } cgs_t;
 
@@ -1574,8 +1574,8 @@ extern	vmCvar_t		cg_debugBB;
 Ghoul2 Insert End
 */
 
-//[Alereon /] - UnityMod new cvars.
-//[Alereon /] - HUD.
+//[Unity /] - UnityMod new cvars.
+//[Unity /] - HUD.
 extern	vmCvar_t		Uni_drawClock;
 extern	vmCvar_t		Uni_drawClockX;
 extern	vmCvar_t		Uni_drawClockY;
@@ -1587,7 +1587,7 @@ extern	vmCvar_t		Uni_drawItemsOnHudX;
 extern	vmCvar_t		Uni_drawItemsOnHudY;
 extern	vmCvar_t		Uni_drawItemsOnHudScale;
 
-//[Alereon /] - RGB.
+//[Unity /] - RGB.
 extern	vmCvar_t		Uni_allowRGB;
 extern	vmCvar_t		Uni_gripArmColourR;
 extern	vmCvar_t		Uni_gripArmColourG;
@@ -1602,14 +1602,14 @@ extern	vmCvar_t		Uni_throwColourR;
 extern	vmCvar_t		Uni_throwColourG;
 extern	vmCvar_t		Uni_throwColourB;
 
-//[Kevin /] - Duel.
+//[Unity /] - Duel.
 extern	vmCvar_t		Uni_duelGlow;
 extern	vmCvar_t		Uni_duelMessages;
 extern	vmCvar_t		Uni_duelStartMessage;
 extern	vmCvar_t		Uni_duelEndMessage;
 extern	vmCvar_t		Uni_duelMusic;
 
-//[Kevin /] - Other.
+//[Unity /] - Other.
 extern	vmCvar_t		Uni_drawBuddies;
 extern	vmCvar_t		Uni_chatBleep;
 extern	vmCvar_t		Uni_blockShaderRemaps;
