@@ -72,6 +72,10 @@ void Uni_CG_DrawItemsOnHud( void )
 	{
 		if (cg.snap->ps.stats[STAT_HOLDABLE_ITEMS] & (1 << i))
 		{
+			if (i == HI_DATAPAD || i == HI_NONE)
+			{
+				continue;
+			}
 			count++;
 			CG_DrawPic(cgs.screenWidth - iconSize - Uni_drawItemsOnHudX.integer, Uni_drawItemsOnHudY.integer + (32 * count), iconSize, iconSize, cgs.media.invenIcons[i]);
 		}
