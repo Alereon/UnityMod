@@ -3851,11 +3851,11 @@ static void CG_Draw2D( void ) {
 			{
 				cgRageTime = cg.time;
 			}
-			
+
 			rageTime = (float)(cg.time - cgRageTime);
-			
+
 			rageTime /= 9000;
-			
+
 			if (rageTime < 0)
 			{
 				rageTime = 0;
@@ -3864,17 +3864,17 @@ static void CG_Draw2D( void ) {
 			{
 				rageTime = 0.15;
 			}
-			
+
 			hcolor[3] = rageTime;
 			hcolor[0] = 0.7;
 			hcolor[1] = 0;
 			hcolor[2] = 0;
-			
-			if (!cg.renderingThirdPerson)
+
+			if (!cg.renderingThirdPerson && Uni_firstPersonScreenEffects.integer) //[Unity /] - First person screen effects.
 			{
 				CG_FillRect(0, 0, cgs.screenWidth, SCREEN_HEIGHT, hcolor);
 			}
-			
+
 			cgRageFadeTime = 0;
 			cgRageFadeVal = 0;
 		}
@@ -3885,11 +3885,11 @@ static void CG_Draw2D( void ) {
 				cgRageFadeTime = cg.time;
 				cgRageFadeVal = 0.15;
 			}
-			
+
 			rageTime = cgRageFadeVal;
-			
-			cgRageFadeVal -= (cg.time - cgRageFadeTime)*0.000005;
-			
+
+			cgRageFadeVal -= (cg.time - cgRageFadeTime) * 0.000005;
+
 			if (rageTime < 0)
 			{
 				rageTime = 0;
@@ -3898,18 +3898,18 @@ static void CG_Draw2D( void ) {
 			{
 				rageTime = 0.15;
 			}
-			
+
 			if (cg.snap->ps.fd.forceRageRecoveryTime > cg.time)
 			{
 				float checkRageRecTime = rageTime;
-				
+
 				if (checkRageRecTime < 0.15)
 				{
 					checkRageRecTime = 0.15;
 				}
-				
+
 				hcolor[3] = checkRageRecTime;
-				hcolor[0] = rageTime*4;
+				hcolor[0] = rageTime * 4;
 				if (hcolor[0] < 0.2)
 				{
 					hcolor[0] = 0.2;
@@ -3924,14 +3924,14 @@ static void CG_Draw2D( void ) {
 				hcolor[1] = 0;
 				hcolor[2] = 0;
 			}
-			
-			if (!cg.renderingThirdPerson && rageTime)
+
+			if (!cg.renderingThirdPerson && rageTime && Uni_firstPersonScreenEffects.integer) //[Unity /] - First person screen effects.
 			{
 				CG_FillRect(0, 0, cgs.screenWidth, SCREEN_HEIGHT, hcolor);
 			}
 			else
 			{
-				if (cg.snap->ps.fd.forceRageRecoveryTime > cg.time)
+				if (cg.snap->ps.fd.forceRageRecoveryTime > cg.time && Uni_firstPersonScreenEffects.integer) //[Unity /] - First person screen effects.
 				{
 					hcolor[3] = 0.15;
 					hcolor[0] = 0.2;
@@ -3948,11 +3948,11 @@ static void CG_Draw2D( void ) {
 			{
 				cgRageRecTime = cg.time;
 			}
-			
+
 			rageRecTime = (float)(cg.time - cgRageRecTime);
-			
+
 			rageRecTime /= 9000;
-			
+
 			if (rageRecTime < 0.15)//0)
 			{
 				rageRecTime = 0.15;//0;
@@ -3961,17 +3961,17 @@ static void CG_Draw2D( void ) {
 			{
 				rageRecTime = 0.15;
 			}
-			
+
 			hcolor[3] = rageRecTime;
 			hcolor[0] = 0.2;
 			hcolor[1] = 0.2;
 			hcolor[2] = 0.2;
-			
-			if (!cg.renderingThirdPerson)
+
+			if (!cg.renderingThirdPerson && Uni_firstPersonScreenEffects.integer) //[Unity /] - First person screen effects.
 			{
 				CG_FillRect(0, 0, cgs.screenWidth, SCREEN_HEIGHT, hcolor);
 			}
-			
+
 			cgRageRecFadeTime = 0;
 			cgRageRecFadeVal = 0;
 		}
@@ -3982,11 +3982,11 @@ static void CG_Draw2D( void ) {
 				cgRageRecFadeTime = cg.time;
 				cgRageRecFadeVal = 0.15;
 			}
-			
+
 			rageRecTime = cgRageRecFadeVal;
-			
-			cgRageRecFadeVal -= (cg.time - cgRageRecFadeTime)*0.000005;
-			
+
+			cgRageRecFadeVal -= (cg.time - cgRageRecFadeTime) * 0.000005;
+
 			if (rageRecTime < 0)
 			{
 				rageRecTime = 0;
@@ -3995,13 +3995,13 @@ static void CG_Draw2D( void ) {
 			{
 				rageRecTime = 0.15;
 			}
-			
+
 			hcolor[3] = rageRecTime;
 			hcolor[0] = 0.2;
 			hcolor[1] = 0.2;
 			hcolor[2] = 0.2;
-			
-			if (!cg.renderingThirdPerson && rageRecTime)
+
+			if (!cg.renderingThirdPerson && rageRecTime && Uni_firstPersonScreenEffects.integer) //[Unity /] - First person screen effects.
 			{
 				CG_FillRect(0, 0, cgs.screenWidth, SCREEN_HEIGHT, hcolor);
 			}
@@ -4010,18 +4010,18 @@ static void CG_Draw2D( void ) {
 				cgRageRecTime = 0;
 			}
 		}
-		
+
 		if (cg.snap->ps.fd.forcePowersActive & (1 << FP_ABSORB))
 		{
 			if (!cgAbsorbTime)
 			{
 				cgAbsorbTime = cg.time;
 			}
-			
+
 			absorbTime = (float)(cg.time - cgAbsorbTime);
-			
+
 			absorbTime /= 9000;
-			
+
 			if (absorbTime < 0)
 			{
 				absorbTime = 0;
@@ -4030,17 +4030,17 @@ static void CG_Draw2D( void ) {
 			{
 				absorbTime = 0.15;
 			}
-			
-			hcolor[3] = absorbTime/2;
+
+			hcolor[3] = absorbTime / 2;
 			hcolor[0] = 0;
 			hcolor[1] = 0;
 			hcolor[2] = 0.7;
-			
-			if (!cg.renderingThirdPerson)
+
+			if (!cg.renderingThirdPerson && Uni_firstPersonScreenEffects.integer) //[Unity /] - First person screen effects.
 			{
 				CG_FillRect(0, 0, cgs.screenWidth, SCREEN_HEIGHT, hcolor);
 			}
-			
+
 			cgAbsorbFadeTime = 0;
 			cgAbsorbFadeVal = 0;
 		}
@@ -4051,11 +4051,11 @@ static void CG_Draw2D( void ) {
 				cgAbsorbFadeTime = cg.time;
 				cgAbsorbFadeVal = 0.15;
 			}
-			
+
 			absorbTime = cgAbsorbFadeVal;
-			
-			cgAbsorbFadeVal -= (cg.time - cgAbsorbFadeTime)*0.000005;
-			
+
+			cgAbsorbFadeVal -= (cg.time - cgAbsorbFadeTime) * 0.000005;
+
 			if (absorbTime < 0)
 			{
 				absorbTime = 0;
@@ -4064,13 +4064,13 @@ static void CG_Draw2D( void ) {
 			{
 				absorbTime = 0.15;
 			}
-			
-			hcolor[3] = absorbTime/2;
+
+			hcolor[3] = absorbTime / 2;
 			hcolor[0] = 0;
 			hcolor[1] = 0;
 			hcolor[2] = 0.7;
-			
-			if (!cg.renderingThirdPerson && absorbTime)
+
+			if (!cg.renderingThirdPerson && absorbTime && Uni_firstPersonScreenEffects.integer) //[Unity /] - First person screen effects.
 			{
 				CG_FillRect(0, 0, cgs.screenWidth, SCREEN_HEIGHT, hcolor);
 			}
@@ -4079,18 +4079,18 @@ static void CG_Draw2D( void ) {
 				cgAbsorbTime = 0;
 			}
 		}
-		
+
 		if (cg.snap->ps.fd.forcePowersActive & (1 << FP_PROTECT))
 		{
 			if (!cgProtectTime)
 			{
 				cgProtectTime = cg.time;
 			}
-			
+
 			protectTime = (float)(cg.time - cgProtectTime);
-			
+
 			protectTime /= 9000;
-			
+
 			if (protectTime < 0)
 			{
 				protectTime = 0;
@@ -4099,17 +4099,17 @@ static void CG_Draw2D( void ) {
 			{
 				protectTime = 0.15;
 			}
-			
-			hcolor[3] = protectTime/2;
+
+			hcolor[3] = protectTime / 2;
 			hcolor[0] = 0;
 			hcolor[1] = 0.7;
 			hcolor[2] = 0;
-			
-			if (!cg.renderingThirdPerson)
+
+			if (!cg.renderingThirdPerson && Uni_firstPersonScreenEffects.integer) //[Unity /] - First person screen effects.
 			{
 				CG_FillRect(0, 0, cgs.screenWidth, SCREEN_HEIGHT, hcolor);
 			}
-			
+
 			cgProtectFadeTime = 0;
 			cgProtectFadeVal = 0;
 		}
@@ -4120,11 +4120,11 @@ static void CG_Draw2D( void ) {
 				cgProtectFadeTime = cg.time;
 				cgProtectFadeVal = 0.15;
 			}
-			
+
 			protectTime = cgProtectFadeVal;
-			
-			cgProtectFadeVal -= (cg.time - cgProtectFadeTime)*0.000005;
-			
+
+			cgProtectFadeVal -= (cg.time - cgProtectFadeTime) * 0.000005;
+
 			if (protectTime < 0)
 			{
 				protectTime = 0;
@@ -4133,13 +4133,13 @@ static void CG_Draw2D( void ) {
 			{
 				protectTime = 0.15;
 			}
-			
-			hcolor[3] = protectTime/2;
+
+			hcolor[3] = protectTime / 2;
 			hcolor[0] = 0;
 			hcolor[1] = 0.7;
 			hcolor[2] = 0;
-			
-			if (!cg.renderingThirdPerson && protectTime)
+
+			if (!cg.renderingThirdPerson && protectTime && Uni_firstPersonScreenEffects.integer) //[Unity /] - First person screen effects.
 			{
 				CG_FillRect(0, 0, cgs.screenWidth, SCREEN_HEIGHT, hcolor);
 			}
@@ -4160,11 +4160,11 @@ static void CG_Draw2D( void ) {
 			{
 				cgYsalTime = cg.time;
 			}
-			
+
 			ysalTime = (float)(cg.time - cgYsalTime);
-			
+
 			ysalTime /= 9000;
-			
+
 			if (ysalTime < 0)
 			{
 				ysalTime = 0;
@@ -4173,17 +4173,17 @@ static void CG_Draw2D( void ) {
 			{
 				ysalTime = 0.15;
 			}
-			
-			hcolor[3] = ysalTime/2;
+
+			hcolor[3] = ysalTime / 2;
 			hcolor[0] = 0.7;
 			hcolor[1] = 0.7;
 			hcolor[2] = 0;
-			
-			if (!cg.renderingThirdPerson)
+
+			if (!cg.renderingThirdPerson && Uni_firstPersonScreenEffects.integer) //[Unity /] - First person screen effects.
 			{
 				CG_FillRect(0, 0, cgs.screenWidth, SCREEN_HEIGHT, hcolor);
 			}
-			
+
 			cgYsalFadeTime = 0;
 			cgYsalFadeVal = 0;
 		}
@@ -4194,11 +4194,11 @@ static void CG_Draw2D( void ) {
 				cgYsalFadeTime = cg.time;
 				cgYsalFadeVal = 0.15;
 			}
-			
+
 			ysalTime = cgYsalFadeVal;
-			
-			cgYsalFadeVal -= (cg.time - cgYsalFadeTime)*0.000005;
-			
+
+			cgYsalFadeVal -= (cg.time - cgYsalFadeTime) * 0.000005;
+
 			if (ysalTime < 0)
 			{
 				ysalTime = 0;
@@ -4207,13 +4207,13 @@ static void CG_Draw2D( void ) {
 			{
 				ysalTime = 0.15;
 			}
-			
-			hcolor[3] = ysalTime/2;
+
+			hcolor[3] = ysalTime / 2;
 			hcolor[0] = 0.7;
 			hcolor[1] = 0.7;
 			hcolor[2] = 0;
-			
-			if (!cg.renderingThirdPerson && ysalTime)
+
+			if (!cg.renderingThirdPerson && ysalTime && Uni_firstPersonScreenEffects.integer) //[Unity /] - First person screen effects.
 			{
 				CG_FillRect(0, 0, cgs.screenWidth, SCREEN_HEIGHT, hcolor);
 			}

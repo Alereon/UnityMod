@@ -1580,7 +1580,6 @@ extern	vmCvar_t		Uni_drawClock;
 extern	vmCvar_t		Uni_drawClockX;
 extern	vmCvar_t		Uni_drawClockY;
 extern	vmCvar_t		Uni_drawClockScale;
-extern	vmCvar_t		Uni_noChat;
 extern	vmCvar_t		Uni_expandScoreboard;
 extern	vmCvar_t		Uni_drawItemsOnHud;
 extern	vmCvar_t		Uni_drawItemsOnHudX;
@@ -1610,10 +1609,12 @@ extern	vmCvar_t		Uni_duelEndMessage;
 extern	vmCvar_t		Uni_duelMusic;
 
 //[Unity /] - Other.
+extern	vmCvar_t		Uni_noChat;
 extern	vmCvar_t		Uni_drawBuddies;
 extern	vmCvar_t		Uni_chatBleep;
 extern	vmCvar_t		Uni_blockShaderRemaps;
 extern	vmCvar_t		Uni_printShaderInformation;
+extern	vmCvar_t		Uni_firstPersonScreenEffects;
 
 //
 // cg_main.c

@@ -600,7 +600,6 @@ vmCvar_t	Uni_drawClock;
 vmCvar_t	Uni_drawClockX;
 vmCvar_t	Uni_drawClockY;
 vmCvar_t	Uni_drawClockScale;
-vmCvar_t	Uni_noChat;
 vmCvar_t	Uni_expandScoreboard;
 vmCvar_t	Uni_drawItemsOnHud;
 vmCvar_t	Uni_drawItemsOnHudX;
@@ -630,10 +629,12 @@ vmCvar_t	Uni_duelEndMessage;
 vmCvar_t	Uni_duelMusic;
 
 //[Unity /] - Other
+vmCvar_t	Uni_noChat;
 vmCvar_t	Uni_drawBuddies;
 vmCvar_t	Uni_chatBleep;
 vmCvar_t	Uni_blockShaderRemaps;
 vmCvar_t	Uni_printShaderInformation;
+vmCvar_t	Uni_firstPersonScreenEffects;
 
 typedef struct {
 	vmCvar_t	*vmCvar;
@@ -806,7 +807,6 @@ Ghoul2 Insert End
 	{ &Uni_drawClockY, "Uni_drawClockY", "310", CVAR_ARCHIVE },
 	{ &Uni_drawClockScale, "Uni_drawClockScale", "0.7", CVAR_ARCHIVE },
 	{ &Uni_expandScoreboard, "Uni_expandScoreboard", "0", CVAR_ARCHIVE },
-	{ &Uni_noChat, "Uni_noChat", "0", CVAR_ARCHIVE },
 	{ &Uni_drawItemsOnHud, "Uni_drawItemsOnHud", "0", CVAR_ARCHIVE },
 	{ &Uni_drawItemsOnHudX, "Uni_drawItemsOnHudX", "0", CVAR_ARCHIVE },
 	{ &Uni_drawItemsOnHudY, "Uni_drawItemsOnHudY", "144", CVAR_ARCHIVE },
@@ -835,10 +835,12 @@ Ghoul2 Insert End
 	{ &Uni_duelMusic, "Uni_duelMusic", "1", CVAR_ARCHIVE },
 
 	//[Unity /] - Other
+	{ &Uni_noChat, "Uni_noChat", "0", CVAR_ARCHIVE },
 	{ &Uni_drawBuddies, "Uni_drawBuddies", "0", CVAR_ARCHIVE },
 	{ &Uni_chatBleep, "Uni_chatBleep", "1", CVAR_ARCHIVE },
 	{ &Uni_blockShaderRemaps, "Uni_blockShaderRemaps", "0", CVAR_ARCHIVE },
 	{ &Uni_printShaderInformation, "Uni_printShaderInformation", "0", CVAR_ARCHIVE },
+	{ &Uni_firstPersonScreenEffects, "Uni_firstPersonScreenEffects", "1", CVAR_ARCHIVE },
 };
 
 static int  cvarTableSize = sizeof( cvarTable ) / sizeof( cvarTable[0] );
