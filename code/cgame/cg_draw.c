@@ -838,6 +838,15 @@ static void CG_DrawAmmo(centity_t *cent, float x, float y)
 		return;
 	}
 
+	//[Unity] - Integrate your amount of force points in the HUD.
+	if (Uni_drawForcePoints.integer & 1)
+	{
+		trap_R_SetColor(colorTable[CT_ICON_BLUE]);
+
+		CG_DrawNumField(x + 28, y + 39, 3, cg.snap->ps.fd.forcePower, 6, 12, NUM_FONT_SMALL, qfalse);
+	}
+	//[/Unity]
+
 	if ( cent->currentState.weapon == WP_SABER )
 	{
 		trap_R_SetColor( colorTable[CT_WHITE] );
@@ -910,7 +919,7 @@ static void CG_DrawAmmo(centity_t *cent, float x, float y)
 	numColor_i = CT_HUD_ORANGE;
 
 	trap_R_SetColor( colorTable[numColor_i] );	
-	CG_DrawNumField (x + 30, y + 26, 3, value, 6, 12, NUM_FONT_SMALL,qfalse);
+	CG_DrawNumField (x + 28, y + 26, 3, value, 6, 12, NUM_FONT_SMALL,qfalse);
 
 
 //cg.snap->ps.ammo[weaponData[cg.snap->ps.weapon].ammoIndex]
@@ -4369,6 +4378,16 @@ static void CG_Draw2D( void ) {
 	//[Unity /] - Calling UnityMod's HUD functions.
 	Uni_CG_DrawClock(); // Clock.
 	Uni_CG_DrawItemsOnHud(); // Inventory items on the HUD.
+
+	//[Unity] - Draws your amount of force points on your HUD at the left side per default.
+	if (Uni_drawForcePoints.integer >= 2)
+	{
+		CG_Text_Paint(Uni_drawForcePointsX.integer,
+					  Uni_drawForcePointsY.integer, 
+					  Uni_drawForcePointsScale.value,
+			          colorWhite, va("%iFP", cg.snap->ps.fd.forcePower), 0, 0, 0, 1);
+	}
+	//[/Unity]
 
 	if (!cg_paused.integer) {
 		CG_DrawUpperRight();

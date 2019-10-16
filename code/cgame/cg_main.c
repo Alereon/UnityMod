@@ -605,6 +605,10 @@ vmCvar_t	Uni_drawItemsOnHud;
 vmCvar_t	Uni_drawItemsOnHudX;
 vmCvar_t	Uni_drawItemsOnHudY;
 vmCvar_t	Uni_drawItemsOnHudScale;
+vmCvar_t	Uni_drawForcePoints;
+vmCvar_t	Uni_drawForcePointsX;
+vmCvar_t	Uni_drawForcePointsY;
+vmCvar_t	Uni_drawForcePointsScale;
 
 //[Unity /] - RGB.
 vmCvar_t	Uni_allowRGB;
@@ -801,7 +805,7 @@ Ghoul2 Insert End
 */
 
 	//[Unity /] - UnityMod new cvars.
-	//[Unity /] - HUD.
+	// HUD.
 	{ &Uni_drawClock, "Uni_drawClock", "0", CVAR_ARCHIVE },
 	{ &Uni_drawClockX, "Uni_drawClockX", "0", CVAR_ARCHIVE },
 	{ &Uni_drawClockY, "Uni_drawClockY", "310", CVAR_ARCHIVE },
@@ -811,8 +815,12 @@ Ghoul2 Insert End
 	{ &Uni_drawItemsOnHudX, "Uni_drawItemsOnHudX", "0", CVAR_ARCHIVE },
 	{ &Uni_drawItemsOnHudY, "Uni_drawItemsOnHudY", "144", CVAR_ARCHIVE },
 	{ &Uni_drawItemsOnHudScale, "Uni_drawItemsOnHudScale", "32", CVAR_ARCHIVE },
+	{ &Uni_drawForcePoints, "Uni_drawForcePoints", "0", CVAR_ARCHIVE },
+	{ &Uni_drawForcePointsX, "Uni_drawForcePointsX", "0", CVAR_ARCHIVE },
+	{ &Uni_drawForcePointsY, "Uni_drawForcePointsY", "385", CVAR_ARCHIVE },
+	{ &Uni_drawForcePointsScale, "Uni_drawForcePointsScale", "0.7", CVAR_ARCHIVE },
 
-	//[Unity /] - RGB.
+	// RGB.
 	{ &Uni_allowRGB, "Uni_allowRGB", "1", CVAR_ARCHIVE },
 	{ &Uni_gripArmColourR, "Uni_gripArmColourR", "255", CVAR_ARCHIVE },
 	{ &Uni_gripArmColourG, "Uni_gripArmColourG", "0", CVAR_ARCHIVE },
@@ -827,20 +835,21 @@ Ghoul2 Insert End
 	{ &Uni_throwColourG, "Uni_throwColourG", "32", CVAR_ARCHIVE },
 	{ &Uni_throwColourB, "Uni_throwColourB", "40", CVAR_ARCHIVE },
 
-	//[Unity /] - Duel
+	// Duel
 	{ &Uni_duelGlow, "Uni_duelGlow", "1", CVAR_ARCHIVE },
 	{ &Uni_duelMessages, "Uni_duelMessages", "0", CVAR_ARCHIVE },
 	{ &Uni_duelStartMessage, "Uni_duelStartMessage", "^1G^7ood ^1l^7uck^1!", CVAR_ARCHIVE },
 	{ &Uni_duelEndMessage, "Uni_duelEndMessage", "^1G^7ood ^1f^7ight^1!", CVAR_ARCHIVE },
 	{ &Uni_duelMusic, "Uni_duelMusic", "1", CVAR_ARCHIVE },
 
-	//[Unity /] - Other
+	// Other
 	{ &Uni_noChat, "Uni_noChat", "0", CVAR_ARCHIVE },
 	{ &Uni_drawBuddies, "Uni_drawBuddies", "0", CVAR_ARCHIVE },
 	{ &Uni_chatBleep, "Uni_chatBleep", "1", CVAR_ARCHIVE },
 	{ &Uni_blockShaderRemaps, "Uni_blockShaderRemaps", "0", CVAR_ARCHIVE },
 	{ &Uni_printShaderInformation, "Uni_printShaderInformation", "0", CVAR_ARCHIVE },
 	{ &Uni_firstPersonScreenEffects, "Uni_firstPersonScreenEffects", "1", CVAR_ARCHIVE },
+	//[/Unity]
 };
 
 static int  cvarTableSize = sizeof( cvarTable ) / sizeof( cvarTable[0] );

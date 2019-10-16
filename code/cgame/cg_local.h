@@ -1575,7 +1575,7 @@ Ghoul2 Insert End
 */
 
 //[Unity /] - UnityMod new cvars.
-//[Unity /] - HUD.
+// HUD.
 extern	vmCvar_t		Uni_drawClock;
 extern	vmCvar_t		Uni_drawClockX;
 extern	vmCvar_t		Uni_drawClockY;
@@ -1585,8 +1585,12 @@ extern	vmCvar_t		Uni_drawItemsOnHud;
 extern	vmCvar_t		Uni_drawItemsOnHudX;
 extern	vmCvar_t		Uni_drawItemsOnHudY;
 extern	vmCvar_t		Uni_drawItemsOnHudScale;
+extern	vmCvar_t		Uni_drawForcePoints;
+extern	vmCvar_t		Uni_drawForcePointsX;
+extern	vmCvar_t		Uni_drawForcePointsY;
+extern	vmCvar_t		Uni_drawForcePointsScale;
 
-//[Unity /] - RGB.
+// RGB.
 extern	vmCvar_t		Uni_allowRGB;
 extern	vmCvar_t		Uni_gripArmColourR;
 extern	vmCvar_t		Uni_gripArmColourG;
@@ -1601,20 +1605,21 @@ extern	vmCvar_t		Uni_throwColourR;
 extern	vmCvar_t		Uni_throwColourG;
 extern	vmCvar_t		Uni_throwColourB;
 
-//[Unity /] - Duel.
+// Duel.
 extern	vmCvar_t		Uni_duelGlow;
 extern	vmCvar_t		Uni_duelMessages;
 extern	vmCvar_t		Uni_duelStartMessage;
 extern	vmCvar_t		Uni_duelEndMessage;
 extern	vmCvar_t		Uni_duelMusic;
 
-//[Unity /] - Other.
+// Other.
 extern	vmCvar_t		Uni_noChat;
 extern	vmCvar_t		Uni_drawBuddies;
 extern	vmCvar_t		Uni_chatBleep;
 extern	vmCvar_t		Uni_blockShaderRemaps;
 extern	vmCvar_t		Uni_printShaderInformation;
 extern	vmCvar_t		Uni_firstPersonScreenEffects;
+//[/Unity]
 
 //
 // cg_main.c
