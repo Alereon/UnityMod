@@ -4378,6 +4378,7 @@ static void CG_Draw2D( void ) {
 	//[Unity /] - Calling UnityMod's HUD functions.
 	Uni_CG_DrawClock(); // Clock.
 	Uni_CG_DrawItemsOnHud(); // Inventory items on the HUD.
+	Uni_CG_DrawMovementKeys(); // Movement keys.
 
 	//[Unity] - Draws your amount of force points on your HUD at the left side per default.
 	if (Uni_drawForcePoints.integer >= 2)

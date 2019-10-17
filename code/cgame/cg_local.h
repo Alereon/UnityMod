@@ -1590,6 +1590,12 @@ extern	vmCvar_t		Uni_drawForcePointsX;
 extern	vmCvar_t		Uni_drawForcePointsY;
 extern	vmCvar_t		Uni_drawForcePointsScale;
 
+// Strafe.
+extern	vmCvar_t		Uni_drawMovementKeys;
+extern	vmCvar_t		Uni_drawMovementKeysX;
+extern	vmCvar_t		Uni_drawMovementKeysY;
+extern	vmCvar_t		Uni_drawMovementKeysScale;
+
 // RGB.
 extern	vmCvar_t		Uni_allowRGB;
 extern	vmCvar_t		Uni_gripArmColourR;

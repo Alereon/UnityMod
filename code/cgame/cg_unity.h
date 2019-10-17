@@ -56,6 +56,8 @@ UnityMod function prototypes.
 void Uni_CG_DrawClock( void );
 void Uni_CG_DrawItemsOnHud( void );
 
+// Strafe.
+void Uni_CG_DrawMovementKeys( void );
 
 // Console commands.
 void Uni_CG_Buddies( void );

@@ -5,9 +5,9 @@
 unityMod_t unity;
 
 /*
-=================
+==============
 HUD Functions.
-=================
+==============
 */
 
 // Draws a clock on the screen.
@@ -86,8 +86,94 @@ void Uni_CG_DrawItemsOnHud( void )
 
 /*
 =================
-Console command Functions.
+Strafe Functions.
 =================
+*/
+
+// Draw movement keys.
+void Uni_CG_DrawMovementKeys( void )
+{
+	usercmd_t cmd = { 0 };
+	char str1[32] = { 0 }, str2[32] = { 0 };
+	float scale = Uni_drawMovementKeysScale.value;
+
+	if (!Uni_drawMovementKeys.integer || !cg.snap)
+	{
+		return;
+	}
+
+	if (cg.clientNum == cg.predictedPlayerState.clientNum && !cg.demoPlayback)
+	{
+		trap_GetUserCmd(trap_GetCurrentCmdNumber(), &cmd);
+	}
+	else 
+	{
+		int moveDir = cg.snap->ps.movementDir;
+		float xyspeed = sqrt(cg.snap->ps.velocity[0] * cg.snap->ps.velocity[0] + cg.snap->ps.velocity[1] * cg.snap->ps.velocity[1]);
+
+		if ((cg.snap->ps.pm_flags & PMF_JUMP_HELD))
+		{
+			cmd.upmove = 1;
+		}
+		else if ((cg.snap->ps.pm_flags & PMF_DUCKED))
+		{
+			cmd.upmove = -1;
+		}
+
+		if (xyspeed < 10)
+		{
+			moveDir = -1;
+		}
+
+		switch (moveDir)
+		{
+			case 0: // W
+				cmd.forwardmove = 1;
+				break;
+			case 1: // WA
+				cmd.forwardmove = 1;
+				cmd.rightmove = -1;
+				break;
+			case 2: // A
+				cmd.rightmove = -1;
+				break;
+			case 3: // AS
+				cmd.rightmove = -1;
+				cmd.forwardmove = -1;
+				break;
+			case 4: // S
+				cmd.forwardmove = -1;
+				break;
+			case 5: // SD
+				cmd.forwardmove = -1;
+				cmd.rightmove = 1;
+				break;
+			case 6: // D
+				cmd.rightmove = 1;
+				break;
+			case 7: // DW
+				cmd.rightmove = 1;
+				cmd.forwardmove = 1;
+				break;
+			default:
+				break;
+		}
+	}
+
+	Com_sprintf(str1, sizeof(str1), va("^%cc ^%cW ^%cj", (cmd.upmove < 0) ? COLOR_RED : COLOR_WHITE,
+		(cmd.forwardmove > 0) ? COLOR_RED : COLOR_WHITE, (cmd.upmove > 0) ? COLOR_RED : COLOR_WHITE));
+	Com_sprintf(str2, sizeof(str2), va("^%cA ^%cS ^%cD", (cmd.rightmove < 0) ? COLOR_RED : COLOR_WHITE,
+		(cmd.forwardmove < 0) ? COLOR_RED : COLOR_WHITE, (cmd.rightmove > 0) ? COLOR_RED : COLOR_WHITE));
+
+	scale *= 0.5;
+	CG_Text_Paint(Uni_drawMovementKeysX.integer - MAX(cgs.screenWidth - CG_Text_Width("c W j", scale, 0), cgs.screenWidth - CG_Text_Width("A S D", scale, 0)) / 2.0f, Uni_drawMovementKeysY.integer + scale * BIGCHAR_HEIGHT, scale, colorWhite, str1, 0.5, 0, 0, FONT_NONE);
+	CG_Text_Paint(Uni_drawMovementKeysX.integer - MAX(cgs.screenWidth - CG_Text_Width("c W j", scale, 0), cgs.screenWidth - CG_Text_Width("A S D", scale, 0)) / 2.0f, Uni_drawMovementKeysY.integer + scale * BIGCHAR_HEIGHT + CG_Text_Height("A S D c W j", scale, 0) + scale * BIGCHAR_HEIGHT, scale, colorWhite, str2, 0.5, 0, 0, FONT_NONE);
+}
+
+/*
+==========================
+Console command Functions.
+==========================
 */
 
 // Add/remove buddies.
@@ -401,7 +487,7 @@ int Uni_CG_CountRemaps( unityShaderRemapType_t type )
 }
 
 #if 0
-void Uni_CG_RemoveRemap(char *originalShader)
+void Uni_CG_RemoveRemap( char *originalShader )
 {
 	// NOTE: We don't really need to remove remaps. Theoretically a server can remove remaps from its configstrings, but
 	//       they still stay active till the next video restart or until the server overrides them again. So even if a
@@ -411,7 +497,7 @@ void Uni_CG_RemoveRemap(char *originalShader)
 }
 #endif
 
-void Uni_CG_CleanRemaps(void)
+void Uni_CG_CleanRemaps( void )
 {
 	// NOTE: We can simply cleanup all remaps that are no longer in the configstrings by pretending we don't know any
 	//       remaps and rebuilding our array using the configstrings. However if the server removes remaps from its

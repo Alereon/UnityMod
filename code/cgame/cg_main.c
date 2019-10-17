@@ -610,6 +610,12 @@ vmCvar_t	Uni_drawForcePointsX;
 vmCvar_t	Uni_drawForcePointsY;
 vmCvar_t	Uni_drawForcePointsScale;
 
+//[Unity /] - Strafe.
+vmCvar_t	Uni_drawMovementKeys;
+vmCvar_t	Uni_drawMovementKeysX;
+vmCvar_t	Uni_drawMovementKeysY;
+vmCvar_t	Uni_drawMovementKeysScale;
+
 //[Unity /] - RGB.
 vmCvar_t	Uni_allowRGB;
 vmCvar_t	Uni_gripArmColourR;
@@ -819,6 +825,12 @@ Ghoul2 Insert End
 	{ &Uni_drawForcePointsX, "Uni_drawForcePointsX", "0", CVAR_ARCHIVE },
 	{ &Uni_drawForcePointsY, "Uni_drawForcePointsY", "385", CVAR_ARCHIVE },
 	{ &Uni_drawForcePointsScale, "Uni_drawForcePointsScale", "0.7", CVAR_ARCHIVE },
+
+	// Strafe.
+	{ &Uni_drawMovementKeys, "Uni_drawMovementKeys", "0", CVAR_ARCHIVE },
+	{ &Uni_drawMovementKeysX, "Uni_drawMovementKeysX", "1050", CVAR_ARCHIVE },
+	{ &Uni_drawMovementKeysY, "Uni_drawMovementKeysY", "425", CVAR_ARCHIVE },
+	{ &Uni_drawMovementKeysScale, "Uni_drawMovementKeysScale", "1.3", CVAR_ARCHIVE },
 
 	// RGB.
 	{ &Uni_allowRGB, "Uni_allowRGB", "1", CVAR_ARCHIVE },
