@@ -615,6 +615,11 @@ vmCvar_t	Uni_drawMovementKeys;
 vmCvar_t	Uni_drawMovementKeysX;
 vmCvar_t	Uni_drawMovementKeysY;
 vmCvar_t	Uni_drawMovementKeysScale;
+vmCvar_t	Uni_drawSpeedometer;
+vmCvar_t	Uni_drawSpeedometerX;
+vmCvar_t	Uni_drawSpeedometerY;
+vmCvar_t	Uni_drawSpeedometerScale;
+vmCvar_t	Uni_drawAvgSpeed;
 
 //[Unity /] - RGB.
 vmCvar_t	Uni_allowRGB;
@@ -822,15 +827,20 @@ Ghoul2 Insert End
 	{ &Uni_drawItemsOnHudY, "Uni_drawItemsOnHudY", "144", CVAR_ARCHIVE },
 	{ &Uni_drawItemsOnHudScale, "Uni_drawItemsOnHudScale", "32", CVAR_ARCHIVE },
 	{ &Uni_drawForcePoints, "Uni_drawForcePoints", "0", CVAR_ARCHIVE },
-	{ &Uni_drawForcePointsX, "Uni_drawForcePointsX", "0", CVAR_ARCHIVE },
+	{ &Uni_drawForcePointsX, "Uni_drawForcePointsX", "818", CVAR_ARCHIVE },
 	{ &Uni_drawForcePointsY, "Uni_drawForcePointsY", "385", CVAR_ARCHIVE },
 	{ &Uni_drawForcePointsScale, "Uni_drawForcePointsScale", "0.7", CVAR_ARCHIVE },
 
 	// Strafe.
 	{ &Uni_drawMovementKeys, "Uni_drawMovementKeys", "0", CVAR_ARCHIVE },
-	{ &Uni_drawMovementKeysX, "Uni_drawMovementKeysX", "1050", CVAR_ARCHIVE },
+	{ &Uni_drawMovementKeysX, "Uni_drawMovementKeysX", "220", CVAR_ARCHIVE },
 	{ &Uni_drawMovementKeysY, "Uni_drawMovementKeysY", "425", CVAR_ARCHIVE },
 	{ &Uni_drawMovementKeysScale, "Uni_drawMovementKeysScale", "1.3", CVAR_ARCHIVE },
+	{ &Uni_drawSpeedometer, "Uni_drawSpeedometer", "0", CVAR_ARCHIVE },
+	{ &Uni_drawSpeedometerX, "Uni_drawSpeedometerX", "630", CVAR_ARCHIVE },
+	{ &Uni_drawSpeedometerY, "Uni_drawSpeedometerY", "430", CVAR_ARCHIVE },
+	{ &Uni_drawSpeedometerScale, "Uni_drawSpeedometerScale", "0.75", CVAR_ARCHIVE },
+	{ &Uni_drawAvgSpeed, "Uni_drawAvgSpeed", "0", CVAR_ARCHIVE },
 
 	// RGB.
 	{ &Uni_allowRGB, "Uni_allowRGB", "1", CVAR_ARCHIVE },

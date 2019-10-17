@@ -5,7 +5,6 @@
 #include "../game/bg_public.h"
 #include "cg_public.h"
 #include "../ui/keycodes.h" // basejk doesn't make use of the keycodes in cgame, but it still has api functions that could
-#include "cg_unity.h"
 
 
 // The entire cgame module is unloaded and reloaded on each level change,
@@ -1595,6 +1594,11 @@ extern	vmCvar_t		Uni_drawMovementKeys;
 extern	vmCvar_t		Uni_drawMovementKeysX;
 extern	vmCvar_t		Uni_drawMovementKeysY;
 extern	vmCvar_t		Uni_drawMovementKeysScale;
+extern	vmCvar_t		Uni_drawSpeedometer;
+extern	vmCvar_t		Uni_drawSpeedometerX;
+extern	vmCvar_t		Uni_drawSpeedometerY;
+extern	vmCvar_t		Uni_drawSpeedometerScale;
+extern	vmCvar_t		Uni_drawAvgSpeed;
 
 // RGB.
 extern	vmCvar_t		Uni_allowRGB;
@@ -2350,3 +2354,4 @@ void trap_MVAPI_SetVirtualScreen( float w, float h );                // Level: 3
 
 #include "../api/mvapi.h"
 #include "cg_multiversion.h"
+#include "cg_unity.h" //[Unity /] - Include UnityMod header file.

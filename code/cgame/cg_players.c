@@ -1038,6 +1038,14 @@ void CG_NewClientInfo( int clientNum, qboolean entitiesInitialized ) {
 	v = Info_ValueForKey( configstring, "t" );
 	newInfo.team = atoi( v );
 
+	//[Unity] - Reset on team change.
+	if (ci && newInfo.team != ci->team)
+	{
+		unity.player[clientNum].strafe.avgSpeed = 0;
+		unity.player[clientNum].strafe.maxSpeed = 0;
+	}
+	//[/Unity]
+
 	// team task
 	v = Info_ValueForKey( configstring, "tt" );
 	newInfo.teamTask = atoi(v);

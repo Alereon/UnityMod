@@ -32,11 +32,26 @@ typedef enum {
 	REMAP_PRIORITY
 } unityShaderRemapType_t;
 
+// Struct for anything related to strafing.
+#define ACCEL_SAMPLES 16
+typedef struct {
+	float		maxSpeed, currentSpeed;
+	float		avgSpeed, avgSpeedSamp;
+} unityStrafe_t;
+
+// Player struct to act as hub for any player related information.
+typedef struct {
+	unityStrafe_t strafe;
+} unityPlayer_t;
+
 // Main struct for everything UnityMod related.
 typedef struct {
 	// Local.
 	int					buddies;
 	qboolean			mapChange;
+
+	// Player.
+	unityPlayer_t		player[MAX_CLIENTS];
 
 	// Remaps.
 	qboolean			remapsUpdated;
@@ -58,12 +73,15 @@ void Uni_CG_DrawItemsOnHud( void );
 
 // Strafe.
 void Uni_CG_DrawMovementKeys( void );
+void Uni_CG_Speedometer( centity_t *cent );
 
 // Console commands.
 void Uni_CG_Buddies( void );
 void Uni_CG_BuddyList( void );
 void Uni_CG_ListBlockedRemaps( void );
 void Uni_CG_ListPriorityRemaps( void );
+void Uni_CG_ResetMaxSpeed( void );
+void Uni_CG_ResetAverageSpeed( void );
 
 // Remaps.
 void Uni_CG_ShaderRemaps( void );
@@ -71,3 +89,6 @@ int Uni_CG_HandleRemap( char *originalShader, char *newShader, float timeOffset,
 void Uni_CG_HandleChangedRemaps( unityShaderRemapType_t mode );
 void Uni_CG_ListRemaps( unityShaderRemapType_t type );
 int Uni_CG_CountRemaps( unityShaderRemapType_t type );
+
+// Common tools.
+float Q_floorf( float x );

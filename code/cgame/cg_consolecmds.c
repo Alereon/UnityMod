@@ -458,6 +458,8 @@ static consoleCommand_t	commands[] = {
 	{ "buddylist", Uni_CG_BuddyList },
 	{ "blockedRemaps", Uni_CG_ListBlockedRemaps },
 	{ "priorityRemaps", Uni_CG_ListPriorityRemaps },
+	{ "resetmaxspeed", Uni_CG_ResetMaxSpeed },
+	{ "resetavgspeed", Uni_CG_ResetAverageSpeed },
 };
 
 
