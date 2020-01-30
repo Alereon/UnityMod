@@ -1578,7 +1578,7 @@ void ClientBegin( int clientNum, qboolean allowTeamReset ) {
 			int preSess;
 
 			//SetTeam(ent, "");
-			ent->client->sess.sessionTeam = PickTeam(-1);
+			ent->client->sess.sessionTeam = PickTeam(clientNum);
 			trap_GetUserinfo(clientNum, userinfo, MAX_INFO_STRING);
 
 			if (ent->client->sess.sessionTeam == TEAM_SPECTATOR)
