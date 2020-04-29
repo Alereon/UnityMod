@@ -91,6 +91,27 @@ Strafe Functions.
 =================
 */
 
+//Calculate current speed, max speed and average speed.
+void Uni_CG_CalculateSpeed(void)
+{
+	unityPlayer_t *player;
+	vec3_t speed_vel;
+	float speed;
+
+	player = &unity.player[cg.snap->ps.clientNum];
+
+	VectorCopy(cg.snap->ps.velocity, speed_vel);
+	player->strafe.currentSpeed = (int)sqrt(speed_vel[0] * speed_vel[0] + speed_vel[1] * speed_vel[1]);
+
+	if (player->strafe.currentSpeed > player->strafe.maxSpeed)
+	{
+		player->strafe.maxSpeed = player->strafe.currentSpeed;
+	}
+
+	player->strafe.avgSpeed += player->strafe.currentSpeed;
+	player->strafe.avgSpeedSamp++;
+}
+
 // Movement keys.
 void Uni_CG_DrawMovementKeys( void )
 {
@@ -109,8 +130,10 @@ void Uni_CG_DrawMovementKeys( void )
 	}
 	else 
 	{
+		unityPlayer_t *player;
 		int moveDir = cg.snap->ps.movementDir;
-		float xyspeed = sqrt(cg.snap->ps.velocity[0] * cg.snap->ps.velocity[0] + cg.snap->ps.velocity[1] * cg.snap->ps.velocity[1]);
+
+		player = &unity.player[cg.snap->ps.clientNum];
 
 		if ((cg.snap->ps.pm_flags & PMF_JUMP_HELD))
 		{
@@ -121,7 +144,7 @@ void Uni_CG_DrawMovementKeys( void )
 			cmd.upmove = -1;
 		}
 
-		if (xyspeed < 10)
+		if (player->strafe.currentSpeed < 10)
 		{
 			moveDir = -1;
 		}
@@ -166,42 +189,23 @@ void Uni_CG_DrawMovementKeys( void )
 	Com_sprintf(str2, sizeof(str2), va("^%cA ^%cS ^%cD", (cmd.rightmove < 0) ? COLOR_RED : COLOR_WHITE,
 		(cmd.forwardmove < 0) ? COLOR_RED : COLOR_WHITE, (cmd.rightmove > 0) ? COLOR_RED : COLOR_WHITE));
 
-	scale *= 0.5;
 	CG_Text_Paint(MAX(cgs.screenWidth - CG_Text_Width("c W j", scale, 0), cgs.screenWidth - CG_Text_Width("A S D", scale, 0)) - Uni_drawMovementKeysX.integer, Uni_drawMovementKeysY.integer + scale * BIGCHAR_HEIGHT, scale, colorWhite, str1, 0.5, 0, 0, FONT_NONE);
 	CG_Text_Paint(MAX(cgs.screenWidth - CG_Text_Width("c W j", scale, 0), cgs.screenWidth - CG_Text_Width("A S D", scale, 0)) - Uni_drawMovementKeysX.integer, Uni_drawMovementKeysY.integer + scale * BIGCHAR_HEIGHT + CG_Text_Height("A S D c W j", scale, 0) + scale * BIGCHAR_HEIGHT, scale, colorWhite, str2, 0.5, 0, 0, FONT_NONE);
 }
 
-// Speedometer.
-void Uni_CG_Speedometer( centity_t *cent )
+char *Uni_CG_ReturnColorForAccel(void)
 {
-	vec3_t				speed_vel;
-	const char			*accelStr, *accelStr2, *accelStr3;
-	char				speedStr[4][32] = { 0 };
-	vec4_t				colorSpeed		= { 1, 1, 1, 1 };
-	const float			currentSpeed	= unity.player[cent->currentState.clientNum].strafe.currentSpeed;
-	static float		lastSpeed		= 0, previousAccels[ACCEL_SAMPLES];
-	const float			accel			= currentSpeed - lastSpeed;
-	float				scale			= Uni_drawSpeedometerScale.value;
+	const float			currentSpeed = unity.player[cg.snap->ps.clientNum].strafe.currentSpeed;
+	static float		lastSpeed = 0, previousAccels[ACCEL_SAMPLES];
+	const float			accel = currentSpeed - lastSpeed;
 	float				total, avgAccel;
 	int					t, i;
 	static unsigned int index;
 	static int			lastupdate;
 
-	if (!Uni_drawSpeedometer.integer)
-		return;
-
-	VectorCopy(cg.snap->ps.velocity, speed_vel);
-	unity.player[cent->currentState.clientNum].strafe.currentSpeed = (int)sqrt(speed_vel[0] * speed_vel[0] + speed_vel[1] * speed_vel[1]);
+	t = trap_Milliseconds();
 
 	lastSpeed = currentSpeed;
-
-	if (currentSpeed > 250)
-	{
-		colorSpeed[1] = 1 / ((currentSpeed / 250) * (currentSpeed / 250));
-		colorSpeed[2] = 1 / ((currentSpeed / 250) * (currentSpeed / 250));
-	}
-
-	t = trap_Milliseconds();
 
 	if (t - lastupdate > 5)
 	{
@@ -223,67 +227,69 @@ void Uni_CG_Speedometer( centity_t *cent )
 
 	if (avgAccel > 0.0f)
 	{
-		accelStr = "^2µ:";
-		accelStr2 = "^2k:";
-		accelStr3 = "^2m: ";
+		return S_COLOR_GREEN;
 	}
 	else if (avgAccel < 0.0f)
 	{
-		accelStr = "^1µ:";
-		accelStr2 = "^1k:";
-		accelStr3 = "^1m: ";
+		return S_COLOR_RED;
 	}
 	else
 	{
-		accelStr = "^7µ:";
-		accelStr2 = "^7k:";
-		accelStr3 = "^7m: ";
+		return S_COLOR_WHITE;
 	}
+}
 
+// Speedometer.
+void Uni_CG_Speedometer( void )
+{
+	unityPlayer_t		*player;
+	char				speedStr[2][32] = { 0 };
+	float				scale			= Uni_drawSpeedometerScale.value;
+	float				currentSpeed;
 
-	if (currentSpeed > unity.player[cent->currentState.clientNum].strafe.maxSpeed)
+	if (!Uni_drawSpeedometer.integer)
+		return;
+
+	player = &unity.player[cg.snap->ps.clientNum];
+
+	currentSpeed = player->strafe.currentSpeed;
+
+	switch (Uni_drawSpeedometer.integer)
 	{
-		unity.player[cent->currentState.clientNum].strafe.maxSpeed = currentSpeed;
-	}
-
-	unity.player[cent->currentState.clientNum].strafe.avgSpeed += currentSpeed;
-	unity.player[cent->currentState.clientNum].strafe.avgSpeedSamp++;
-
-	if (Uni_drawSpeedometer.integer == 1)
-	{
-		Com_sprintf(speedStr[0], sizeof(speedStr[0]), "%s^7 %.0f| %.0f", accelStr, Q_floorf(currentSpeed + 0.5f), Q_floorf(unity.player[cent->currentState.clientNum].strafe.maxSpeed + 0.5f));
-		Com_sprintf(speedStr[3], sizeof(speedStr[3]), "Avg µ: %.0f", unity.player[cent->currentState.clientNum].strafe.avgSpeed / unity.player[cent->currentState.clientNum].strafe.avgSpeedSamp);
-
-		CG_Text_Paint(MAX(cgs.screenWidth - CG_Text_Width(speedStr[3], scale, 0), cgs.screenWidth - CG_Text_Width(speedStr[0], scale, 0)) - Uni_drawSpeedometerX.integer, Uni_drawSpeedometerY.integer + scale * BIGCHAR_HEIGHT + CG_Text_Height(speedStr[0], scale, 0), scale, colorWhite, speedStr[0], 0.5, 0, 0, FONT_NONE);
+	case 1:
+		Com_sprintf(speedStr[0], sizeof(speedStr[0]), "%sµ:^7 %.0f| %.0f", Uni_CG_ReturnColorForAccel(), Q_floorf(player->strafe.currentSpeed + 0.5f), Q_floorf(player->strafe.maxSpeed + 0.5f));
+		CG_Text_Paint(MAX(cgs.screenWidth - CG_Text_Width(speedStr[0], scale, 0), cgs.screenWidth - CG_Text_Width(speedStr[0], scale, 0)) - Uni_drawSpeedometerX.integer, Uni_drawSpeedometerY.integer + scale * BIGCHAR_HEIGHT + CG_Text_Height(speedStr[0], scale, 0), scale, colorWhite, speedStr[0], 0.5, 0, 0, FONT_NONE);
 
 		if (Uni_drawAvgSpeed.integer)
 		{
-			CG_Text_Paint(MAX(cgs.screenWidth - CG_Text_Width(speedStr[3], scale, 0), cgs.screenWidth - CG_Text_Width(speedStr[0], scale, 0)) - Uni_drawSpeedometerX.integer, Uni_drawSpeedometerY.integer + scale * BIGCHAR_HEIGHT, scale, colorWhite, speedStr[3], 0.5, 0, 0, FONT_NONE);
+			Com_sprintf(speedStr[1], sizeof(speedStr[1]), "Avg µ: %.0f", player->strafe.avgSpeed / player->strafe.avgSpeedSamp);
+			CG_Text_Paint(MAX(cgs.screenWidth - CG_Text_Width(speedStr[1], scale, 0), cgs.screenWidth - CG_Text_Width(speedStr[0], scale, 0)) - Uni_drawSpeedometerX.integer, Uni_drawSpeedometerY.integer + scale * BIGCHAR_HEIGHT, scale, colorWhite, speedStr[1], 0.5, 0, 0, FONT_NONE);
 		}
-	}
-	else if (Uni_drawSpeedometer.integer == 2)
-	{
-		Com_sprintf(speedStr[1], sizeof(speedStr[1]), "%s^7 %.1f| %.1f", accelStr2, currentSpeed * 0.05, unity.player[cent->currentState.clientNum].strafe.maxSpeed * 0.05);
-		Com_sprintf(speedStr[3], sizeof(speedStr[3]), "Avg k: %.1f", unity.player[cent->currentState.clientNum].strafe.avgSpeed * 0.05 / unity.player[cent->currentState.clientNum].strafe.avgSpeedSamp);
-
-		CG_Text_Paint(MAX(cgs.screenWidth - CG_Text_Width(speedStr[3], scale, 0), cgs.screenWidth - CG_Text_Width(speedStr[1], scale, 0)) - Uni_drawSpeedometerX.integer, Uni_drawSpeedometerY.integer + scale * BIGCHAR_HEIGHT + CG_Text_Height(speedStr[1], scale, 0), scale, colorWhite, speedStr[1], 0.5, 0, 0, FONT_NONE);
+		break;
+		
+	case 2:
+		Com_sprintf(speedStr[0], sizeof(speedStr[0]), "%sk:^7 %.1f| %.1f", Uni_CG_ReturnColorForAccel(), currentSpeed * 0.05, player->strafe.maxSpeed * 0.05);
+		CG_Text_Paint(MAX(cgs.screenWidth - CG_Text_Width(speedStr[0], scale, 0), cgs.screenWidth - CG_Text_Width(speedStr[0], scale, 0)) - Uni_drawSpeedometerX.integer, Uni_drawSpeedometerY.integer + scale * BIGCHAR_HEIGHT + CG_Text_Height(speedStr[0], scale, 0), scale, colorWhite, speedStr[0], 0.5, 0, 0, FONT_NONE);
 
 		if (Uni_drawAvgSpeed.integer)
 		{
-			CG_Text_Paint(MAX(cgs.screenWidth - CG_Text_Width(speedStr[3], scale, 0), cgs.screenWidth - CG_Text_Width(speedStr[1], scale, 0)) - Uni_drawSpeedometerX.integer, Uni_drawSpeedometerY.integer + scale * BIGCHAR_HEIGHT, scale, colorWhite, speedStr[3], 0.5, 0, 0, FONT_NONE);
+			Com_sprintf(speedStr[1], sizeof(speedStr[1]), "Avg k: %.1f", player->strafe.avgSpeed * 0.05 / player->strafe.avgSpeedSamp);
+			CG_Text_Paint(MAX(cgs.screenWidth - CG_Text_Width(speedStr[1], scale, 0), cgs.screenWidth - CG_Text_Width(speedStr[0], scale, 0)) - Uni_drawSpeedometerX.integer, Uni_drawSpeedometerY.integer + scale * BIGCHAR_HEIGHT, scale, colorWhite, speedStr[1], 0.5, 0, 0, FONT_NONE);
 		}
-	}
-	else if (Uni_drawSpeedometer.integer > 2)
-	{
-		Com_sprintf(speedStr[2], sizeof(speedStr[2]), "%s^7 %.1f| %.1f", accelStr3, currentSpeed * 0.03106855, unity.player[cent->currentState.clientNum].strafe.maxSpeed * 0.03106855);
-		Com_sprintf(speedStr[3], sizeof(speedStr[3]), "Avg m: %.1f", unity.player[cent->currentState.clientNum].strafe.avgSpeed * 0.03106855 / unity.player[cent->currentState.clientNum].strafe.avgSpeedSamp);
+		break;
 
-		CG_Text_Paint(MAX(cgs.screenWidth - CG_Text_Width(speedStr[3], scale, 0), cgs.screenWidth - CG_Text_Width(speedStr[2], scale, 0)) - Uni_drawSpeedometerX.integer, Uni_drawSpeedometerY.integer + scale * BIGCHAR_HEIGHT + CG_Text_Height(speedStr[2], scale, 0), scale, colorWhite, speedStr[2], 0.5, 0, 0, FONT_NONE);
+	case 3:
+	default:
+		Com_sprintf(speedStr[0], sizeof(speedStr[0]), "%sm:^7 %.1f| %.1f", Uni_CG_ReturnColorForAccel(), currentSpeed * 0.03106855, player->strafe.maxSpeed * 0.03106855);
+		CG_Text_Paint(MAX(cgs.screenWidth - CG_Text_Width(speedStr[0], scale, 0), cgs.screenWidth - CG_Text_Width(speedStr[0], scale, 0)) - Uni_drawSpeedometerX.integer, Uni_drawSpeedometerY.integer + scale * BIGCHAR_HEIGHT + CG_Text_Height(speedStr[0], scale, 0), scale, colorWhite, speedStr[0], 0.5, 0, 0, FONT_NONE);
 
 		if (Uni_drawAvgSpeed.integer)
 		{
-			CG_Text_Paint(MAX(cgs.screenWidth - CG_Text_Width(speedStr[3], scale, 0), cgs.screenWidth - CG_Text_Width(speedStr[2], scale, 0)) - Uni_drawSpeedometerX.integer, Uni_drawSpeedometerY.integer + scale * BIGCHAR_HEIGHT, scale, colorWhite, speedStr[3], 0.5, 0, 0, FONT_NONE);
+			Com_sprintf(speedStr[1], sizeof(speedStr[1]), "Avg m: %.1f", player->strafe.avgSpeed * 0.03106855 / player->strafe.avgSpeedSamp);
+			CG_Text_Paint(MAX(cgs.screenWidth - CG_Text_Width(speedStr[1], scale, 0), cgs.screenWidth - CG_Text_Width(speedStr[0], scale, 0)) - Uni_drawSpeedometerX.integer, Uni_drawSpeedometerY.integer + scale * BIGCHAR_HEIGHT, scale, colorWhite, speedStr[1], 0.5, 0, 0, FONT_NONE);
 		}
+
+		break;
 	}
 
 	trap_R_SetColor(NULL);
@@ -630,18 +636,14 @@ void Uni_CG_CleanRemaps( void )
 // Reset maximum speed.
 void Uni_CG_ResetMaxSpeed( void )
 {
-	centity_t *player = &cg_entities[cg.snap->ps.clientNum];
-
-	unity.player[player->currentState.clientNum].strafe.maxSpeed = 0;
+	unity.player[cg.snap->ps.clientNum].strafe.maxSpeed = 0;
 }
 
 // Reset average speed.
 void Uni_CG_ResetAverageSpeed( void )
 {
-	centity_t *player = &cg_entities[cg.snap->ps.clientNum];
-
-	unity.player[player->currentState.clientNum].strafe.avgSpeed = 0;
-	unity.player[player->currentState.clientNum].strafe.avgSpeedSamp = 0;
+	unity.player[cg.snap->ps.clientNum].strafe.avgSpeed = 0;
+	unity.player[cg.snap->ps.clientNum].strafe.avgSpeedSamp = 0;
 }
 
 // Common tools.

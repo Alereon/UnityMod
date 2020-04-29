@@ -835,7 +835,7 @@ Ghoul2 Insert End
 	{ &Uni_drawMovementKeys, "Uni_drawMovementKeys", "0", CVAR_ARCHIVE },
 	{ &Uni_drawMovementKeysX, "Uni_drawMovementKeysX", "220", CVAR_ARCHIVE },
 	{ &Uni_drawMovementKeysY, "Uni_drawMovementKeysY", "425", CVAR_ARCHIVE },
-	{ &Uni_drawMovementKeysScale, "Uni_drawMovementKeysScale", "1.3", CVAR_ARCHIVE },
+	{ &Uni_drawMovementKeysScale, "Uni_drawMovementKeysScale", "0.65", CVAR_ARCHIVE },
 	{ &Uni_drawSpeedometer, "Uni_drawSpeedometer", "0", CVAR_ARCHIVE },
 	{ &Uni_drawSpeedometerX, "Uni_drawSpeedometerX", "630", CVAR_ARCHIVE },
 	{ &Uni_drawSpeedometerY, "Uni_drawSpeedometerY", "430", CVAR_ARCHIVE },

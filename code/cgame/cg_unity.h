@@ -35,8 +35,10 @@ typedef enum {
 // Struct for anything related to strafing.
 #define ACCEL_SAMPLES 16
 typedef struct {
-	float		maxSpeed, currentSpeed;
-	float		avgSpeed, avgSpeedSamp;
+	float		currentSpeed;
+	float		maxSpeed;
+	float		avgSpeed;
+	float		avgSpeedSamp;
 } unityStrafe_t;
 
 // Player struct to act as hub for any player related information.
@@ -73,7 +75,9 @@ void Uni_CG_DrawItemsOnHud( void );
 
 // Strafe.
 void Uni_CG_DrawMovementKeys( void );
-void Uni_CG_Speedometer( centity_t *cent );
+void Uni_CG_Speedometer( void );
+void Uni_CG_CalculateSpeed( void );
+char *Uni_CG_ReturnColorForAccel( void );
 
 // Console commands.
 void Uni_CG_Buddies( void );

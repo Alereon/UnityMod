@@ -3812,12 +3812,6 @@ static void CG_Draw2D( void ) {
 	float			fallTime, rageTime, rageRecTime, absorbTime, protectTime, ysalTime;
 	vec4_t			hcolor;
 
-	//[Unity] - New variables.
-	centity_t		*cent;
-
-	cent = &cg_entities[cg.snap->ps.clientNum];
-	//[/Unity]
-
 	if (cgs.orderPending && cg.time > cgs.orderTime) {
 		CG_CheckOrderPending();
 	}
@@ -4385,7 +4379,7 @@ static void CG_Draw2D( void ) {
 	Uni_CG_DrawClock(); // Clock.
 	Uni_CG_DrawItemsOnHud(); // Inventory items on the HUD.
 	Uni_CG_DrawMovementKeys(); // Movement keys.
-	Uni_CG_Speedometer(cent); // Speedometer.
+	Uni_CG_Speedometer(); // Speedometer.
 
 	//[Unity] - Draws your amount of force points on your HUD at the left side per default.
 	if (Uni_drawForcePoints.integer >= 2)
