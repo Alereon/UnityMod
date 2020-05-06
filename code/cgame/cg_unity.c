@@ -96,7 +96,6 @@ void Uni_CG_CalculateSpeed(void)
 {
 	unityPlayer_t *player;
 	vec3_t speed_vel;
-	float speed;
 
 	player = &unity.player[cg.snap->ps.clientNum];
 
@@ -309,12 +308,7 @@ void Uni_CG_Buddies( void )
 
 	if (trap_Argc() < 2)
 	{
-		CG_Printf("%s%s %sProvide the clientnumber of your buddy %s%s\n", 
-			UNI_SYMBOL_COLOR,
-			UNI_START_SYMBOL,
-			UNI_TEXT_COLOR,
-			UNI_SYMBOL_COLOR,
-			UNI_END_SYMBOL);
+		Uni_CG_Printf("Provide the clientnumber of your buddy\n");
 		return;
 	}
 
@@ -323,59 +317,36 @@ void Uni_CG_Buddies( void )
 
 	if (buddy < 0 || buddy > MAX_CLIENTS)
 	{
-		CG_Printf("%s%s '%s%i%s' %sis not a valid clientNum %s%s\n", 
-			UNI_SYMBOL_COLOR,
-			UNI_START_SYMBOL,
-			UNI_TEXT_COLOR,
-			buddy,
-			UNI_SYMBOL_COLOR,
-			UNI_TEXT_COLOR,
-			UNI_SYMBOL_COLOR,
-			UNI_END_SYMBOL);
+		Uni_CG_Printf("%i Provide the clientnumber of your buddy\n", buddy);
 		return;
 	}
 
 	if (buddy == cg.clientNum)
 	{
-		CG_Printf("%s%s %sYou cannot make yourself a buddy %s%s\n", 
-			UNI_SYMBOL_COLOR,
-			UNI_START_SYMBOL,
-			UNI_TEXT_COLOR,
-			UNI_SYMBOL_COLOR,
-			UNI_END_SYMBOL);
+		Uni_CG_Printf("You cannot make yourself a buddy\n");
 		return;
 	}
 
 	if (!ci->infoValid)
 	{
-		CG_Printf("%s%s %sClient %s'%s%i%s' %sis not a valid target %s%s\n",
-			UNI_SYMBOL_COLOR,
-			UNI_START_SYMBOL,
-			UNI_TEXT_COLOR,
+		Uni_CG_Printf("Client %s'%s%i%s' %sis not a valid target\n",
 			UNI_SYMBOL_COLOR,
 			UNI_TEXT_COLOR,
 			buddy,
 			UNI_SYMBOL_COLOR,
-			UNI_TEXT_COLOR,
-			UNI_SYMBOL_COLOR,
-			UNI_END_SYMBOL);
+			UNI_TEXT_COLOR);
 		return;
 	}
 
 	unity.buddies ^= (1 << buddy);
 
-	CG_Printf("%s%s %s%i%s) %s%s %sis %s %s%s\n",
-		UNI_SYMBOL_COLOR,
-		UNI_START_SYMBOL,
-		UNI_TEXT_COLOR,
+	Uni_CG_Printf("%i%s) %s%s %sis %s\n",
 		buddy,
 		UNI_SYMBOL_COLOR,
 		UNI_TEXT_COLOR,
 		cgs.clientinfo[buddy].name,
 		UNI_TEXT_COLOR,
-		(unity.buddies & (1 << buddy)) ? "now your buddy" : "no longer your buddy",
-		UNI_SYMBOL_COLOR,
-		UNI_END_SYMBOL);
+		(unity.buddies & (1 << buddy)) ? "now your buddy" : "no longer your buddy");
 }
 
 // Print a list of your current buddies.
@@ -384,12 +355,7 @@ void Uni_CG_BuddyList( void )
 	int i;
 	int j = 0;
 
-	CG_Printf("%s%s %sBuddy List %s%s\n", 
-		UNI_SYMBOL_COLOR,
-		UNI_START_SYMBOL,
-		UNI_TEXT_COLOR,
-		UNI_SYMBOL_COLOR,
-		UNI_END_SYMBOL);
+	Uni_CG_Printf("Buddy List\n");
 
 	for (i = 0; i < MAX_CLIENTS; i++)
 	{
@@ -535,11 +501,11 @@ void Uni_CG_HandleChangedRemaps( unityShaderRemapType_t mode )
 				{
 					CG_Printf( "%s%s %sNewly %s shader remaps %s%s\n",
 						UNI_SYMBOL_COLOR,
-						UNI_START_SYMBOL,
+						UNI_SYMBOL,
 						UNI_TEXT_COLOR,
 						(dst->priority ? "prioritized" : "blocked"),
 						UNI_SYMBOL_COLOR,
-						UNI_END_SYMBOL );
+						UNI_SYMBOL);
 				}
 
 				CG_Printf( "%s- %s%s %s%s %s%s\n",
@@ -577,11 +543,11 @@ void Uni_CG_ListRemaps( unityShaderRemapType_t type )
 			{
 				CG_Printf( "%s%s %s%s shader remaps %s%s\n",
 					UNI_SYMBOL_COLOR,
-					UNI_START_SYMBOL,
+					UNI_SYMBOL,
 					UNI_TEXT_COLOR,
 					(type == REMAP_PRIORITY ? "Priority" : "Regular"),
 					UNI_SYMBOL_COLOR,
-					UNI_END_SYMBOL );
+					UNI_SYMBOL);
 			}
 
 			CG_Printf( "%s- %s%s %s%s %s%s\n",
@@ -646,7 +612,11 @@ void Uni_CG_ResetAverageSpeed( void )
 	unity.player[cg.snap->ps.clientNum].strafe.avgSpeedSamp = 0;
 }
 
-// Common tools.
+/*
+==========================
+Misc functions.
+==========================
+*/
 float Q_floorf( float x )
 {
 	if (x < 0)
@@ -656,3 +626,254 @@ float Q_floorf( float x )
 	}
 	return (int)x;
 }
+
+//Returns a string stripped of color codes. (does NOT modify the input string.)
+char *Uni_StripColors(char *str)
+{
+	static char buf[MAX_STRING_CHARS] = { 0 };
+	int i = 0;
+
+	while (*str)
+	{
+		if ((jk2startversion == VERSION_1_02 && Q_IsColorString_1_02(str)) || (jk2startversion != VERSION_1_02 && Q_IsColorString(str)))
+		{
+			str += 2;
+			continue;
+		}
+
+		buf[i++] = *str;
+
+		if (i >= MAX_STRING_CHARS - 1)
+		{
+			break;
+		}
+		str++;
+	}
+
+	buf[i] = 0;
+
+	return buf;
+}
+
+void Uni_CG_Printf(const char* msg, ...)
+{
+	va_list		argptr;
+	char		text[1024];
+	char		*ptr;
+
+	va_start(argptr, msg);
+	Q_vsnprintf(text, sizeof(text), msg, argptr);
+	va_end(argptr);
+
+	ptr = text + strlen(text) - 1;
+
+	while (*ptr)
+	{
+		if (*ptr == '\n')
+		{
+			*ptr = 0;
+			break;
+		}
+		ptr--;
+	}
+
+	Com_sprintf(text, sizeof(text), "%s%s %s%s %s%s\n", UNI_SYMBOL_COLOR, UNI_SYMBOL, UNI_TEXT_COLOR, text, UNI_SYMBOL_COLOR, UNI_SYMBOL);
+
+	trap_Print(text);
+}
+
+/*
+==========================
+Table functions.
+==========================
+*/
+static char Uni_Table_memoryPool[UNI_MEM_POOL];
+static int  uni_Mem_PoolSize;
+static unityTable_t uni_Table = { 0 };
+
+void *Uni_Mem_Alloc(int chunk)
+{
+	if (uni_Mem_PoolSize + chunk >= sizeof(Uni_Table_memoryPool))
+	{
+		CG_Printf("The requested amount of memory is not available.\n");
+		return NULL;
+	}
+
+	uni_Mem_PoolSize += chunk;
+
+	return &Uni_Table_memoryPool[uni_Mem_PoolSize - chunk];
+}
+
+void Uni_Mem_Free(void)
+{
+	uni_Mem_PoolSize = 0;
+	memset(&uni_Table, 0, sizeof(uni_Table));
+}
+
+void Uni_Table_Create(int rows, int columns, const char *name)
+{
+	int i;
+
+	//Allocate memory for the rows and initialize them.
+	uni_Table.row = (unityRow_t*)Uni_Mem_Alloc(sizeof(unityRow_t) * rows);
+	memset(uni_Table.row, 0, sizeof(unityColumn_t) * rows);
+
+	//Allocate memory for the columns in each row and initialize them.
+	for (i = 0; i < rows; i++)
+	{
+		uni_Table.row[i].column = (unityColumn_t*)Uni_Mem_Alloc(sizeof(unityColumn_t) * columns);
+		memset(uni_Table.row[i].column, 0, sizeof(unityColumn_t) * columns);
+	}
+	
+	//Allocate memory to store the length of each column's longest content.
+	uni_Table.longestCon = (int*)Uni_Mem_Alloc(sizeof(int) * columns);
+	memset(uni_Table.longestCon, 0, sizeof(int) * columns);
+
+	uni_Table.name = (char*)Uni_Mem_Alloc(sizeof(char) * (strlen(name) + 1));
+	strcpy(uni_Table.name, name);
+	uni_Table.name[strlen(name) + 1] = 0;
+	uni_Table.nameLen = strlen(Uni_StripColors(uni_Table.name));
+
+	uni_Table.rows = rows;
+	uni_Table.columns = columns;
+}
+
+
+void Uni_Table_AddRow(const char *content, ...)
+{
+	va_list va;
+	unityColumn_t *cell;
+	char buf[MAX_STRING_CHARS] = { 0 };
+	char field[MAX_STRING_CHARS] = { 0 };
+	int i, j = 0, len, col = 0;
+
+	va_start(va, content);
+	Q_vsnprintf(buf, sizeof(buf), content, va);
+	va_end(va);
+
+	for (i = 0; i <= strlen(buf); i++)
+	{
+		if (buf[i] == '\x18'|| i == strlen(buf))
+		{
+			field[j] = 0;
+			len = strlen(field);
+
+			cell = (unityColumn_t*)&uni_Table.row[uni_Table.currentRow].column[col];
+
+			cell->content = (char*)Uni_Mem_Alloc(sizeof(char) * (len + 1));
+			strcpy(cell->content, field);
+
+			cell->content[len + 1] = 0;
+
+			cell->len = strlen(Uni_StripColors(cell->content));
+
+			if (uni_Table.longestCon[col] < cell->len)
+			{
+				uni_Table.longestCon[col] = cell->len;
+			}
+
+			memset(field, 0, sizeof(field));
+
+			j = 0;
+			col++;
+			continue;
+		}
+
+		field[j++] = buf[i];
+	}
+
+	uni_Table.row[uni_Table.currentRow].used = qtrue;
+	uni_Table.currentRow++;
+}
+
+void Uni_Table_Print_Sepline(void)
+{
+	int i;
+	char *sepLine;
+
+	sepLine = (char*)Uni_Mem_Alloc(sizeof(char) * (uni_Table.rowLen + 2));
+
+	Com_sprintf(sepLine, sizeof(sepLine), "%s", UNI_SYMBOL_COLOR);
+
+	for (i = 2; i < uni_Table.rowLen + 2; i++)
+	{ 
+		sepLine[i] = '-';
+	}
+
+	sepLine[i] = 0;
+
+	CG_Printf("%s\n", sepLine);
+}
+
+void Uni_Table_Print(void)
+{
+	unityColumn_t *cell;
+	int i, j, len, count;
+	char row[MAX_STRING_CHARS] = { 0 };
+	char separator[MAX_STRING_CHARS] = { 0 };
+
+	for (i = 0; i < uni_Table.rows; i++)
+	{
+		if (uni_Table.row[i].used)
+		{
+			for (j = 0; j < uni_Table.columns; j++)
+			{
+				cell = (unityColumn_t*)&uni_Table.row[i].column[j];
+
+				len = (uni_Table.longestCon[j] - cell->len);
+
+				for (count = 0; count < (len / 2); count++)
+				{
+					separator[count] = ' ';
+				}
+				separator[count] = 0;
+
+				if (j == 0) // We add the initial separator characters to the first column only.
+				{
+					Com_sprintf(row, sizeof(row), "%s%c %s%s%s%s%s %s%c", UNI_SYMBOL_COLOR, UNI_SEPARATOR, separator, UNI_TEXT_COLOR, cell->content, separator, (len % 2 ? " " : ""), UNI_SYMBOL_COLOR, UNI_SEPARATOR);
+				}
+				else //Every other column only gets a separator char at the end.
+				{
+					Com_sprintf(row, sizeof(row), "%s %s%s%s%s%s %s%c", row, separator, UNI_TEXT_COLOR, cell->content, separator, (len % 2 ? " " : ""), UNI_SYMBOL_COLOR, UNI_SEPARATOR);
+				}
+
+			}
+
+			uni_Table.rowLen = strlen(Uni_StripColors(row));
+
+			if (i == 0)
+			{
+				memset(separator, 0, sizeof(separator));
+				Uni_Table_Print_Sepline();
+
+				len = (uni_Table.rowLen - uni_Table.nameLen) - 4;
+				//4 is the length of the color codes + seperators at the start and end of the table name string.
+				for (count = 0; count < (len / 2); count++)
+				{
+					separator[count] = ' ';
+				}
+				count = 0;
+
+				CG_Printf("%s%c %s%s%s%s%s %s%c\n", UNI_SYMBOL_COLOR, UNI_SEPARATOR, separator, UNI_TEXT_COLOR, uni_Table.name, separator, (len % 2 ? " " : ""), UNI_SYMBOL_COLOR, UNI_SEPARATOR);
+				Uni_Table_Print_Sepline();
+				CG_Printf("%s\n", row);
+				Uni_Table_Print_Sepline();
+			}
+			else if ( !uni_Table.row[i + 1].used)
+			{
+				CG_Printf("%s\n", row);
+				Uni_Table_Print_Sepline();
+			}
+			else
+			{
+				CG_Printf("%s\n", row);
+			}
+
+			memset(separator, 0, sizeof(separator));
+			memset(row, 0, sizeof(row));
+		}
+	}
+
+	Uni_Mem_Free();
+}
+

@@ -7,9 +7,8 @@ UnityMod structs.
 */
 
 // Defines for mod symbols, colours, etc.
-#define UNI_START_SYMBOL "::"
-#define UNI_END_SYMBOL   "::"
-#define UNI_SEPARATOR    "|"
+#define UNI_SYMBOL		 "::"
+#define UNI_SEPARATOR    '|'
 #define UNI_TEXT_COLOR   "^7"
 #define UNI_SYMBOL_COLOR "^1"
 
@@ -20,11 +19,11 @@ UnityMod structs.
 // Struct for tracking shader remaps.
 #define MAX_SHADER_REMAPS 256 // Classic game module only does 128 remaps, mods might increase this, but I am not aware of any that do, so doubling it should be enough...
 typedef struct {
-	char oldShader[MAX_QPATH];
-	char newShader[MAX_QPATH];
-	float timeOffset;
-	qboolean priority;
-	qboolean recentlyChanged;
+	char				oldShader[MAX_QPATH];
+	char				newShader[MAX_QPATH];
+	float				timeOffset;
+	qboolean			priority;
+	qboolean			recentlyChanged;
 } unityShaderRemap_t;
 
 typedef enum {
@@ -35,10 +34,10 @@ typedef enum {
 // Struct for anything related to strafing.
 #define ACCEL_SAMPLES 16
 typedef struct {
-	float		currentSpeed;
-	float		maxSpeed;
-	float		avgSpeed;
-	float		avgSpeedSamp;
+	float				currentSpeed;
+	float				maxSpeed;
+	float				avgSpeed;
+	float				avgSpeedSamp;
 } unityStrafe_t;
 
 // Player struct to act as hub for any player related information.
@@ -62,6 +61,30 @@ typedef struct {
 } unityMod_t;
 
 extern unityMod_t unity;
+
+#define UNI_MEM_POOL  (256 * 1024)
+#define UD "\x18" //Magic character to know when a column ends;
+
+typedef struct {
+	char				*content;		//content of the cell.
+	int					len;			//string length of the cell.
+} unityColumn_t;
+
+typedef struct {
+	unityColumn_t		*column;		// The amount of columns each row should have.
+	qboolean			used;			//Mark row as being used if the cells of the row are filled with content.
+} unityRow_t;
+
+typedef struct {
+	unityRow_t			*row;			//The amount of rows the table should have.
+	char				*name;			//Name of the table.
+	int					nameLen;		//Length of the name of the table.
+	int					rows;			//The amount of rows the table has.
+	int					columns;		//The amount of columns the table has.
+	int					currentRow;		//currently selected row which gets filled when Uni_Table_AddRoW is getting called.
+	int					rowLen;			//The length of the rows.
+	int					*longestCon;	//stores the longest cell content of each column.
+} unityTable_t;
 
 /*
 =================
@@ -94,5 +117,16 @@ void Uni_CG_HandleChangedRemaps( unityShaderRemapType_t mode );
 void Uni_CG_ListRemaps( unityShaderRemapType_t type );
 int Uni_CG_CountRemaps( unityShaderRemapType_t type );
 
+//Tables.
+void Uni_Table_Create(int rows, int columns, const char *name);
+void Uni_Table_AddRow(const char *content, ...);
+void Uni_Table_Print_Sepline(void);
+void Uni_Table_Print(void);
+
 // Common tools.
 float Q_floorf( float x );
+char *Uni_StripColors(char *str);
+void Uni_CG_Printf(const char* msg, ...);
+
+void *Uni_Mem_Alloc(int chunk);
+void Uni_Mem_Free(void);
