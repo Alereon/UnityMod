@@ -306,20 +306,21 @@ void Uni_CG_Buddies( void )
 	int buddy;
 	clientInfo_t *ci;
 
+	buddy = atoi(CG_Argv(1));
+
 	if (trap_Argc() < 2)
 	{
 		Uni_CG_Printf("Provide the clientnumber of your buddy\n");
 		return;
 	}
 
-	buddy = atoi(CG_Argv(1));
-	ci    = cgs.clientinfo + buddy;
-
 	if (buddy < 0 || buddy > MAX_CLIENTS)
 	{
-		Uni_CG_Printf("%i Provide the clientnumber of your buddy\n", buddy);
+		Uni_CG_Printf("There is no client with this number.\n", buddy);
 		return;
 	}
+
+	ci = cgs.clientinfo + buddy;
 
 	if (buddy == cg.clientNum)
 	{
@@ -353,32 +354,87 @@ void Uni_CG_Buddies( void )
 void Uni_CG_BuddyList( void )
 {
 	int i;
-	int j = 0;
 
-	Uni_CG_Printf("Buddy List\n");
+	Uni_Table_Create(MAX_CLIENTS, 2, "Buddy List");
+	Uni_Table_AddRow("Num"UD"Name");
 
 	for (i = 0; i < MAX_CLIENTS; i++)
 	{
 		if (unity.buddies & (1 << i))
 		{
-			CG_Printf("%s%i%s) %s%s%s\n", 
-				UNI_TEXT_COLOR,
-				i,
-				UNI_SYMBOL_COLOR,
-				UNI_TEXT_COLOR,
-				cgs.clientinfo[i].name,
-				UNI_TEXT_COLOR);
-
-			j++;
+			Uni_Table_AddRow("%d"UD"%s", i, cgs.clientinfo[i].name);
 		}
 	}
 
-	if (!j)
+	Uni_Table_Print();
+}
+
+void Uni_CG_Ignore(void)
+{
+	int ignore;
+	clientInfo_t *ci;
+
+	ignore = atoi(CG_Argv(1));
+
+	if (trap_Argc() < 2)
 	{
-		CG_Printf("%sYou have no buddies at the moment%s.\n", 
-			UNI_TEXT_COLOR,
-			UNI_SYMBOL_COLOR);
+		Uni_CG_Printf("There is no client with this number.\n");
+		return;
 	}
+
+	if (ignore < 0 || ignore > MAX_CLIENTS)
+	{
+		Uni_CG_Printf("%i Provide the clientnumber of the client you want to ignore\n", ignore);
+		return;
+	}
+
+	ci = cgs.clientinfo + ignore;
+
+	if (ignore == cg.clientNum)
+	{
+		Uni_CG_Printf("You cannot ignore yourself.\n");
+		return;
+	}
+
+	if (!ci->infoValid)
+	{
+		Uni_CG_Printf("Client %s'%s%i%s' %sis not a valid target\n",
+			UNI_SYMBOL_COLOR,
+			UNI_TEXT_COLOR,
+			ignore,
+			UNI_SYMBOL_COLOR,
+			UNI_TEXT_COLOR);
+		return;
+	}
+
+	unity.ignored ^= (1 << ignore);
+
+	Uni_CG_Printf("%i%s) %s%s %sis %s\n",
+		ignore,
+		UNI_SYMBOL_COLOR,
+		UNI_TEXT_COLOR,
+		cgs.clientinfo[ignore].name,
+		UNI_TEXT_COLOR,
+		(unity.ignored & (1 << ignore)) ? "now being ignored." : "no longer being ignored");
+}
+
+// Print a list of your current buddies.
+void Uni_CG_IgnoreList(void)
+{
+	int i;
+
+	Uni_Table_Create(MAX_CLIENTS, 2, "Ignore List");
+	Uni_Table_AddRow("Num"UD"Name");
+
+	for (i = 0; i < MAX_CLIENTS; i++)
+	{
+		if (unity.ignored & (1 << i))
+		{
+			Uni_Table_AddRow("%d"UD"%s", i, cgs.clientinfo[i].name);
+		}
+	}
+
+	Uni_Table_Print();
 }
 
 // Prints a list of current blocked regular remaps.
@@ -478,7 +534,7 @@ void Uni_CG_HandleChangedRemaps( unityShaderRemapType_t mode )
 	int counter = 0;
 	int i;
 
-	Uni_Table_Create(unity.remapsCount, 2, va("Newly %s shader remaps", (dst->priority ? "prioritized" : "blocked")));
+	Uni_Table_Create(unity.remapsCount, 2, va("New shader remaps"));
 	Uni_Table_AddRow("Old shader"UD"New shader");
 
 	for ( i = 0, dst = &unity.remaps[0]; i < unity.remapsCount; i++, dst++ )
@@ -735,6 +791,11 @@ void Uni_Table_AddRow(const char *content, ...)
 
 			cell = (unityColumn_t*)&uni_Table.row[uni_Table.currentRow].column[col];
 
+			if (!cell)
+			{
+				return;
+			}
+
 			cell->content = (char*)Uni_Mem_Alloc(sizeof(char) * (len + 1));
 			strcpy(cell->content, field);
 
@@ -887,4 +948,59 @@ void Uni_CG_ClearPlayerData(int num)
 	{
 		unity.buddies ^= (1 << num);
 	}
+}
+
+qboolean Uni_CG_IsIgnored(char *text, int mode)
+{
+	clientInfo_t *ci;
+	qboolean pm = qfalse;
+	char chat[MAX_SAY_TEXT];
+	char *plr, *n;
+	char name[MAX_NAME_LENGTH] = { 0 };
+	int i, count = 0;
+
+	if (text[1] == '[')
+	{
+		pm = qtrue;
+	}
+
+	Q_strncpyz(chat, text, sizeof(chat));
+	plr = Q_strrchr(chat, '\x19');
+	*plr = 0;
+
+	n = chat;
+
+	//Team chat and private chat have the same format.
+	if (mode == SAY_TEAM || pm)
+	{
+		n += 2; //Skip the chat token and openings bracket of team/private chat.
+		while (*n)
+		{
+			if (*n == '^' && *(n + 1) == '7' && *(n + 2) == '\x19' )
+			{
+				break;
+			}
+			name[count++] = *n;
+			n++;
+		}
+		name[count] = 0;
+	}
+	else //All chat.
+	{
+		memcpy(name, n, strlen(n) - 2);
+	}
+	
+	for (i = 0; i < MAX_CLIENTS; i++)
+	{
+		ci = &cgs.clientinfo[i];
+
+		if (!ci->infoValid)
+			continue;
+
+		if (unity.ignored & (1 << i) && !Q_stricmp(name, ci->name)) //The Client is on the ignore list!
+		{
+			return qtrue;
+		}
+	}
+	return qfalse;
 }

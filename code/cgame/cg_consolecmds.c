@@ -460,6 +460,8 @@ static consoleCommand_t	commands[] = {
 	{ "priorityRemaps", Uni_CG_ListPriorityRemaps },
 	{ "resetmaxspeed", Uni_CG_ResetMaxSpeed },
 	{ "resetavgspeed", Uni_CG_ResetAverageSpeed },
+	{ "ignoreclient", Uni_CG_Ignore },
+	{ "ignorelist", Uni_CG_IgnoreList },
 };
 
 

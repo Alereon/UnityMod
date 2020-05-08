@@ -49,6 +49,7 @@ typedef struct {
 typedef struct {
 	// Local.
 	int					buddies;
+	int					ignored;
 	qboolean			mapChange;
 
 	// Player.
@@ -110,6 +111,8 @@ void Uni_CG_ListBlockedRemaps( void );
 void Uni_CG_ListPriorityRemaps( void );
 void Uni_CG_ResetMaxSpeed( void );
 void Uni_CG_ResetAverageSpeed( void );
+void Uni_CG_Ignore(void);
+void Uni_CG_IgnoreList(void);
 
 // Remaps.
 void Uni_CG_ShaderRemaps( void );
@@ -135,3 +138,4 @@ float Q_floorf( float x );
 char *Uni_StripColors(char *str);
 void Uni_CG_Printf(const char* msg, ...);
 void Uni_CG_ClearPlayerData(int num);
+qboolean Uni_CG_IsIgnored(char *text, int mode);
