@@ -715,8 +715,8 @@ void Uni_Table_Create(int rows, int columns, const char *name)
 	int i;
 
 	//Allocate memory for the rows and initialize them.
-	uni_Table.row = (unityRow_t*)Uni_Mem_Alloc(sizeof(unityRow_t) * rows);
-	memset(uni_Table.row, 0, sizeof(unityColumn_t) * rows);
+	uni_Table.row = (unityRow_t*)Uni_Mem_Alloc(sizeof(unityRow_t) * (rows + 1));
+	memset(uni_Table.row, 0, sizeof(unityColumn_t) * (rows + 1));
 
 	//Allocate memory for the columns in each row and initialize them.
 	for (i = 0; i < rows; i++)
@@ -753,7 +753,7 @@ void Uni_Table_AddRow(const char *content, ...)
 
 	for (i = 0; i <= strlen(buf); i++)
 	{
-		if (buf[i] == '\x18'|| i == strlen(buf))
+		if (buf[i] == '\x18' || i == strlen(buf))
 		{
 			field[j] = 0;
 			len = strlen(field);
