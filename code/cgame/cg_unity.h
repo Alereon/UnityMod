@@ -84,6 +84,7 @@ typedef struct {
 	int					currentRow;		//currently selected row which gets filled when Uni_Table_AddRoW is getting called.
 	int					rowLen;			//The length of the rows.
 	int					*longestCon;	//stores the longest cell content of each column.
+	int					minCellLen;
 } unityTable_t;
 
 /*
@@ -120,6 +121,7 @@ int Uni_CG_CountRemaps( unityShaderRemapType_t type );
 //Tables.
 void Uni_Table_Create(int rows, int columns, const char *name);
 void Uni_Table_AddRow(const char *content, ...);
+int Uni_Table_Get_minCellLen(void);
 void Uni_Table_Print_Sepline(void);
 void Uni_Table_Print(void);
 

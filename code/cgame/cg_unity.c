@@ -478,6 +478,9 @@ void Uni_CG_HandleChangedRemaps( unityShaderRemapType_t mode )
 	int counter = 0;
 	int i;
 
+	Uni_Table_Create(unity.remapsCount, 2, va("Newly %s shader remaps", (dst->priority ? "prioritized" : "blocked")));
+	Uni_Table_AddRow("Old shader"UD"New shader");
+
 	for ( i = 0, dst = &unity.remaps[0]; i < unity.remapsCount; i++, dst++ )
 	{
 		if ( dst->recentlyChanged || (!dst->priority && wasBlocked != Uni_blockShaderRemaps.integer) )
@@ -497,30 +500,13 @@ void Uni_CG_HandleChangedRemaps( unityShaderRemapType_t mode )
 			// Only print message for priority and blocked remaps, not for normal non-blocked ones.
 			if ( (Uni_blockShaderRemaps.integer && ((Uni_printShaderInformation.integer & 1) && !dst->priority) || ((Uni_printShaderInformation.integer & 2) && dst->priority)) )
 			{
-				if ( !counter )
-				{
-					CG_Printf( "%s%s %sNewly %s shader remaps %s%s\n",
-						UNI_SYMBOL_COLOR,
-						UNI_SYMBOL,
-						UNI_TEXT_COLOR,
-						(dst->priority ? "prioritized" : "blocked"),
-						UNI_SYMBOL_COLOR,
-						UNI_SYMBOL);
-				}
-
-				CG_Printf( "%s- %s%s %s%s %s%s\n",
-					UNI_SYMBOL_COLOR,
-					UNI_TEXT_COLOR,
-					dst->oldShader, 
-					UNI_SYMBOL_COLOR,
-					UNI_SEPARATOR,
-					UNI_TEXT_COLOR,
-					dst->newShader );
-
+				Uni_Table_AddRow("%s"UD"%s", dst->oldShader, dst->newShader);
 				counter++;
 			}
 		}
 	}
+
+	Uni_Table_Print();
 
 	if (counter) CG_Printf("\nCurrently %s %s%i %sremaps in total%s.\n%sUse %s/%s%s to get a full list%s.\n", (mode == REMAP_PRIORITY ? "prioritizing" : "blocking"), UNI_SYMBOL_COLOR, counter, UNI_TEXT_COLOR, UNI_SYMBOL_COLOR, UNI_TEXT_COLOR, UNI_SYMBOL_COLOR, UNI_TEXT_COLOR, (mode == REMAP_PRIORITY ? "priorityRemaps" : "blockedRemaps"), UNI_SYMBOL_COLOR);
 
@@ -534,34 +520,21 @@ void Uni_CG_ListRemaps( unityShaderRemapType_t type )
 	int counter = 0;
 	int i = 0;
 
+	Uni_Table_Create(unity.remapsCount, 2, va("%s shader remaps", (type == REMAP_PRIORITY ? "Priority" : "Regular")));
+	Uni_Table_AddRow("Old shader"UD"New shader");
+
 	for ( i = 0, dst = &unity.remaps[0]; i < unity.remapsCount; i++, dst++ )
 	{
 		// Only print message for priority and blocked remaps, not for normal non-blocked ones.
 		if ( (type == REMAP_REGULAR && !dst->priority) || (type == REMAP_PRIORITY && dst->priority) )
 		{
-			if ( !counter )
-			{
-				CG_Printf( "%s%s %s%s shader remaps %s%s\n",
-					UNI_SYMBOL_COLOR,
-					UNI_SYMBOL,
-					UNI_TEXT_COLOR,
-					(type == REMAP_PRIORITY ? "Priority" : "Regular"),
-					UNI_SYMBOL_COLOR,
-					UNI_SYMBOL);
-			}
 
-			CG_Printf( "%s- %s%s %s%s %s%s\n",
-				UNI_SYMBOL_COLOR,
-				UNI_TEXT_COLOR,
-				dst->oldShader,
-				UNI_SYMBOL_COLOR,
-				UNI_SEPARATOR,
-				UNI_TEXT_COLOR,
-				dst->newShader );
-
+			Uni_Table_AddRow("%s"UD"%s", dst->oldShader, dst->newShader);
 			counter++;
 		}
 	}
+
+	Uni_Table_Print();
 
 	CG_Printf( "\nCurrently got %s%i %s%s remaps%s.\n", UNI_SYMBOL_COLOR, counter, UNI_TEXT_COLOR, (type == REMAP_PRIORITY ? "priority" : "regular"), UNI_SYMBOL_COLOR );
 }
@@ -736,6 +709,8 @@ void Uni_Table_Create(int rows, int columns, const char *name)
 
 	uni_Table.rows = rows;
 	uni_Table.columns = columns;
+
+	uni_Table.minCellLen = (int)uni_Table.nameLen / uni_Table.columns;
 }
 
 
@@ -805,10 +780,32 @@ void Uni_Table_Print_Sepline(void)
 	CG_Printf("%s\n", sepLine);
 }
 
+int Uni_Table_Get_minCellLen(void)
+{
+	int i, j;
+	int len = uni_Table.minCellLen;
+
+	for (i = 0; i < uni_Table.rows; i++)
+	{
+		if (uni_Table.row[i].used)
+		{
+			for (j = 0; j < uni_Table.columns; j++)
+			{
+				if (uni_Table.longestCon[j] > len)
+				{
+					len = uni_Table.longestCon[j];
+				}
+			}
+		}
+	}
+	return len;
+}
+
 void Uni_Table_Print(void)
 {
 	unityColumn_t *cell;
-	int i, j, len, count;
+	int i, j, count, len;
+	int minLen = Uni_Table_Get_minCellLen();
 	char row[MAX_STRING_CHARS] = { 0 };
 	char separator[MAX_STRING_CHARS] = { 0 };
 
@@ -820,7 +817,7 @@ void Uni_Table_Print(void)
 			{
 				cell = (unityColumn_t*)&uni_Table.row[i].column[j];
 
-				len = (uni_Table.longestCon[j] - cell->len);
+				len = minLen - cell->len;
 
 				for (count = 0; count < (len / 2); count++)
 				{
