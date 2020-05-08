@@ -877,3 +877,17 @@ void Uni_Table_Print(void)
 	Uni_Mem_Free();
 }
 
+void Uni_CG_ClearPlayerData(int num)
+{
+	unityPlayer_t *player;
+
+	player = &unity.player[num];
+	//Clear the client's player data.
+	memset(player, 0, sizeof(player));
+
+	//Clear our own information we had of the player.
+	if (unity.buddies & (1 << num))
+	{
+		unity.buddies ^= (1 << num);
+	}
+}

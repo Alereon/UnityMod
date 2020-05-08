@@ -123,10 +123,13 @@ void Uni_Table_AddRow(const char *content, ...);
 void Uni_Table_Print_Sepline(void);
 void Uni_Table_Print(void);
 
+//Tables memory handling.
+void *Uni_Mem_Alloc(int chunk);
+void Uni_Mem_Free(void);
+
+
 // Common tools.
 float Q_floorf( float x );
 char *Uni_StripColors(char *str);
 void Uni_CG_Printf(const char* msg, ...);
-
-void *Uni_Mem_Alloc(int chunk);
-void Uni_Mem_Free(void);
+void Uni_CG_ClearPlayerData(int num);

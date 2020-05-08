@@ -2725,6 +2725,9 @@ Ghoul2 Insert End
 	memset( &cgs, 0, sizeof( cgs ) );
 	memset( cg_weapons, 0, sizeof(cg_weapons) );
 
+	//[Unity /] - Initialise our struct.
+	memset(&unity, 0, sizeof(unity));
+
 	cg.clientNum = clientNum;
 
 	cgs.processedSnapshotNum = serverMessageNum;

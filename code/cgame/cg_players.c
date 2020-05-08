@@ -993,6 +993,8 @@ void CG_NewClientInfo( int clientNum, qboolean entitiesInitialized ) {
 	configstring = CG_ConfigString( clientNum + CS_PLAYERS );
 	if ( !configstring[0] ) {
 		memset( ci, 0, sizeof( *ci ) );
+		//[Unity /] - Clear all the player data we have for this player.
+		Uni_CG_ClearPlayerData(clientNum);
 		return;		// player just left
 	}
 

@@ -1839,12 +1839,6 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		break;
 
 	case EV_PLAYER_TELEPORT_OUT:
-		//[Unity] - Remove buddy when he disconnects.
-		if (unity.buddies & (1 << cent->currentState.clientNum))
-		{
-			unity.buddies ^= (1 << cent->currentState.clientNum);
-		}
-		//[/Unity]
 		DEBUGNAME("EV_PLAYER_TELEPORT_OUT");
 		{
 			trace_t tr;
