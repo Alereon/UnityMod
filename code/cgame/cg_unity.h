@@ -113,6 +113,7 @@ void Uni_CG_ResetMaxSpeed( void );
 void Uni_CG_ResetAverageSpeed( void );
 void Uni_CG_Ignore(void);
 void Uni_CG_IgnoreList(void);
+void Uni_CG_ClientList(void);
 
 // Remaps.
 void Uni_CG_ShaderRemaps( void );

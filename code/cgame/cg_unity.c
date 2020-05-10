@@ -300,6 +300,27 @@ Console command Functions.
 ==========================
 */
 
+void Uni_CG_ClientList(void)
+{
+	int i;
+	clientInfo_t *ci;
+
+	Uni_Table_Create(MAX_CLIENTS, 3, "Clientlist");
+	Uni_Table_AddRow("Num"UD"Name"UD"Skin");
+
+	for (i = 0; i < MAX_CLIENTS; i++)
+	{
+		ci = &cgs.clientinfo[i];
+
+		if (ci->infoValid)
+		{
+			Uni_Table_AddRow("%d"UD"%s"UD"%s", i, ci->name, va("%s/%s", ci->modelName, ci->skinName));
+		}
+	}
+
+	Uni_Table_Print();
+}
+
 // Add/remove buddies.
 void Uni_CG_Buddies( void )
 {
@@ -418,7 +439,6 @@ void Uni_CG_Ignore(void)
 		(unity.ignored & (1 << ignore)) ? "now being ignored." : "no longer being ignored");
 }
 
-// Print a list of your current buddies.
 void Uni_CG_IgnoreList(void)
 {
 	int i;
@@ -947,6 +967,10 @@ void Uni_CG_ClearPlayerData(int num)
 	if (unity.buddies & (1 << num))
 	{
 		unity.buddies ^= (1 << num);
+	}
+	if (unity.ignored & (1 << num))
+	{
+		unity.ignored ^= (1 << num);
 	}
 }
 

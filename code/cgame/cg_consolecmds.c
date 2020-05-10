@@ -462,6 +462,7 @@ static consoleCommand_t	commands[] = {
 	{ "resetavgspeed", Uni_CG_ResetAverageSpeed },
 	{ "ignoreclient", Uni_CG_Ignore },
 	{ "ignorelist", Uni_CG_IgnoreList },
+	{ "clientlist", Uni_CG_ClientList },
 };
 
 
