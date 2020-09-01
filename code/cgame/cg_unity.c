@@ -192,7 +192,7 @@ void Uni_CG_DrawMovementKeys( void )
 	CG_Text_Paint(MAX(cgs.screenWidth - CG_Text_Width("c W j", scale, 0), cgs.screenWidth - CG_Text_Width("A S D", scale, 0)) - Uni_drawMovementKeysX.integer, Uni_drawMovementKeysY.integer + scale * BIGCHAR_HEIGHT + CG_Text_Height("A S D c W j", scale, 0) + scale * BIGCHAR_HEIGHT, scale, colorWhite, str2, 0.5, 0, 0, FONT_NONE);
 }
 
-char *Uni_CG_ReturnColorForAccel(void)
+const char *Uni_CG_ReturnColorForAccel(void)
 {
 	const float			currentSpeed = unity.player[cg.snap->ps.clientNum].strafe.currentSpeed;
 	static float		lastSpeed = 0, previousAccels[ACCEL_SAMPLES];
@@ -1027,4 +1027,84 @@ qboolean Uni_CG_IsIgnored(char *text, int mode)
 		}
 	}
 	return qfalse;
+}
+
+void Uni_CG_MouseMode(void)
+{
+	if (!cg.showScores)
+	{
+		return;
+	}
+
+	if (unity.mouseMode)
+	{
+		unity.mouseMode = qfalse;
+		trap_Key_SetCatcher(0);
+		return;
+	}
+	else
+	{
+		unity.mouseMode = qtrue;
+		trap_Key_SetCatcher(KEYCATCH_CGAME);
+		return;
+	}
+}
+
+void Uni_CG_MouseMode_Coords(int x, int y)
+{
+	unity.mouseX = Com_Clampi(0, cgs.screenWidth, unity.mouseX + x);
+	unity.mouseY = Com_Clampi(0, SCREEN_HEIGHT, unity.mouseY + y);
+}
+
+qboolean Uni_CG_MouseMode_InRect(int x, int y, int width, int height)
+{
+	if (unity.mouseX >= x && unity.mouseX <= (x + width) && unity.mouseY > y && unity.mouseY < (y + height))
+	{
+		return qtrue;
+	}
+	return qfalse;
+}
+
+void Uni_CG_MouseMode_Click(int key, qboolean down)
+{
+	if (key == A_MOUSE1 && down)
+	{
+		Uni_CG_MouseMode_SelectPlayer();
+	}
+	else
+	{
+		cg.showScores = qfalse;
+		unity.mouseMode = qfalse;
+		trap_Key_SetCatcher(0);
+	}
+}
+
+void Uni_CG_MouseMode_SelectPlayer(void)
+{
+	score_t	*score;
+	int i;
+
+	score = cg.scores;
+
+	for (i = 0; i < cg.numScores; i++, score++)
+	{
+		if (!cgs.clientinfo[score->client].infoValid) 
+		{
+			continue;
+		}
+
+		if (!score->selected)
+		{
+			continue;
+		}
+
+		cg.crosshairClientNum = score->client;
+
+		cg.showScores = qfalse;
+		unity.mouseMode = qfalse;
+		trap_Key_SetCatcher(0);
+
+		trap_SendConsoleCommand("messagemode3");
+		break;
+	}
 }

@@ -4401,6 +4401,19 @@ static void CG_Draw2D( void ) {
 	if ( !cg.scoreBoardShowing) {
 		CG_DrawCenterString();
 	}
+
+	if (unity.mouseMode)
+	{
+		if ((trap_Key_GetCatcher() & KEYCATCH_CGAME))
+		{
+			CG_DrawPic(unity.mouseX, unity.mouseY, 32, 32, cgs.media.cursor);
+		}
+		else
+		{
+			unity.mouseMode = qfalse;
+			cg.showScores = qfalse;
+		}
+	}
 }
 
 

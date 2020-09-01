@@ -14,7 +14,7 @@ UnityMod structs.
 
 #define UNI_AUTHORS      "Alereon" UNI_SYMBOL_COLOR " & " UNI_TEXT_COLOR "Kevin"
 #define UNI_CGAMENAME    "UnityMod"
-#define UNI_CGAMEVERSION UNI_SYMBOL_COLOR UNI_START_SYMBOL " " UNI_TEXT_COLOR UNI_CGAMENAME " " UNI_SYMBOL_COLOR UNI_END_SYMBOL
+#define UNI_CGAMEVERSION UNI_SYMBOL_COLOR UNI_SYMBOL " " UNI_TEXT_COLOR UNI_CGAMENAME " " UNI_SYMBOL_COLOR UNI_SYMBOL
 
 // Struct for tracking shader remaps.
 #define MAX_SHADER_REMAPS 256 // Classic game module only does 128 remaps, mods might increase this, but I am not aware of any that do, so doubling it should be enough...
@@ -51,6 +51,9 @@ typedef struct {
 	int					buddies;
 	int					ignored;
 	qboolean			mapChange;
+	qboolean			mouseMode;
+	int					mouseX;
+	int					mouseY;
 
 	// Player.
 	unityPlayer_t		player[MAX_CLIENTS];
@@ -64,7 +67,7 @@ typedef struct {
 extern unityMod_t unity;
 
 #define UNI_MEM_POOL  (256 * 1024)
-#define UD "\x18" //Magic character to know when a column ends;
+#define UD "\x18" //Magic character to know when a column ends.
 
 typedef struct {
 	char				*content;		//content of the cell.
@@ -102,7 +105,7 @@ void Uni_CG_DrawItemsOnHud( void );
 void Uni_CG_DrawMovementKeys( void );
 void Uni_CG_Speedometer( void );
 void Uni_CG_CalculateSpeed( void );
-char *Uni_CG_ReturnColorForAccel( void );
+const char *Uni_CG_ReturnColorForAccel( void );
 
 // Console commands.
 void Uni_CG_Buddies( void );
@@ -140,3 +143,11 @@ char *Uni_StripColors(char *str);
 void Uni_CG_Printf(const char* msg, ...);
 void Uni_CG_ClearPlayerData(int num);
 qboolean Uni_CG_IsIgnored(char *text, int mode);
+
+//Mouse mode.
+void Uni_CG_MouseMode(void);
+void Uni_CG_MouseMode_Coords(int x, int y);
+void Uni_CG_MouseMode_Click(int key, qboolean down);
+qboolean Uni_CG_MouseMode_InRect(int x, int y, int width, int height);
+void Uni_CG_MouseMode_DrawRect(score_t *score, float fade);
+void Uni_CG_MouseMode_SelectPlayer(void);

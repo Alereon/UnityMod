@@ -875,6 +875,12 @@ void CG_OwnerDraw(float x, float y, float w, float h, float text_x, float text_y
 void CG_MouseEvent(int x, int y) {
 	int n;
 
+	if (unity.mouseMode)
+	{
+		Uni_CG_MouseMode_Coords(x, y);
+		return;
+	}
+
 	if ( (cg.predictedPlayerState.pm_type == PM_NORMAL || cg.predictedPlayerState.pm_type == PM_FLOAT || cg.predictedPlayerState.pm_type == PM_SPECTATOR) && cg.showScores == qfalse) {
     trap_Key_SetCatcher(0);
 		return;
@@ -905,7 +911,6 @@ void CG_MouseEvent(int x, int y) {
   } else {
 	  Display_MouseMove(NULL, cgs.cursorX, cgs.cursorY);
   }
-
 }
 
 /*
@@ -957,6 +962,12 @@ void CG_EventHandling(int type) {
 void CG_KeyEvent(int key, qboolean down) {
 
 	if (!down) {
+		return;
+	}
+
+	if (unity.mouseMode)
+	{
+		Uni_CG_MouseMode_Click(key, down);
 		return;
 	}
 

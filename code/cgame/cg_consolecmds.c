@@ -85,7 +85,7 @@ static void CG_ScoresDown_f( void ) {
 }
 
 static void CG_ScoresUp_f( void ) {
-	if ( cg.showScores ) {
+	if ( cg.showScores && !unity.mouseMode ) {
 		cg.showScores = qfalse;
 		cg.scoreFadeTime = cg.time;
 	}
@@ -463,6 +463,7 @@ static consoleCommand_t	commands[] = {
 	{ "ignoreclient", Uni_CG_Ignore },
 	{ "ignorelist", Uni_CG_IgnoreList },
 	{ "clientlist", Uni_CG_ClientList },
+	{ "mousemode", Uni_CG_MouseMode},
 };
 
 

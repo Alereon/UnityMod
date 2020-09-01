@@ -152,6 +152,24 @@ static void CG_DrawClientScore( int y, score_t *score, float *color, float fade,
 		CG_FillRect( SB_SCORELINE_X - 5, y + 2, SB_SCORELINE_WIDTH + 10, largeFormat?SB_NORMAL_HEIGHT:SB_INTER_HEIGHT, hcolor );
 	}
 
+	if (unity.mouseMode)
+	{
+		vec4_t rect;
+
+		Vector4Copy(colorGreen, rect);
+		rect[3] = fade * 0.7f;
+
+		if (Uni_CG_MouseMode_InRect(SB_SCORELINE_X - 5, y + 2, SB_SCORELINE_WIDTH + 10, largeFormat ? SB_NORMAL_HEIGHT : SB_INTER_HEIGHT) && cg.clientNum != score->client)
+		{
+			CG_FillRect(SB_SCORELINE_X - 5, y + 2, SB_SCORELINE_WIDTH + 10, largeFormat ? SB_NORMAL_HEIGHT : SB_INTER_HEIGHT, rect);
+			score->selected = qtrue;
+		}
+		else
+		{
+			score->selected = qfalse;
+		}
+	}
+
 	CG_Text_Paint (SB_NAME_X, y, 0.9f * scale, colorWhite, ci->name,0, 0, ITEM_TEXTSTYLE_OUTLINED, FONT_MEDIUM );
 
 	if ( ci->team != TEAM_SPECTATOR || cgs.gametype == GT_TOURNAMENT )

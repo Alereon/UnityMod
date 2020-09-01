@@ -424,6 +424,9 @@ typedef struct {
 	int				captures;
 	qboolean	perfect;
 	int				team;
+
+	//[/unity] - marks the client on the scoreboard as selected in mouse mode.
+	qboolean		selected;
 } score_t;
 
 // each client has an associated clientInfo_t
