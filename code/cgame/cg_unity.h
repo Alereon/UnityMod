@@ -128,7 +128,6 @@ int Uni_CG_CountRemaps( unityShaderRemapType_t type );
 //Tables.
 void Uni_Table_Create(int rows, int columns, const char *name);
 void Uni_Table_AddRow(const char *content, ...);
-int Uni_Table_Get_minCellLen(void);
 void Uni_Table_Print_Sepline(void);
 void Uni_Table_Print(void);
 
@@ -149,5 +148,4 @@ void Uni_CG_MouseMode(void);
 void Uni_CG_MouseMode_Coords(int x, int y);
 void Uni_CG_MouseMode_Click(int key, qboolean down);
 qboolean Uni_CG_MouseMode_InRect(int x, int y, int width, int height);
-void Uni_CG_MouseMode_DrawRect(score_t *score, float fade);
 void Uni_CG_MouseMode_SelectPlayer(void);

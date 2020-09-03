@@ -731,6 +731,80 @@ void Uni_CG_Printf(const char* msg, ...)
 	trap_Print(text);
 }
 
+void Uni_CG_ClearPlayerData(int num)
+{
+	unityPlayer_t *player;
+
+	player = &unity.player[num];
+	//Clear the client's player data.
+	memset(player, 0, sizeof(player));
+
+	//Clear our own information we had of the player.
+	if (unity.buddies & (1 << num))
+	{
+		unity.buddies ^= (1 << num);
+	}
+	if (unity.ignored & (1 << num))
+	{
+		unity.ignored ^= (1 << num);
+	}
+}
+
+qboolean Uni_CG_IsIgnored(char *text, int mode)
+{
+	clientInfo_t *ci;
+	qboolean pm = qfalse;
+	char chat[MAX_SAY_TEXT];
+	char *plr, *n;
+	char name[MAX_NAME_LENGTH] = { 0 };
+	int i, count = 0;
+
+	if (text[1] == '[')
+	{
+		pm = qtrue;
+	}
+
+	Q_strncpyz(chat, text, sizeof(chat));
+	plr = Q_strrchr(chat, '\x19');
+	*plr = 0;
+
+	n = chat;
+
+	//Team chat and private chat have the same format.
+	if (mode == SAY_TEAM || pm)
+	{
+		n += 2; //Skip the chat token and openings bracket of team/private chat.
+		while (*n)
+		{
+			if (*n == '^' && *(n + 1) == '7' && *(n + 2) == '\x19')
+			{
+				break;
+			}
+			name[count++] = *n;
+			n++;
+		}
+		name[count] = 0;
+	}
+	else //All chat.
+	{
+		memcpy(name, n, strlen(n) - 2);
+	}
+
+	for (i = 0; i < MAX_CLIENTS; i++)
+	{
+		ci = &cgs.clientinfo[i];
+
+		if (!ci->infoValid)
+			continue;
+
+		if (unity.ignored & (1 << i) && !Q_stricmp(name, ci->name)) //The Client is on the ignore list!
+		{
+			return qtrue;
+		}
+	}
+	return qfalse;
+}
+
 /*
 ==========================
 Table functions.
@@ -861,32 +935,10 @@ void Uni_Table_Print_Sepline(void)
 	CG_Printf("%s\n", sepLine);
 }
 
-int Uni_Table_Get_minCellLen(void)
-{
-	int i, j;
-	int len = uni_Table.minCellLen;
-
-	for (i = 0; i < uni_Table.rows; i++)
-	{
-		if (uni_Table.row[i].used)
-		{
-			for (j = 0; j < uni_Table.columns; j++)
-			{
-				if (uni_Table.longestCon[j] > len)
-				{
-					len = uni_Table.longestCon[j];
-				}
-			}
-		}
-	}
-	return len;
-}
-
 void Uni_Table_Print(void)
 {
 	unityColumn_t *cell;
 	int i, j, count, len;
-	int minLen = Uni_Table_Get_minCellLen();
 	char row[MAX_STRING_CHARS] = { 0 };
 	char separator[MAX_STRING_CHARS] = { 0 };
 
@@ -898,7 +950,7 @@ void Uni_Table_Print(void)
 			{
 				cell = (unityColumn_t*)&uni_Table.row[i].column[j];
 
-				len = minLen - cell->len;
+				len = uni_Table.longestCon[j] - cell->len;
 
 				for (count = 0; count < (len / 2); count++)
 				{
@@ -955,79 +1007,11 @@ void Uni_Table_Print(void)
 	Uni_Mem_Free();
 }
 
-void Uni_CG_ClearPlayerData(int num)
-{
-	unityPlayer_t *player;
-
-	player = &unity.player[num];
-	//Clear the client's player data.
-	memset(player, 0, sizeof(player));
-
-	//Clear our own information we had of the player.
-	if (unity.buddies & (1 << num))
-	{
-		unity.buddies ^= (1 << num);
-	}
-	if (unity.ignored & (1 << num))
-	{
-		unity.ignored ^= (1 << num);
-	}
-}
-
-qboolean Uni_CG_IsIgnored(char *text, int mode)
-{
-	clientInfo_t *ci;
-	qboolean pm = qfalse;
-	char chat[MAX_SAY_TEXT];
-	char *plr, *n;
-	char name[MAX_NAME_LENGTH] = { 0 };
-	int i, count = 0;
-
-	if (text[1] == '[')
-	{
-		pm = qtrue;
-	}
-
-	Q_strncpyz(chat, text, sizeof(chat));
-	plr = Q_strrchr(chat, '\x19');
-	*plr = 0;
-
-	n = chat;
-
-	//Team chat and private chat have the same format.
-	if (mode == SAY_TEAM || pm)
-	{
-		n += 2; //Skip the chat token and openings bracket of team/private chat.
-		while (*n)
-		{
-			if (*n == '^' && *(n + 1) == '7' && *(n + 2) == '\x19' )
-			{
-				break;
-			}
-			name[count++] = *n;
-			n++;
-		}
-		name[count] = 0;
-	}
-	else //All chat.
-	{
-		memcpy(name, n, strlen(n) - 2);
-	}
-	
-	for (i = 0; i < MAX_CLIENTS; i++)
-	{
-		ci = &cgs.clientinfo[i];
-
-		if (!ci->infoValid)
-			continue;
-
-		if (unity.ignored & (1 << i) && !Q_stricmp(name, ci->name)) //The Client is on the ignore list!
-		{
-			return qtrue;
-		}
-	}
-	return qfalse;
-}
+/*
+==========================
+Scoreboard mouse mode functions.
+==========================
+*/
 
 void Uni_CG_MouseMode(void)
 {
