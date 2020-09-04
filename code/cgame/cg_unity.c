@@ -1037,7 +1037,7 @@ void Uni_CG_MouseMode(void)
 void Uni_CG_MouseMode_Coords(int x, int y)
 {
 	unity.mouseX = Com_Clampi(0, cgs.screenWidth, unity.mouseX + x);
-	unity.mouseY = Com_Clampi(0, SCREEN_HEIGHT, unity.mouseY + y);
+	unity.mouseY = Com_Clampi(0, cgs.screenHeight, unity.mouseY + y);
 }
 
 qboolean Uni_CG_MouseMode_InRect(int x, int y, int width, int height)
