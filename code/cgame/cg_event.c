@@ -273,7 +273,7 @@ clientkilled:
 			s = va("%s %s", sKilledStr, targetName );
 		}
 		if (!(cg_singlePlayerActive.integer && cg_cameraOrbit.integer)) {
-			CG_CenterPrint( s, SCREEN_HEIGHT * 0.30, BIGCHAR_WIDTH );
+			CG_CenterPrint( s, cgs.screenHeight * 0.30, BIGCHAR_WIDTH );
 		} 
 		// print the text message as well
 	}
@@ -456,7 +456,7 @@ static void CG_UseItem( centity_t *cent ) {
 	// print a message if the local player
 	if ( es->number == cg.snap->ps.clientNum ) {
 		if ( !itemNum ) {
-			CG_CenterPrint( "No item to use", SCREEN_HEIGHT * 0.30, BIGCHAR_WIDTH );
+			CG_CenterPrint( "No item to use", cgs.screenHeight * 0.30, BIGCHAR_WIDTH );
 		} else {
 			item = BG_FindItemForHoldable( itemNum );
 		}
@@ -1010,6 +1010,9 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 	case EV_CLIENTJOIN:
 		DEBUGNAME("EV_CLIENTJOIN");
 
+		if ( !VALID_INDEX(cg_entities, es->eventParm) )
+			break;
+
 		//Slight hack to force a local reinit of client entity on join.
 		cl_ent = &cg_entities[es->eventParm];
 
@@ -1242,6 +1245,9 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 			int		index;
 			qboolean	newindex = qfalse;
 
+			if ( !VALID_INDEX(cg_entities, es->eventParm) )
+				break;
+
 			index = cg_entities[es->eventParm].currentState.modelindex;		// player predicted
 
 			if (index < 1 && cg_entities[es->eventParm].currentState.isJediMaster)
@@ -1254,7 +1260,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 					const char *strText = CG_GetStripEdString("INGAMETEXT", "PICKUPLINE");
 
 					//Com_Printf("%s %s\n", strText, showPowersName[index]);
-					CG_CenterPrint( va("%s %s\n", strText, CG_GetStripEdString("INGAME",showPowersName[index])), SCREEN_HEIGHT * 0.30, BIGCHAR_WIDTH );
+					CG_CenterPrint( va("%s %s\n", strText, CG_GetStripEdString("INGAME",showPowersName[index])), cgs.screenHeight * 0.30, BIGCHAR_WIDTH );
 				}
 
 				//Show the player their force selection bar in case picking the holocron up changed the current selection
@@ -1895,15 +1901,21 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 	//
 	case EV_SAGA_ROUNDOVER:
 		DEBUGNAME("EV_SAGA_ROUNDOVER");
+		if ( !VALID_INDEX(cg_entities, cent->currentState.weapon) )
+			break;
 		CG_SagaRoundOver(&cg_entities[cent->currentState.weapon], cent->currentState.eventParm);
 		break;
 	case EV_SAGA_OBJECTIVECOMPLETE:
 		DEBUGNAME("EV_SAGA_OBJECTIVECOMPLETE");
+		if ( !VALID_INDEX(cg_entities, cent->currentState.weapon) )
+			break;
 		CG_SagaObjectiveCompleted(&cg_entities[cent->currentState.weapon], cent->currentState.eventParm, cent->currentState.trickedentindex);
 		break;
 
 	case EV_DESTROY_GHOUL2_INSTANCE:
 		DEBUGNAME("EV_DESTROY_GHOUL2_INSTANCE");
+		if ( !VALID_INDEX(cg_entities, es->eventParm) )
+			break;
 		if (cg_entities[es->eventParm].ghoul2 && trap_G2_HaveWeGhoul2Models(cg_entities[es->eventParm].ghoul2))
 		{
 			if (es->eventParm < MAX_CLIENTS)
@@ -1919,6 +1931,8 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 
 	case EV_DESTROY_WEAPON_MODEL:
 		DEBUGNAME("EV_DESTROY_WEAPON_MODEL");
+		if ( !VALID_INDEX(cg_entities, es->eventParm) )
+			break;
 		if (cg_entities[es->eventParm].ghoul2 && trap_G2_HaveWeGhoul2Models(cg_entities[es->eventParm].ghoul2) &&
 			trap_G2API_HasGhoul2ModelOnIndex(&(cg_entities[es->eventParm].ghoul2), 1))
 		{
@@ -2081,6 +2095,8 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 
 	case EV_MUTE_SOUND:
 		DEBUGNAME("EV_MUTE_SOUND");
+		if ( !VALID_INDEX(cg_entities, es->trickedentindex2) )
+			break;
 		if (cg_entities[es->trickedentindex2].currentState.eFlags & EF_SOUNDTRACKER)
 		{
 			cg_entities[es->trickedentindex2].currentState.eFlags -= EF_SOUNDTRACKER;
@@ -2094,14 +2110,14 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		if (es->saberEntityNum == TRACK_CHANNEL_2 || es->saberEntityNum == TRACK_CHANNEL_3 ||
 			es->saberEntityNum == TRACK_CHANNEL_5)
 		{ //channels 2 and 3 are for speed and rage, 5 for sight
-			if ( cgs.gameSounds[ es->eventParm ] )
+			if ( VALID_INDEX(cgs.gameSounds, es->eventParm) && cgs.gameSounds[ es->eventParm ] )
 			{
 				trap_S_AddRealLoopingSound(es->number, es->pos.trBase, vec3_origin, cgs.gameSounds[ es->eventParm ] );
 			}
 		}
 		else
 		{
-			if ( cgs.gameSounds[ es->eventParm ] ) {
+			if ( VALID_INDEX(cgs.gameSounds, es->eventParm) && cgs.gameSounds[ es->eventParm ] ) {
 				trap_S_StartSound (NULL, es->number, CHAN_VOICE, cgs.gameSounds[ es->eventParm ] );
 			} else {
 				s = CG_ConfigString( CS_SOUNDS + es->eventParm );
@@ -2112,7 +2128,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 
 	case EV_GLOBAL_SOUND:	// play from the player's head so it never diminishes
 		DEBUGNAME("EV_GLOBAL_SOUND");
-		if ( cgs.gameSounds[ es->eventParm ] ) {
+		if ( VALID_INDEX(cgs.gameSounds, es->eventParm) && cgs.gameSounds[ es->eventParm ] ) {
 			trap_S_StartSound (NULL, cg.snap->ps.clientNum, CHAN_AUTO, cgs.gameSounds[ es->eventParm ] );
 		} else {
 			s = CG_ConfigString( CS_SOUNDS + es->eventParm );
@@ -2197,7 +2213,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 	case EV_ENTITY_SOUND:
 		DEBUGNAME("EV_ENTITY_SOUND");
 		//somewhat of a hack - weapon is the caller entity's index, trickedentindex is the proper sound channel
-		if ( cgs.gameSounds[ es->eventParm ] ) {
+		if ( VALID_INDEX(cgs.gameSounds, es->eventParm) && cgs.gameSounds[ es->eventParm ] ) {
 			trap_S_StartSound (NULL, es->weapon, es->trickedentindex, cgs.gameSounds[ es->eventParm ] );
 		} else {
 			s = CG_ConfigString( CS_SOUNDS + es->eventParm );
@@ -2219,7 +2235,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		DEBUGNAME("EV_DEBRIS");
 		if (es->weapon)
 		{
-			if (cgs.gameSounds[es->weapon])
+			if (VALID_INDEX(cgs.gameSounds, es->weapon) && cgs.gameSounds[es->weapon])
 			{
 				isnd = cgs.gameSounds[es->weapon];
 			}
@@ -2236,7 +2252,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 
 		if (es->trickedentindex > 0)
 		{
-			if (cgs.gameModels[es->trickedentindex])
+			if (VALID_INDEX(cgs.gameModels, es->trickedentindex) && cgs.gameModels[es->trickedentindex])
 			{
 				CG_CreateDebris(es->number, es->pos.trBase, es->angles, es->origin, isnd, cgs.gameModels[es->trickedentindex]);
 			}
@@ -2303,6 +2319,10 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 
 	case EV_FORCE_DRAINED:
 		DEBUGNAME("EV_FORCE_DRAINED");
+
+		if ( !VALID_INDEX(cg_entities, es->owner) )
+			break;
+
 		ByteToDir( es->eventParm, dir );
 		//FX_ForceDrained(position, dir);
 		trap_S_StartSound (NULL, es->owner, CHAN_AUTO, cgs.media.drainSound );
@@ -2318,7 +2338,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 
 	case EV_STARTLOOPINGSOUND:
 		DEBUGNAME("EV_STARTLOOPINGSOUND");
-		if ( cgs.gameSounds[ es->eventParm ] )
+		if ( VALID_INDEX(cgs.gameSounds, es->eventParm) && cgs.gameSounds[ es->eventParm ] )
 		{
 			isnd = cgs.gameSounds[es->eventParm];
 		}
@@ -2341,7 +2361,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 	case EV_WEAPON_CHARGE:
 		DEBUGNAME("EV_WEAPON_CHARGE");
 		assert(es->eventParm > WP_NONE && es->eventParm < WP_NUM_WEAPONS);
-		if (cg_weapons[es->eventParm].chargeSound)
+		if (VALID_INDEX(cg_weapons, es->eventParm) && cg_weapons[es->eventParm].chargeSound)
 		{
 			trap_S_StartSound(NULL, es->number, CHAN_WEAPON, cg_weapons[es->eventParm].chargeSound);
 		}
@@ -2350,7 +2370,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 	case EV_WEAPON_CHARGE_ALT:
 		DEBUGNAME("EV_WEAPON_CHARGE_ALT");
 		assert(es->eventParm > WP_NONE && es->eventParm < WP_NUM_WEAPONS);
-		if (cg_weapons[es->eventParm].altChargeSound)
+		if (VALID_INDEX(cg_weapons, es->eventParm) && cg_weapons[es->eventParm].altChargeSound)
 		{
 			trap_S_StartSound(NULL, es->number, CHAN_WEAPON, cg_weapons[es->eventParm].altChargeSound);
 		}

@@ -300,7 +300,7 @@ typedef struct {
 // MUST be dealt with in G_InitSessionData() / G_ReadSessionData() / G_WriteSessionData()
 typedef struct {
 	team_t		sessionTeam;
-	int			spectatorTime;		// for determining next-in-line to play
+	int			spectatorOrder;		// for determining next-in-line to play
 	spectatorState_t	spectatorState;
 	int			spectatorClient;	// for chasecam and follow mode
 	int			wins, losses;		// tournament stats
@@ -337,6 +337,7 @@ typedef struct {
 	int			voteCount;			// to prevent people from constantly calling votes
 	int			teamVoteCount;		// to prevent people from constantly calling votes
 	qboolean	teamInfo;			// send team overlay updates?
+	qboolean	botDelayed;			// Is ClientBegin still outstanding for this bot, because it was delayed?
 } clientPersistant_t;
 
 
@@ -770,6 +771,8 @@ void AddScore( gentity_t *ent, vec3_t origin, int score );
 void CalculateRanks( void );
 qboolean SpotWouldTelefrag( gentity_t *spot );
 
+void G_CenterPrint( int targetNum, int autoLineWraps, const char *message );
+
 extern gentity_t *gJMSaberEnt;
 
 //
@@ -825,6 +828,8 @@ const char *G_GetStripEdString(char *refSection, char *refName);
 void MV_UpdateMvsdkConfigstring( char *key, char *value );
 void MV_UpdateSvFlags( void );
 void Unity_UpdateSvFlags(void);
+
+void G_StringAppendSubstring( char *dst, size_t dstSize, const char *src, size_t srcLen );
 
 // On linux rand() behaves different than on Winodws or in a qvm, ...
 void mysrand( unsigned seed );
@@ -1080,6 +1085,7 @@ extern	vmCvar_t	g_connectinglimit;
 extern	vmCvar_t	g_mv_forcePowerDisableMode;
 
 extern	vmCvar_t	g_submodelWorkaround;
+extern	vmCvar_t	g_botTeamAutoBalance;
 
 void	trap_Printf( const char *fmt );
 Q_NORETURN void	trap_Error( const char *fmt );

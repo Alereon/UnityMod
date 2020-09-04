@@ -626,6 +626,12 @@ void SpectatorThink( gentity_t *ent, usercmd_t *ucmd ) {
 		Cmd_FollowCycle_f( ent, 1 );
 	}
 
+	// alt attack button cycles backwards
+	if ( client->sess.spectatorState == SPECTATOR_FOLLOW && (client->buttons & BUTTON_ALT_ATTACK) && !(client->oldbuttons & BUTTON_ALT_ATTACK) )
+	{
+		Cmd_FollowCycle_f( ent, -1 );
+	}
+
 	if (client->sess.spectatorState == SPECTATOR_FOLLOW && (ucmd->upmove > 0))
 	{ //jump now removes you from follow mode
 		StopFollowing(ent);
@@ -1196,11 +1202,11 @@ void ClientThink_real( gentity_t *ent ) {
 			//Private duel announcements are now made globally because we only want one duel at a time.
 			if (ent->health > 0 && ent->client->ps.stats[STAT_HEALTH] > 0)
 			{
-				trap_SendServerCommand( -1, va("cp \"%s" S_COLOR_WHITE " %s %s!\n\"", ent->client->pers.netname, G_GetStripEdString("SVINGAME", "PLDUELWINNER"), duelAgainst->client->pers.netname) );
+				G_CenterPrint( -1, 3, va("%s" S_COLOR_WHITE " %s %s" S_COLOR_WHITE "!\n", ent->client->pers.netname, G_GetStripEdString("SVINGAME", "PLDUELWINNER"), duelAgainst->client->pers.netname) );
 			}
 			else
 			{ //it was a draw, because we both managed to die in the same frame
-				trap_SendServerCommand( -1, va("cp \"%s\n\"", G_GetStripEdString("SVINGAME", "PLDUELTIE")) );
+				G_CenterPrint( -1, 3, va("%s\n", G_GetStripEdString("SVINGAME", "PLDUELTIE")) );
 			}
 		}
 		else
@@ -1728,6 +1734,13 @@ void G_RunClient( gentity_t *ent ) {
 	if ( !(ent->r.svFlags & SVF_BOT) && !g_synchronousClients.integer ) {
 		return;
 	}
+
+	if ( ent->client->pers.botDelayed )
+	{ // Call ClientBegin for delayed bots now
+		ClientBegin( ent-g_entities, qtrue );
+		ent->client->pers.botDelayed = qfalse;
+	}
+
 	ent->client->pers.cmd.serverTime = level.time;
 	ClientThink_real( ent );
 }
