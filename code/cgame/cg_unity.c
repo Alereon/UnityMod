@@ -1082,6 +1082,7 @@ void Uni_CG_MouseMode_SelectPlayer(void)
 			continue;
 		}
 
+		cg.crosshairClientTime = cg.time;
 		cg.crosshairClientNum = score->client;
 
 		cg.showScores = qfalse;
