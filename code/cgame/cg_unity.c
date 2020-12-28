@@ -582,9 +582,16 @@ void Uni_CG_HandleChangedRemaps( unityShaderRemapType_t mode )
 		}
 	}
 
-	Uni_Table_Print();
 
-	if (counter) CG_Printf("\nCurrently %s %s%i %sremaps in total%s.\n%sUse %s/%s%s to get a full list%s.\n", (mode == REMAP_PRIORITY ? "prioritizing" : "blocking"), UNI_SYMBOL_COLOR, counter, UNI_TEXT_COLOR, UNI_SYMBOL_COLOR, UNI_TEXT_COLOR, UNI_SYMBOL_COLOR, UNI_TEXT_COLOR, (mode == REMAP_PRIORITY ? "priorityRemaps" : "blockedRemaps"), UNI_SYMBOL_COLOR);
+	if (counter)
+	{
+		Uni_Table_Print();
+		CG_Printf("\nCurrently %s %s%i %sremaps in total%s.\n%sUse %s/%s%s to get a full list%s.\n", (mode == REMAP_PRIORITY ? "prioritizing" : "blocking"), UNI_SYMBOL_COLOR, counter, UNI_TEXT_COLOR, UNI_SYMBOL_COLOR, UNI_TEXT_COLOR, UNI_SYMBOL_COLOR, UNI_TEXT_COLOR, (mode == REMAP_PRIORITY ? "priorityRemaps" : "blockedRemaps"), UNI_SYMBOL_COLOR);
+	}
+	else
+	{
+		Uni_Mem_Free();
+	}
 
 	// Remember if remaps were blocked
 	wasBlocked = Uni_blockShaderRemaps.integer;
@@ -852,10 +859,15 @@ void Uni_Table_Create(int rows, int columns, const char *name)
 	uni_Table.longestCon = (int*)Uni_Mem_Alloc(sizeof(int) * columns);
 	memset(uni_Table.longestCon, 0, sizeof(int) * columns);
 
-	uni_Table.name = (char*)Uni_Mem_Alloc(sizeof(char) * (strlen(name) + 1));
-	strcpy(uni_Table.name, name);
-	uni_Table.name[strlen(name) + 1] = 0;
-	uni_Table.nameLen = strlen(Uni_StripColors(uni_Table.name));
+	uni_Table.nameLen = 0;
+
+	if (name != NULL)
+	{
+		uni_Table.name = (char*)Uni_Mem_Alloc(sizeof(char) * (strlen(name) + 1));
+		strcpy(uni_Table.name, name);
+		uni_Table.name[strlen(name) + 1] = 0;
+		uni_Table.nameLen = strlen(Uni_StripColors(uni_Table.name));
+	}
 
 	uni_Table.rows = rows;
 	uni_Table.columns = columns;
@@ -883,7 +895,7 @@ void Uni_Table_AddRow(const char *content, ...)
 			field[j] = 0;
 			len = strlen(field);
 
-			cell = (unityColumn_t*)&uni_Table.row[uni_Table.currentRow].column[col];
+			cell = &uni_Table.row[uni_Table.currentRow].column[col];
 
 			if (!cell)
 			{
@@ -971,7 +983,7 @@ void Uni_Table_Print(void)
 
 			uni_Table.rowLen = strlen(Uni_StripColors(row));
 
-			if (i == 0)
+			if (uni_Table.nameLen > 0 && i == 0)
 			{
 				memset(separator, 0, sizeof(separator));
 				Uni_Table_Print_Sepline();
@@ -989,7 +1001,7 @@ void Uni_Table_Print(void)
 				CG_Printf("%s\n", row);
 				Uni_Table_Print_Sepline();
 			}
-			else if ( !uni_Table.row[i + 1].used)
+			else if ( !uni_Table.row[i + 1].used || (!uni_Table.nameLen && i == 0))
 			{
 				CG_Printf("%s\n", row);
 				Uni_Table_Print_Sepline();
