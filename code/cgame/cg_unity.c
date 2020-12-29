@@ -1,4 +1,4 @@
-// cg_unity.c -- custom functions used in UnityMod.
+ï»¿// cg_unity.c -- custom functions used in UnityMod.
 
 #include "cg_local.h"
 #include "../ui/ui_shared.h"
@@ -256,12 +256,12 @@ void Uni_CG_Speedometer( void )
 	switch (Uni_drawSpeedometer.integer)
 	{
 	case 1:
-		Com_sprintf(speedStr[0], sizeof(speedStr[0]), "%sµ:^7 %.0f| %.0f", Uni_CG_ReturnColorForAccel(), Q_floorf(player->strafe.currentSpeed + 0.5f), Q_floorf(player->strafe.maxSpeed + 0.5f));
+		Com_sprintf(speedStr[0], sizeof(speedStr[0]), "%sï¿½:^7 %.0f| %.0f", Uni_CG_ReturnColorForAccel(), Q_floorf(player->strafe.currentSpeed + 0.5f), Q_floorf(player->strafe.maxSpeed + 0.5f));
 		CG_Text_Paint(MAX(cgs.screenWidth - CG_Text_Width(speedStr[0], scale, 0), cgs.screenWidth - CG_Text_Width(speedStr[0], scale, 0)) - Uni_drawSpeedometerX.integer, Uni_drawSpeedometerY.integer + scale * BIGCHAR_HEIGHT + CG_Text_Height(speedStr[0], scale, 0), scale, colorWhite, speedStr[0], 0.5, 0, 0, FONT_NONE);
 
 		if (Uni_drawAvgSpeed.integer)
 		{
-			Com_sprintf(speedStr[1], sizeof(speedStr[1]), "Avg µ: %.0f", player->strafe.avgSpeed / player->strafe.avgSpeedSamp);
+			Com_sprintf(speedStr[1], sizeof(speedStr[1]), "Avg ï¿½: %.0f", player->strafe.avgSpeed / player->strafe.avgSpeedSamp);
 			CG_Text_Paint(MAX(cgs.screenWidth - CG_Text_Width(speedStr[1], scale, 0), cgs.screenWidth - CG_Text_Width(speedStr[0], scale, 0)) - Uni_drawSpeedometerX.integer, Uni_drawSpeedometerY.integer + scale * BIGCHAR_HEIGHT, scale, colorWhite, speedStr[1], 0.5, 0, 0, FONT_NONE);
 		}
 		break;
@@ -666,6 +666,26 @@ void Uni_CG_ResetAverageSpeed( void )
 {
 	unity.player[cg.snap->ps.clientNum].strafe.avgSpeed = 0;
 	unity.player[cg.snap->ps.clientNum].strafe.avgSpeedSamp = 0;
+}
+
+void Uni_CG_CvarList(void)
+{
+	int i;
+
+	Uni_Table_Create(128, 3, NULL);
+	Uni_Table_AddRow("Cvar"UD"Description"UD"Default");
+
+	for (i = 0; i < unity.cvarCount; i++)
+	{
+		if (uni_cvar[i]->desc == NULL)
+		{
+			continue;
+		}
+
+		Uni_Table_AddRow("%s"UD"%s"UD"%s", uni_cvar[i]->cvarName, uni_cvar[i]->desc, uni_cvar[i]->defaultString);
+	}
+
+	Uni_Table_Print();
 }
 
 /*

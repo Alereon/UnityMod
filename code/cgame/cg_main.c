@@ -656,9 +656,10 @@ typedef struct {
 	char		*cvarName;
 	char		*defaultString;
 	int			cvarFlags;
+	const char	*desc;
 } cvarTable_t;
 
-static cvarTable_t cvarTable[] = { // bk001129
+ static cvarTable_t cvarTable[] = { // bk001129
 	{ &cg_ignore, "cg_ignore", "0", 0 },	// used for debugging
 	{ &cg_autoswitch, "cg_autoswitch", "1", CVAR_ARCHIVE },
 	{ &cg_drawGun, "cg_drawGun", "1", CVAR_ARCHIVE },
@@ -697,49 +698,48 @@ static cvarTable_t cvarTable[] = { // bk001129
 	{ &cg_bobup , "cg_bobup", "0.005", CVAR_ARCHIVE },
 	{ &cg_bobpitch, "cg_bobpitch", "0.002", CVAR_ARCHIVE },
 	{ &cg_bobroll, "cg_bobroll", "0.002", CVAR_ARCHIVE },
-	//{ &cg_swingSpeed, "cg_swingSpeed", "0.3", CVAR_CHEAT },
 	{ &cg_animSpeed, "cg_animspeed", "1", CVAR_CHEAT },
 	{ &cg_debugAnim, "cg_debuganim", "0", CVAR_CHEAT },
 	{ &cg_debugSaber, "cg_debugsaber", "0", CVAR_CHEAT },
 	{ &cg_debugPosition, "cg_debugposition", "0", CVAR_CHEAT },
 	{ &cg_debugEvents, "cg_debugevents", "0", CVAR_CHEAT },
 	{ &cg_errorDecay, "cg_errordecay", "100", 0 },
-	{ &cg_nopredict, "cg_nopredict", "0", 0 },
+	{ &cg_errorDecay, "cg_errordecay", "100", 0, NULL },
 	{ &cg_noPlayerAnims, "cg_noplayeranims", "0", CVAR_CHEAT },
 	{ &cg_showmiss, "cg_showmiss", "0", 0 },
 	{ &cg_footsteps, "cg_footsteps", "1", CVAR_CHEAT },
 	{ &cg_tracerChance, "cg_tracerchance", "0.4", CVAR_CHEAT },
 	{ &cg_tracerWidth, "cg_tracerwidth", "1", CVAR_CHEAT },
 	{ &cg_tracerLength, "cg_tracerlength", "100", CVAR_CHEAT },
-
+	{ &cg_tracerLength, "cg_tracerlength", "100", CVAR_CHEAT, NULL },
 	{ &cg_swingAngles, "cg_swingAngles", "1", 0 },
-
+	{ &cg_swingAngles, "cg_swingAngles", "1", 0, NULL },
 	{ &cg_oldPainSounds, "cg_oldPainSounds", "0", 0 },
+	{ &cg_oldPainSounds, "cg_oldPainSounds", "0", 0, NULL },
 
-#ifdef G2_COLLISION_ENABLED
 	{ &cg_saberModelTraceEffect, "cg_saberModelTraceEffect", "0", 0 },
+	{ &cg_saberModelTraceEffect, "cg_saberModelTraceEffect", "0", 0, NULL },
 #endif
 
 	{ &cg_fpls, "cg_fpls", "0", 0 },
-
 	{ &cg_saberDynamicMarks, "cg_saberDynamicMarks", "0", 0 },
 	{ &cg_saberDynamicMarkTime, "cg_saberDynamicMarkTime", "60000", 0 },
-
+	{ &cg_saberDynamicMarkTime, "cg_saberDynamicMarkTime", "60000", 0, NULL },
 	{ &cg_saberContact, "cg_saberContact", "1", 0 },
 	{ &cg_saberTrail, "cg_saberTrail", "1", 0 },
-
+	{ &cg_saberTrail, "cg_saberTrail", "1", 0, NULL },
 	{ &cg_duelHeadAngles, "cg_duelHeadAngles", "0", 0 },
-
+	{ &cg_duelHeadAngles, "cg_duelHeadAngles", "0", 0, NULL },
 	{ &cg_speedTrail, "cg_speedTrail", "1", 0 },
 	{ &cg_auraShell, "cg_auraShell", "1", 0 },
-
+	{ &cg_auraShell, "cg_auraShell", "1", 0, NULL },
 	{ &cg_animBlend, "cg_animBlend", "1", 0 },
-
+	{ &cg_animBlend, "cg_animBlend", "1", 0, NULL },
 	{ &cg_dismember, "cg_dismember", "0", CVAR_ARCHIVE },
-
+	{ &cg_dismember, "cg_dismember", "0", CVAR_ARCHIVE, NULL },
 	{ &cg_widescreen, "cg_widescreen", "1", CVAR_ARCHIVE },
 	{ &cg_fovAspectAdjust, "cg_fovAspectAdjust", "0", CVAR_ARCHIVE },
-
+	{ &cg_fovAspectAdjust, "cg_fovAspectAdjust", "0", CVAR_ARCHIVE, NULL },
 	{ &cg_thirdPerson, "cg_thirdPerson", "0", 0 },
 	{ &cg_thirdPersonRange, "cg_thirdPersonRange", "80", CVAR_CHEAT },
 	{ &cg_thirdPersonAngle, "cg_thirdPersonAngle", "0", CVAR_CHEAT },
@@ -747,10 +747,10 @@ static cvarTable_t cvarTable[] = { // bk001129
 	{ &cg_thirdPersonVertOffset, "cg_thirdPersonVertOffset", "16", CVAR_CHEAT },
 	{ &cg_thirdPersonCameraDamp, "cg_thirdPersonCameraDamp", "0.3", 0 },
 	{ &cg_thirdPersonTargetDamp, "cg_thirdPersonTargetDamp", "0.5", CVAR_CHEAT },
-	
+	{ &cg_thirdPersonTargetDamp, "cg_thirdPersonTargetDamp", "0.5", CVAR_CHEAT, NULL },
 	{ &cg_thirdPersonHorzOffset, "cg_thirdPersonHorzOffset", "0", CVAR_CHEAT },
 	{ &cg_thirdPersonAlpha,	"cg_thirdPersonAlpha",	"1.0", CVAR_CHEAT },
-
+	{ &cg_thirdPersonAlpha,	"cg_thirdPersonAlpha",	"1.0", CVAR_CHEAT, NULL },
 	{ &cg_teamChatTime, "cg_teamChatTime", "3000", CVAR_ARCHIVE  },
 	{ &cg_teamChatHeight, "cg_teamChatHeight", "0", CVAR_ARCHIVE  },
 	{ &cg_forceModel, "cg_forceModel", "0", CVAR_ARCHIVE  },
@@ -758,18 +758,18 @@ static cvarTable_t cvarTable[] = { // bk001129
 	{ &cg_deferPlayers, "cg_deferPlayers", "1", CVAR_ARCHIVE },
 	{ &cg_drawTeamOverlay, "cg_drawTeamOverlay", "0", CVAR_ARCHIVE },
 	{ &cg_teamOverlayUserinfo, "teamoverlay", "0", CVAR_ROM | CVAR_USERINFO },
-	{ &cg_stats, "cg_stats", "0", 0 },
+	{ &cg_teamOverlayUserinfo, "teamoverlay", "0", CVAR_ROM | CVAR_USERINFO, NULL },
 	{ &cg_drawFriend, "cg_drawFriend", "1", CVAR_ARCHIVE },
 	{ &cg_teamChatsOnly, "cg_teamChatsOnly", "0", CVAR_ARCHIVE },
 	{ &cg_noVoiceChats, "cg_noVoiceChats", "0", CVAR_ARCHIVE },
 	{ &cg_noVoiceText, "cg_noVoiceText", "0", CVAR_ARCHIVE },
+	{ &cg_noVoiceText, "cg_noVoiceText", "0", CVAR_ARCHIVE, NULL },
 	// the following variables are created in other parts of the system,
-	// but we also reference them here
 	{ &cg_buildScript, "com_buildScript", "0", 0 },	// force loading of all possible data amd error on failures
 	{ &cg_paused, "cl_paused", "0", CVAR_ROM },
 	{ &cg_blood, "com_blood", "1", CVAR_ARCHIVE },
 	{ &cg_synchronousClients, "g_synchronousClients", "0", 0 },	// communicated by systeminfo
-
+	{ &cg_synchronousClients, "g_synchronousClients", "0", 0, NULL },	// communicated by systeminfo
 	{ &cg_redTeamName, "g_redteam", DEFAULT_REDTEAM_NAME, CVAR_ARCHIVE | CVAR_SERVERINFO | CVAR_USERINFO },
 	{ &cg_blueTeamName, "g_blueteam", DEFAULT_BLUETEAM_NAME, CVAR_ARCHIVE | CVAR_SERVERINFO | CVAR_USERINFO },
 	{ &cg_currentSelectedPlayer, "cg_currentSelectedPlayer", "0", CVAR_ARCHIVE},
@@ -780,7 +780,7 @@ static cvarTable_t cvarTable[] = { // bk001129
 	{ &cg_singlePlayerActive, "ui_singlePlayerActive", "0", CVAR_USERINFO},
 	{ &cg_recordSPDemo, "ui_recordSPDemo", "0", CVAR_ARCHIVE},
 	{ &cg_recordSPDemoName, "ui_recordSPDemoName", "", CVAR_ARCHIVE},
-
+	{ &cg_recordSPDemoName, "ui_recordSPDemoName", "", CVAR_ARCHIVE, NULL },
 	{ &cg_cameraOrbit, "cg_cameraOrbit", "0", CVAR_CHEAT},
 	{ &cg_cameraOrbitDelay, "cg_cameraOrbitDelay", "50", CVAR_ARCHIVE},
 	{ &cg_timescaleFadeEnd, "cg_timescaleFadeEnd", "1", 0},
@@ -790,7 +790,7 @@ static cvarTable_t cvarTable[] = { // bk001129
 	{ &cg_hudFiles, "cg_hudFiles", "0", CVAR_USERINFO | CVAR_ARCHIVE},
 	{ &cg_smoothClients, "cg_smoothClients", "0", CVAR_USERINFO | CVAR_ARCHIVE},
 	{ &cg_cameraMode, "com_cameraMode", "0", CVAR_CHEAT},
-
+	{ &cg_cameraMode, "com_cameraMode", "0", CVAR_CHEAT, NULL },
 	{ &cg_pmove_fixed, "pmove_fixed", "0", 0},
 	{ &cg_pmove_msec, "pmove_msec", "8", 0},
 	{ &cg_noTaunt, "cg_noTaunt", "0", CVAR_ARCHIVE},
@@ -798,19 +798,20 @@ static cvarTable_t cvarTable[] = { // bk001129
 	{ &cg_smallFont, "ui_smallFont", "0.25", CVAR_ARCHIVE},
 	{ &cg_bigFont, "ui_bigFont", "0.4", CVAR_ARCHIVE},
 	{ &cg_trueLightning, "cg_trueLightning", "0.0", CVAR_ARCHIVE},
-
+	{ &cg_trueLightning, "cg_trueLightning", "0.0", CVAR_ARCHIVE, NULL },
 	{ &cg_ui_myteam, "ui_myteam", "0", CVAR_ROM|CVAR_INTERNAL},
-
+	{ &cg_ui_myteam, "ui_myteam", "0", CVAR_ROM|CVAR_INTERNAL, NULL },
 	{ &cg_mv_fixbrokenmodelsclient, "mv_fixbrokenmodelsclient", "2", CVAR_ARCHIVE },
 	{ &cg_drawPlayerSprites, "cg_drawPlayerSprites", "3", CVAR_ARCHIVE },
-
+	{ &cg_drawPlayerSprites, "cg_drawPlayerSprites", "3", CVAR_ARCHIVE, NULL },
 	{ &cg_MVSDK, "cg_MVSDK", MVSDK_VERSION, CVAR_ROM | CVAR_USERINFO },
+	{ &cg_MVSDK, "cg_MVSDK", MVSDK_VERSION, CVAR_ROM | CVAR_USERINFO, NULL },
 
 //	{ &cg_pmove_fixed, "cg_pmove_fixed", "0", CVAR_USERINFO | CVAR_ARCHIVE }
 /*
 Ghoul2 Insert Start
-*/
 	{ &cg_debugBB, "debugBB", "0", 0},
+	{ &cg_debugBB, "debugBB", "0", 0, NULL },
 /*
 Ghoul2 Insert End
 */
@@ -831,7 +832,6 @@ Ghoul2 Insert End
 	{ &Uni_drawForcePointsY, "Uni_drawForcePointsY", "385", CVAR_ARCHIVE },
 	{ &Uni_drawForcePointsScale, "Uni_drawForcePointsScale", "0.7", CVAR_ARCHIVE },
 
-	// Strafe.
 	{ &Uni_drawMovementKeys, "Uni_drawMovementKeys", "0", CVAR_ARCHIVE },
 	{ &Uni_drawMovementKeysX, "Uni_drawMovementKeysX", "220", CVAR_ARCHIVE },
 	{ &Uni_drawMovementKeysY, "Uni_drawMovementKeysY", "425", CVAR_ARCHIVE },
@@ -841,6 +841,7 @@ Ghoul2 Insert End
 	{ &Uni_drawSpeedometerY, "Uni_drawSpeedometerY", "430", CVAR_ARCHIVE },
 	{ &Uni_drawSpeedometerScale, "Uni_drawSpeedometerScale", "0.75", CVAR_ARCHIVE },
 	{ &Uni_drawAvgSpeed, "Uni_drawAvgSpeed", "0", CVAR_ARCHIVE },
+	{ &Uni_drawAvgSpeed, "Uni_drawAvgSpeed", "0", CVAR_ARCHIVE, NULL },
 
 	// RGB.
 	{ &Uni_allowRGB, "Uni_allowRGB", "1", CVAR_ARCHIVE },
@@ -857,12 +858,12 @@ Ghoul2 Insert End
 	{ &Uni_throwColourG, "Uni_throwColourG", "32", CVAR_ARCHIVE },
 	{ &Uni_throwColourB, "Uni_throwColourB", "40", CVAR_ARCHIVE },
 
-	// Duel
 	{ &Uni_duelGlow, "Uni_duelGlow", "1", CVAR_ARCHIVE },
 	{ &Uni_duelMessages, "Uni_duelMessages", "0", CVAR_ARCHIVE },
 	{ &Uni_duelStartMessage, "Uni_duelStartMessage", "^1G^7ood ^1l^7uck^1!", CVAR_ARCHIVE },
 	{ &Uni_duelEndMessage, "Uni_duelEndMessage", "^1G^7ood ^1f^7ight^1!", CVAR_ARCHIVE },
 	{ &Uni_duelMusic, "Uni_duelMusic", "1", CVAR_ARCHIVE },
+	{ &Uni_duelMusic, "Uni_duelMusic", "1", CVAR_ARCHIVE, NULL },
 
 	// Other
 	{ &Uni_noChat, "Uni_noChat", "0", CVAR_ARCHIVE },
@@ -888,8 +889,17 @@ void CG_RegisterCvars( void ) {
 
 	for ( i = 0, cv = cvarTable ; i < cvarTableSize ; i++, cv++ ) {
 		trap_Cvar_Register( cv->vmCvar, cv->cvarName,
-			cv->defaultString, cv->cvarFlags );
+
+		if (!Q_stricmpn(cv->cvarName, "Uni_", 4))
+		{
+			uni = &uni_cvar[count];
+			uni->cvarName = cv->cvarName;
+			uni->Description = cv->desc;
+			uni->used = qtrue;
+			count++;
 	}
+
+	unity.cvarCount = count;
 
 	// see if we are also running the server on this machine
 	trap_Cvar_VariableStringBuffer( "sv_running", var, sizeof( var ) );

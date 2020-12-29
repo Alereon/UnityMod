@@ -91,6 +91,11 @@ typedef struct {
 	int					minCellLen;
 } unityTable_t;
 
+
+
+#define MAX_UNI_CVARS 128
+extern cvarTable_t *uni_cvar[MAX_UNI_CVARS];
+
 /*
 =================
 UnityMod function prototypes.

@@ -1424,6 +1424,14 @@ Ghoul2 Insert End
 
 //==============================================================================
 
+typedef struct {
+	vmCvar_t* vmCvar;
+	char* cvarName;
+	char* defaultString;
+	int			cvarFlags;
+	const char* desc;
+} cvarTable_t;
+
 extern	cgs_t			cgs;
 extern	cg_t			cg;
 extern	centity_t		cg_entities[MAX_GENTITIES];
