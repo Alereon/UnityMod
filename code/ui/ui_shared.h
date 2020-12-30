@@ -176,7 +176,7 @@ typedef struct editFieldDef_s {
 	float range;									 // 
   int maxChars;                  // for edit fields
   int maxPaintChars;             // for edit fields
-	int paintOffset;							 // 
+	int paintOffset;							 //
 } editFieldDef_t;
 
 #define MAX_MULTI_CVARS 32
