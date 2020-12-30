@@ -1023,6 +1023,11 @@ void Uni_Table_Print(void)
 			}
 			else if ( !uni_Table.row[i + 1].used || (!uni_Table.nameLen && i == 0))
 			{
+				if (i == 0)
+				{
+					Uni_Table_Print_Sepline();
+				}
+
 				CG_Printf("%s\n", row);
 				Uni_Table_Print_Sepline();
 			}
