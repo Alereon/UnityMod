@@ -1,4 +1,4 @@
-﻿// cg_unity.c -- custom functions used in UnityMod.
+// cg_unity.c -- custom functions used in UnityMod.
 
 #include "cg_local.h"
 #include "../ui/ui_shared.h"

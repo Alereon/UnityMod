@@ -1,0 +1,3 @@
+name: Github Actions Test
+
+on: [push]
