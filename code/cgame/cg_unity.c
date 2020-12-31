@@ -4,6 +4,7 @@
 #include "../ui/ui_shared.h"
 
 unityMod_t unity;
+cvarTable_t* uni_cvar[MAX_UNI_CVARS];
 
 /*
 ==============
@@ -37,11 +38,12 @@ void Uni_CG_DrawClock( void )
 		}
 		else
 		{
+			h = t.tm_hour;
+			pm = UNI_SYMBOL_COLOR "AM";
 			if (t.tm_hour == 0)
 			{
 				h = 12;
 			}
-			pm = UNI_SYMBOL_COLOR "AM";
 		}
 
 		time = va("%d%s%s%02d %s", h, (t.tm_sec % 2) ? UNI_SYMBOL_COLOR ":" : " ", UNI_TEXT_COLOR, t.tm_min, pm);
@@ -256,12 +258,12 @@ void Uni_CG_Speedometer( void )
 	switch (Uni_drawSpeedometer.integer)
 	{
 	case 1:
-		Com_sprintf(speedStr[0], sizeof(speedStr[0]), "%s�:^7 %.0f| %.0f", Uni_CG_ReturnColorForAccel(), Q_floorf(player->strafe.currentSpeed + 0.5f), Q_floorf(player->strafe.maxSpeed + 0.5f));
+		Com_sprintf(speedStr[0], sizeof(speedStr[0]), "%sµ:^7 %.0f| %.0f", Uni_CG_ReturnColorForAccel(), Q_floorf(player->strafe.currentSpeed + 0.5f), Q_floorf(player->strafe.maxSpeed + 0.5f));
 		CG_Text_Paint(MAX(cgs.screenWidth - CG_Text_Width(speedStr[0], scale, 0), cgs.screenWidth - CG_Text_Width(speedStr[0], scale, 0)) - Uni_drawSpeedometerX.integer, Uni_drawSpeedometerY.integer + scale * BIGCHAR_HEIGHT + CG_Text_Height(speedStr[0], scale, 0), scale, colorWhite, speedStr[0], 0.5, 0, 0, FONT_NONE);
 
 		if (Uni_drawAvgSpeed.integer)
 		{
-			Com_sprintf(speedStr[1], sizeof(speedStr[1]), "Avg �: %.0f", player->strafe.avgSpeed / player->strafe.avgSpeedSamp);
+			Com_sprintf(speedStr[1], sizeof(speedStr[1]), "Avg µ: %.0f", player->strafe.avgSpeed / player->strafe.avgSpeedSamp);
 			CG_Text_Paint(MAX(cgs.screenWidth - CG_Text_Width(speedStr[1], scale, 0), cgs.screenWidth - CG_Text_Width(speedStr[0], scale, 0)) - Uni_drawSpeedometerX.integer, Uni_drawSpeedometerY.integer + scale * BIGCHAR_HEIGHT, scale, colorWhite, speedStr[1], 0.5, 0, 0, FONT_NONE);
 		}
 		break;

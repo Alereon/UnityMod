@@ -62,6 +62,8 @@ typedef struct {
 	qboolean			remapsUpdated;
 	unityShaderRemap_t	remaps[MAX_SHADER_REMAPS];
 	int					remapsCount;
+
+	int					cvarCount;
 } unityMod_t;
 
 extern unityMod_t unity;
