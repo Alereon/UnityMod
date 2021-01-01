@@ -3,6 +3,9 @@ on:
   push:
     branches: 
       - UnityMod
+      
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
 
 jobs:
   Build:
@@ -29,18 +32,22 @@ jobs:
             cd ..
             echo "compatible all" > mv.info
             zip -r UnityMod_${SHORT_SHA}.pk3 vm mv.info
+     - name: Get Latest Release
+       id: last_release
+       uses: jossef/action-latest-release-info@v1.1.0
+     - name: Delete the last tag and release
+       uses: dev-drprasad/delete-tag-and-release@v0.1.2
+       with:
+         delete_release: true
+         tag_name: ${{ steps.last_release.outputs.tag_name }}
      - name: Create Release
        id: create_release
        uses: actions/create-release@v1.1.4
-       env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
        with:
          tag_name: UnityMod_${{ env.SHORT_SHA }}
          release_name: UnityMod_${{ env.SHORT_SHA }}
      - name: Upload a Release Asset
        uses: actions/upload-release-asset@v1.0.2
-       env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
        with:
          upload_url: ${{ steps.create_release.outputs.upload_url }}
          asset_path: build/Linux-x86_64/code/UnityMod_${{ env.SHORT_SHA }}.pk3  

@@ -4,7 +4,7 @@
 #include "../ui/ui_shared.h"
 
 unityMod_t unity;
-cvarTable_t* uni_cvar[MAX_UNI_CVARS];
+cvarTable_t *uni_cvar[MAX_UNI_CVARS];
 
 /*
 ==============
@@ -13,9 +13,9 @@ HUD Functions.
 */
 
 // Draws a clock on the screen.
-void Uni_CG_DrawClock( void )
+void Uni_CG_DrawClock(void)
 {
-	char	*time;
+	char *time;
 	qtime_t	t;
 
 	trap_RealTime(&t);
@@ -55,7 +55,7 @@ void Uni_CG_DrawClock( void )
 }
 
 // Draw inventory items live on the HUD.
-void Uni_CG_DrawItemsOnHud( void )
+void Uni_CG_DrawItemsOnHud(void)
 {
 	int count = -1;
 	int iconSize = Uni_drawItemsOnHudScale.integer;
@@ -114,7 +114,7 @@ void Uni_CG_CalculateSpeed(void)
 }
 
 // Movement keys.
-void Uni_CG_DrawMovementKeys( void )
+void Uni_CG_DrawMovementKeys(void)
 {
 	usercmd_t cmd = { 0 };
 	char str1[32] = { 0 }, str2[32] = { 0 };
@@ -129,7 +129,7 @@ void Uni_CG_DrawMovementKeys( void )
 	{
 		trap_GetUserCmd(trap_GetCurrentCmdNumber(), &cmd);
 	}
-	else 
+	else
 	{
 		unityPlayer_t *player;
 		int moveDir = cg.snap->ps.movementDir;
@@ -152,36 +152,36 @@ void Uni_CG_DrawMovementKeys( void )
 
 		switch (moveDir)
 		{
-			case 0: // W
-				cmd.forwardmove = 1;
-				break;
-			case 1: // WA
-				cmd.forwardmove = 1;
-				cmd.rightmove = -1;
-				break;
-			case 2: // A
-				cmd.rightmove = -1;
-				break;
-			case 3: // AS
-				cmd.rightmove = -1;
-				cmd.forwardmove = -1;
-				break;
-			case 4: // S
-				cmd.forwardmove = -1;
-				break;
-			case 5: // SD
-				cmd.forwardmove = -1;
-				cmd.rightmove = 1;
-				break;
-			case 6: // D
-				cmd.rightmove = 1;
-				break;
-			case 7: // DW
-				cmd.rightmove = 1;
-				cmd.forwardmove = 1;
-				break;
-			default:
-				break;
+		case 0: // W
+			cmd.forwardmove = 1;
+			break;
+		case 1: // WA
+			cmd.forwardmove = 1;
+			cmd.rightmove = -1;
+			break;
+		case 2: // A
+			cmd.rightmove = -1;
+			break;
+		case 3: // AS
+			cmd.rightmove = -1;
+			cmd.forwardmove = -1;
+			break;
+		case 4: // S
+			cmd.forwardmove = -1;
+			break;
+		case 5: // SD
+			cmd.forwardmove = -1;
+			cmd.rightmove = 1;
+			break;
+		case 6: // D
+			cmd.rightmove = 1;
+			break;
+		case 7: // DW
+			cmd.rightmove = 1;
+			cmd.forwardmove = 1;
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -241,11 +241,11 @@ const char *Uni_CG_ReturnColorForAccel(void)
 }
 
 // Speedometer.
-void Uni_CG_Speedometer( void )
+void Uni_CG_Speedometer(void)
 {
-	unityPlayer_t		*player;
+	unityPlayer_t *player;
 	char				speedStr[2][32] = { 0 };
-	float				scale			= Uni_drawSpeedometerScale.value;
+	float				scale = Uni_drawSpeedometerScale.value;
 	float				currentSpeed;
 
 	if (!Uni_drawSpeedometer.integer)
@@ -258,16 +258,16 @@ void Uni_CG_Speedometer( void )
 	switch (Uni_drawSpeedometer.integer)
 	{
 	case 1:
-		Com_sprintf(speedStr[0], sizeof(speedStr[0]), "%sÂµ:^7 %.0f| %.0f", Uni_CG_ReturnColorForAccel(), Q_floorf(player->strafe.currentSpeed + 0.5f), Q_floorf(player->strafe.maxSpeed + 0.5f));
+		Com_sprintf(speedStr[0], sizeof(speedStr[0]), "%sµ:^7 %.0f| %.0f", Uni_CG_ReturnColorForAccel(), Q_floorf(player->strafe.currentSpeed + 0.5f), Q_floorf(player->strafe.maxSpeed + 0.5f));
 		CG_Text_Paint(MAX(cgs.screenWidth - CG_Text_Width(speedStr[0], scale, 0), cgs.screenWidth - CG_Text_Width(speedStr[0], scale, 0)) - Uni_drawSpeedometerX.integer, Uni_drawSpeedometerY.integer + scale * BIGCHAR_HEIGHT + CG_Text_Height(speedStr[0], scale, 0), scale, colorWhite, speedStr[0], 0.5, 0, 0, FONT_NONE);
 
 		if (Uni_drawAvgSpeed.integer)
 		{
-			Com_sprintf(speedStr[1], sizeof(speedStr[1]), "Avg Âµ: %.0f", player->strafe.avgSpeed / player->strafe.avgSpeedSamp);
+			Com_sprintf(speedStr[1], sizeof(speedStr[1]), "Avg µ: %.0f", player->strafe.avgSpeed / player->strafe.avgSpeedSamp);
 			CG_Text_Paint(MAX(cgs.screenWidth - CG_Text_Width(speedStr[1], scale, 0), cgs.screenWidth - CG_Text_Width(speedStr[0], scale, 0)) - Uni_drawSpeedometerX.integer, Uni_drawSpeedometerY.integer + scale * BIGCHAR_HEIGHT, scale, colorWhite, speedStr[1], 0.5, 0, 0, FONT_NONE);
 		}
 		break;
-		
+
 	case 2:
 		Com_sprintf(speedStr[0], sizeof(speedStr[0]), "%sk:^7 %.1f| %.1f", Uni_CG_ReturnColorForAccel(), currentSpeed * 0.05, player->strafe.maxSpeed * 0.05);
 		CG_Text_Paint(MAX(cgs.screenWidth - CG_Text_Width(speedStr[0], scale, 0), cgs.screenWidth - CG_Text_Width(speedStr[0], scale, 0)) - Uni_drawSpeedometerX.integer, Uni_drawSpeedometerY.integer + scale * BIGCHAR_HEIGHT + CG_Text_Height(speedStr[0], scale, 0), scale, colorWhite, speedStr[0], 0.5, 0, 0, FONT_NONE);
@@ -324,7 +324,7 @@ void Uni_CG_ClientList(void)
 }
 
 // Add/remove buddies.
-void Uni_CG_Buddies( void )
+void Uni_CG_Buddies(void)
 {
 	int buddy;
 	clientInfo_t *ci;
@@ -374,7 +374,7 @@ void Uni_CG_Buddies( void )
 }
 
 // Print a list of your current buddies.
-void Uni_CG_BuddyList( void )
+void Uni_CG_BuddyList(void)
 {
 	int i;
 
@@ -460,35 +460,35 @@ void Uni_CG_IgnoreList(void)
 }
 
 // Prints a list of current blocked regular remaps.
-void Uni_CG_ListBlockedRemaps( void )
+void Uni_CG_ListBlockedRemaps(void)
 {
-	if ( !Uni_blockShaderRemaps.integer )
+	if (!Uni_blockShaderRemaps.integer)
 	{
-		CG_Printf( "\nCurrently got no regular remaps%s.\n", UNI_SYMBOL_COLOR );
+		CG_Printf("\nCurrently got no regular remaps%s.\n", UNI_SYMBOL_COLOR);
 		return;
 	}
-	Uni_CG_ListRemaps( REMAP_REGULAR );
+	Uni_CG_ListRemaps(REMAP_REGULAR);
 }
 
 // Prints a list of current priority remaps.
-void Uni_CG_ListPriorityRemaps( void )
+void Uni_CG_ListPriorityRemaps(void)
 {
-	if ( !Uni_blockShaderRemaps.integer )
+	if (!Uni_blockShaderRemaps.integer)
 	{
-		CG_Printf( "\nCurrently got no priority remaps%s.\n", UNI_SYMBOL_COLOR);
+		CG_Printf("\nCurrently got no priority remaps%s.\n", UNI_SYMBOL_COLOR);
 		return;
 	}
-	Uni_CG_ListRemaps( REMAP_PRIORITY );
+	Uni_CG_ListRemaps(REMAP_PRIORITY);
 }
 
 // Handles priority/normal shader remaps.
-void Uni_CG_ShaderRemaps( void )
+void Uni_CG_ShaderRemaps(void)
 {
 	// Regular remaps.
 	CG_ShaderStateChanged(CG_ConfigString(CS_SHADERSTATE), qfalse);
 
 	// Priority remaps (calling this second for the special case of more than MAX_SHADER_REMAPS being used on a server, so priority can override regular).
-	if ( (cgs.unity_svFlags & UNITY_SVFLAG_PRIORITY_SHADERSTATE) && Uni_blockShaderRemaps.integer )
+	if ((cgs.unity_svFlags & UNITY_SVFLAG_PRIORITY_SHADERSTATE) && Uni_blockShaderRemaps.integer)
 		CG_ShaderStateChanged(CG_ConfigString(CS_PRIORITY_SHADERSTATE), qtrue);
 
 	// Apply changes.
@@ -499,15 +499,15 @@ void Uni_CG_ShaderRemaps( void )
 }
 
 // Shader remap handling.
-int Uni_CG_HandleRemap( char *originalShader, char *newShader, float timeOffset, qboolean priority )
+int Uni_CG_HandleRemap(char *originalShader, char *newShader, float timeOffset, qboolean priority)
 {
 	unityShaderRemap_t *dst = NULL;
 	int i;
 
-	for ( i = 0; i < unity.remapsCount; i++ )
+	for (i = 0; i < unity.remapsCount; i++)
 	{
 		// Try to find an existing remap for the originalShader.
-		if ( !Q_stricmp(unity.remaps[i].oldShader, originalShader) )
+		if (!Q_stricmp(unity.remaps[i].oldShader, originalShader))
 		{
 			// Already got it
 			dst = &unity.remaps[i];
@@ -515,21 +515,21 @@ int Uni_CG_HandleRemap( char *originalShader, char *newShader, float timeOffset,
 		}
 	}
 
-	if ( i == MAX_SHADER_REMAPS )
+	if (i == MAX_SHADER_REMAPS)
 	{
 		// Too much
-		CG_Printf( "^3Warning: Can't keep track of shader remaps (exceeding maximum: %i)\n", MAX_SHADER_REMAPS );
+		CG_Printf("^3Warning: Can't keep track of shader remaps (exceeding maximum: %i)\n", MAX_SHADER_REMAPS);
 		return !Uni_blockShaderRemaps.integer; // Do default action now as we can't delay it
 	}
 
-	if ( dst && ((!Q_stricmp(dst->newShader, newShader) && dst->timeOffset == timeOffset && dst->priority == priority)
-		|| (dst->priority && !priority)) )
+	if (dst && ((!Q_stricmp(dst->newShader, newShader) && dst->timeOffset == timeOffset && dst->priority == priority)
+		|| (dst->priority && !priority)))
 	{
 		// Nothing changed or priority remap exists and overrides this one.
 		return 0;
 	}
 
-	if ( i == unity.remapsCount )
+	if (i == unity.remapsCount)
 	{
 		// It's a new one.
 		dst = &unity.remaps[unity.remapsCount++];
@@ -537,19 +537,19 @@ int Uni_CG_HandleRemap( char *originalShader, char *newShader, float timeOffset,
 	}
 
 	// Remember the remap.
-	Q_strncpyz( dst->oldShader, originalShader, sizeof(unity.remaps[0].oldShader) );
-	Q_strncpyz( dst->newShader, newShader, sizeof(unity.remaps[0].newShader) );
+	Q_strncpyz(dst->oldShader, originalShader, sizeof(unity.remaps[0].oldShader));
+	Q_strncpyz(dst->newShader, newShader, sizeof(unity.remaps[0].newShader));
 	dst->timeOffset = timeOffset;
 	dst->recentlyChanged = qtrue;
 
 	// Mark as priority if it isn't, yet. Don't unmark priority remaps.
-	if ( priority ) dst->priority = priority;
+	if (priority) dst->priority = priority;
 
 	// Don't remap directly, let Uni_CG_HandleChangedRemaps take of it.
 	return 0;
 }
 
-void Uni_CG_HandleChangedRemaps( unityShaderRemapType_t mode )
+void Uni_CG_HandleChangedRemaps(unityShaderRemapType_t mode)
 {
 	static int wasBlocked;
 	unityShaderRemap_t *dst;
@@ -559,9 +559,9 @@ void Uni_CG_HandleChangedRemaps( unityShaderRemapType_t mode )
 	Uni_Table_Create(unity.remapsCount, 2, va("New shader remaps"));
 	Uni_Table_AddRow("Old shader"UD"New shader");
 
-	for ( i = 0, dst = &unity.remaps[0]; i < unity.remapsCount; i++, dst++ )
+	for (i = 0, dst = &unity.remaps[0]; i < unity.remapsCount; i++, dst++)
 	{
-		if ( dst->recentlyChanged || (!dst->priority && wasBlocked != Uni_blockShaderRemaps.integer) )
+		if (dst->recentlyChanged || (!dst->priority && wasBlocked != Uni_blockShaderRemaps.integer))
 		{
 			if (mode == REMAP_REGULAR && dst->priority)
 				continue;
@@ -572,11 +572,11 @@ void Uni_CG_HandleChangedRemaps( unityShaderRemapType_t mode )
 			dst->recentlyChanged = qfalse;
 
 			// Allow the remap if it's priority, otherwise consult the settings.
-			if ( dst->priority || !Uni_blockShaderRemaps.integer )
-				trap_R_RemapShader( dst->oldShader, dst->newShader, va("%f", dst->timeOffset) );
+			if (dst->priority || !Uni_blockShaderRemaps.integer)
+				trap_R_RemapShader(dst->oldShader, dst->newShader, va("%f", dst->timeOffset));
 
 			// Only print message for priority and blocked remaps, not for normal non-blocked ones.
-			if ( (Uni_blockShaderRemaps.integer && ((Uni_printShaderInformation.integer & 1) && !dst->priority) || ((Uni_printShaderInformation.integer & 2) && dst->priority)) )
+			if ((Uni_blockShaderRemaps.integer && ((Uni_printShaderInformation.integer & 1) && !dst->priority) || ((Uni_printShaderInformation.integer & 2) && dst->priority)))
 			{
 				Uni_Table_AddRow("%s"UD"%s", dst->oldShader, dst->newShader);
 				counter++;
@@ -599,7 +599,7 @@ void Uni_CG_HandleChangedRemaps( unityShaderRemapType_t mode )
 	wasBlocked = Uni_blockShaderRemaps.integer;
 }
 
-void Uni_CG_ListRemaps( unityShaderRemapType_t type )
+void Uni_CG_ListRemaps(unityShaderRemapType_t type)
 {
 	unityShaderRemap_t *dst;
 	int counter = 0;
@@ -608,10 +608,10 @@ void Uni_CG_ListRemaps( unityShaderRemapType_t type )
 	Uni_Table_Create(unity.remapsCount, 2, va("%s shader remaps", (type == REMAP_PRIORITY ? "Priority" : "Regular")));
 	Uni_Table_AddRow("Old shader"UD"New shader");
 
-	for ( i = 0, dst = &unity.remaps[0]; i < unity.remapsCount; i++, dst++ )
+	for (i = 0, dst = &unity.remaps[0]; i < unity.remapsCount; i++, dst++)
 	{
 		// Only print message for priority and blocked remaps, not for normal non-blocked ones.
-		if ( (type == REMAP_REGULAR && !dst->priority) || (type == REMAP_PRIORITY && dst->priority) )
+		if ((type == REMAP_REGULAR && !dst->priority) || (type == REMAP_PRIORITY && dst->priority))
 		{
 
 			Uni_Table_AddRow("%s"UD"%s", dst->oldShader, dst->newShader);
@@ -621,22 +621,22 @@ void Uni_CG_ListRemaps( unityShaderRemapType_t type )
 
 	Uni_Table_Print();
 
-	CG_Printf( "\nCurrently got %s%i %s%s remaps%s.\n", UNI_SYMBOL_COLOR, counter, UNI_TEXT_COLOR, (type == REMAP_PRIORITY ? "priority" : "regular"), UNI_SYMBOL_COLOR );
+	CG_Printf("\nCurrently got %s%i %s%s remaps%s.\n", UNI_SYMBOL_COLOR, counter, UNI_TEXT_COLOR, (type == REMAP_PRIORITY ? "priority" : "regular"), UNI_SYMBOL_COLOR);
 }
 
-int Uni_CG_CountRemaps( unityShaderRemapType_t type )
+int Uni_CG_CountRemaps(unityShaderRemapType_t type)
 {
 	int i, count = 0;
 
-	for ( i = 0; i < unity.remapsCount; i++ )
-		if ( (type == REMAP_REGULAR && !unity.remaps[i].priority) || (type == REMAP_PRIORITY && unity.remaps[i].priority) )
+	for (i = 0; i < unity.remapsCount; i++)
+		if ((type == REMAP_REGULAR && !unity.remaps[i].priority) || (type == REMAP_PRIORITY && unity.remaps[i].priority))
 			count++;
 
 	return count;
 }
 
 #if 0
-void Uni_CG_RemoveRemap( char *originalShader )
+void Uni_CG_RemoveRemap(char *originalShader)
 {
 	// NOTE: We don't really need to remove remaps. Theoretically a server can remove remaps from its configstrings, but
 	//       they still stay active till the next video restart or until the server overrides them again. So even if a
@@ -646,7 +646,7 @@ void Uni_CG_RemoveRemap( char *originalShader )
 }
 #endif
 
-void Uni_CG_CleanRemaps( void )
+void Uni_CG_CleanRemaps(void)
 {
 	// NOTE: We can simply cleanup all remaps that are no longer in the configstrings by pretending we don't know any
 	//       remaps and rebuilding our array using the configstrings. However if the server removes remaps from its
@@ -658,13 +658,13 @@ void Uni_CG_CleanRemaps( void )
 }
 
 // Reset maximum speed.
-void Uni_CG_ResetMaxSpeed( void )
+void Uni_CG_ResetMaxSpeed(void)
 {
 	unity.player[cg.snap->ps.clientNum].strafe.maxSpeed = 0;
 }
 
 // Reset average speed.
-void Uni_CG_ResetAverageSpeed( void )
+void Uni_CG_ResetAverageSpeed(void)
 {
 	unity.player[cg.snap->ps.clientNum].strafe.avgSpeed = 0;
 	unity.player[cg.snap->ps.clientNum].strafe.avgSpeedSamp = 0;
@@ -695,7 +695,7 @@ void Uni_CG_CvarList(void)
 Misc functions.
 ==========================
 */
-float Q_floorf( float x )
+float Q_floorf(float x)
 {
 	if (x < 0)
 	{
@@ -733,11 +733,11 @@ char *Uni_StripColors(char *str)
 	return buf;
 }
 
-void Uni_CG_Printf(const char* msg, ...)
+void Uni_CG_Printf(const char *msg, ...)
 {
 	va_list		argptr;
 	char		text[1024];
-	char		*ptr;
+	char *ptr;
 
 	va_start(argptr, msg);
 	Q_vsnprintf(text, sizeof(text), msg, argptr);
@@ -867,25 +867,25 @@ void Uni_Table_Create(int rows, int columns, const char *name)
 	int i;
 
 	//Allocate memory for the rows and initialize them.
-	uni_Table.row = (unityRow_t*)Uni_Mem_Alloc(sizeof(unityRow_t) * (rows + 1));
+	uni_Table.row = (unityRow_t *)Uni_Mem_Alloc(sizeof(unityRow_t) * (rows + 1));
 	memset(uni_Table.row, 0, sizeof(unityColumn_t) * (rows + 1));
 
 	//Allocate memory for the columns in each row and initialize them.
 	for (i = 0; i < rows; i++)
 	{
-		uni_Table.row[i].column = (unityColumn_t*)Uni_Mem_Alloc(sizeof(unityColumn_t) * columns);
+		uni_Table.row[i].column = (unityColumn_t *)Uni_Mem_Alloc(sizeof(unityColumn_t) * columns);
 		memset(uni_Table.row[i].column, 0, sizeof(unityColumn_t) * columns);
 	}
-	
+
 	//Allocate memory to store the length of each column's longest content.
-	uni_Table.longestCon = (int*)Uni_Mem_Alloc(sizeof(int) * columns);
+	uni_Table.longestCon = (int *)Uni_Mem_Alloc(sizeof(int) * columns);
 	memset(uni_Table.longestCon, 0, sizeof(int) * columns);
 
 	uni_Table.nameLen = 0;
 
 	if (name != NULL)
 	{
-		uni_Table.name = (char*)Uni_Mem_Alloc(sizeof(char) * (strlen(name) + 1));
+		uni_Table.name = (char *)Uni_Mem_Alloc(sizeof(char) * (strlen(name) + 1));
 		strcpy(uni_Table.name, name);
 		uni_Table.name[strlen(name) + 1] = 0;
 		uni_Table.nameLen = strlen(Uni_StripColors(uni_Table.name));
@@ -924,7 +924,7 @@ void Uni_Table_AddRow(const char *content, ...)
 				return;
 			}
 
-			cell->content = (char*)Uni_Mem_Alloc(sizeof(char) * (len + 1));
+			cell->content = (char *)Uni_Mem_Alloc(sizeof(char) * (len + 1));
 			strcpy(cell->content, field);
 
 			cell->content[len + 1] = 0;
@@ -955,12 +955,12 @@ void Uni_Table_Print_Sepline(void)
 	int i;
 	char *sepLine;
 
-	sepLine = (char*)Uni_Mem_Alloc(sizeof(char) * (uni_Table.rowLen + 2));
+	sepLine = (char *)Uni_Mem_Alloc(sizeof(char) * (uni_Table.rowLen + 2));
 
 	Com_sprintf(sepLine, sizeof(sepLine), "%s", UNI_SYMBOL_COLOR);
 
 	for (i = 2; i < uni_Table.rowLen + 2; i++)
-	{ 
+	{
 		sepLine[i] = '-';
 	}
 
@@ -982,7 +982,7 @@ void Uni_Table_Print(void)
 		{
 			for (j = 0; j < uni_Table.columns; j++)
 			{
-				cell = (unityColumn_t*)&uni_Table.row[i].column[j];
+				cell = (unityColumn_t *)&uni_Table.row[i].column[j];
 
 				len = uni_Table.longestCon[j] - cell->len;
 
@@ -1023,7 +1023,7 @@ void Uni_Table_Print(void)
 				CG_Printf("%s\n", row);
 				Uni_Table_Print_Sepline();
 			}
-			else if ( !uni_Table.row[i + 1].used || (!uni_Table.nameLen && i == 0))
+			else if (!uni_Table.row[i + 1].used || (!uni_Table.nameLen && i == 0))
 			{
 				if (i == 0)
 				{
@@ -1104,14 +1104,14 @@ void Uni_CG_MouseMode_Click(int key, qboolean down)
 
 void Uni_CG_MouseMode_SelectPlayer(void)
 {
-	score_t	*score;
+	score_t *score;
 	int i;
 
 	score = cg.scores;
 
 	for (i = 0; i < cg.numScores; i++, score++)
 	{
-		if (!cgs.clientinfo[score->client].infoValid) 
+		if (!cgs.clientinfo[score->client].infoValid)
 		{
 			continue;
 		}
