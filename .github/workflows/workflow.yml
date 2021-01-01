@@ -1,0 +1,48 @@
+name: Build UnityMod
+on: 
+  push:
+    branches: 
+      - UnityMod
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    
+    steps:
+     - name: Checkout the code
+       uses: actions/checkout@v2
+     - name: Get commit's short SHA
+       run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+     - name: Use cmake
+       uses: lukka/run-cmake@v3.2
+     - name: Build QVMS
+       shell: sh
+       run: |
+            cd build
+            ./build-unix-qvms.sh
+     - name: Create the pk3 file
+       run: |
+            ls
+            cd build/Linux-x86_64/code/vm
+            rm *.map
+            rm jk2mpgame.qvm
+            cd ..
+            echo "compatible all" > mv.info
+            zip -r UnityMod_${SHORT_SHA}.pk3 vm mv.info
+     - name: Create Release
+       id: create_release
+       uses: actions/create-release@v1.1.4
+       env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       with:
+         tag_name: UnityMod_${{ env.SHORT_SHA }}
+         release_name: UnityMod_${{ env.SHORT_SHA }}
+     - name: Upload a Release Asset
+       uses: actions/upload-release-asset@v1.0.2
+       env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       with:
+         upload_url: ${{ steps.create_release.outputs.upload_url }}
+         asset_path: build/Linux-x86_64/code/UnityMod_${{ env.SHORT_SHA }}.pk3  
+         asset_name: UnityMod_${{ env.SHORT_SHA }}.pk3
+         asset_content_type: application/zip
