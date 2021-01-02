@@ -1,8 +1,10 @@
-name: Build UnityMod
-on: 
+name: Build UnityMod Release
+on:
   push:
-    branches: 
-      - UnityMod
+    branches:
+      - main
+    tags:
+      - v*
       
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
@@ -18,6 +20,9 @@ jobs:
        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
      - name: Use cmake
        uses: lukka/run-cmake@v3.2
+     - name: Get the version/tag
+       id: tag
+       run: echo ::set-output name=tag::${GITHUB_REF/refs\/tags\//}
      - name: Build QVMS
        shell: sh
        run: |
@@ -31,25 +36,20 @@ jobs:
             rm jk2mpgame.qvm
             cd ..
             echo "compatible all" > mv.info
-            zip -r UnityMod_${SHORT_SHA}.pk3 vm mv.info
-     - name: Get Latest Release
-       id: last_release
-       uses: jossef/action-latest-release-info@v1.1.0
-     - name: Delete the last tag and release
-       uses: dev-drprasad/delete-tag-and-release@v0.1.2
-       with:
-         delete_release: true
-         tag_name: ${{ steps.last_release.outputs.tag_name }}
+            zip -r UnityMod_${{ steps.tag.outputs.tag }}.pk3 vm mv.info
      - name: Create Release
        id: create_release
        uses: actions/create-release@v1.1.4
        with:
-         tag_name: UnityMod_${{ env.SHORT_SHA }}
-         release_name: UnityMod_${{ env.SHORT_SHA }}
+         tag_name: UnityMod_${{ steps.tag.outputs.tag }}
+         release_name: UnityMod_${{ steps.tag.outputs.tag }}
      - name: Upload a Release Asset
        uses: actions/upload-release-asset@v1.0.2
        with:
          upload_url: ${{ steps.create_release.outputs.upload_url }}
-         asset_path: build/Linux-x86_64/code/UnityMod_${{ env.SHORT_SHA }}.pk3  
-         asset_name: UnityMod_${{ env.SHORT_SHA }}.pk3
+         asset_path: build/Linux-x86_64/code/UnityMod_${{ steps.tag.outputs.tag }}.pk3  
+         asset_name: UnityMod_${{ steps.tag.outputs.tag }}.pk3
          asset_content_type: application/zip
+      
+      
+    

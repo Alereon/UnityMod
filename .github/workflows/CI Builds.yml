@@ -1,0 +1,38 @@
+name: UnityMod CI Builds
+on:
+  push:
+    branches:
+      - UnityMod
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    
+    steps:
+     - name: Checkout the code
+       uses: actions/checkout@v2
+     - name: Get commit's short SHA
+       run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+     - name: Use cmake
+       uses: lukka/run-cmake@v3.2
+     - name: Build QVMS
+       shell: sh
+       run: |
+            cd build
+            ./build-unix-qvms.sh
+     - name: Create the pk3 file
+       run: |
+            ls
+            cd build/Linux-x86_64/code/vm
+            rm *.map
+            rm jk2mpgame.qvm
+            cd ..
+            echo "compatible all" > mv.info
+            zip -r UnityMod_${SHORT_SHA}.pk3 vm mv.info
+     - name: Upload a Build Artifact
+       uses: actions/upload-artifact@v2.2.1
+       with:
+         name: UnityMod_${{ env.SHORT_SHA }}  
+         path: build/Linux-x86_64/code/UnityMod_${{ env.SHORT_SHA }}.pk3
