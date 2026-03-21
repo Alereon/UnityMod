@@ -987,6 +987,13 @@ void G_UpdateClientBroadcasts ( gentity_t *self )
 
 	// Anyone with force sight on should see this client
 	G_UpdateForceSightBroadcasts ( self );
+
+	// If tvt_specAllEnts is active, let anyone who is a spectator view this client always
+	// Not as good as sv_specAllEnts, we can't make this work for follow spectators
+	// but decent in case engine access is not available.
+	if (tvt_specAllEnts.integer) {
+		G_TvT_UpdateSpecAllEntsBroadcasts(self);
+	}
 }
 
 /*

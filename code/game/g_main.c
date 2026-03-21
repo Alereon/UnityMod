@@ -2572,6 +2572,7 @@ void G_RunFrame( int levelTime ) {
 	gentity_t	*ent;
 	int			msec;
 	int start, end;
+	int			specAllEntsBroadcastClients[2] = { 0,0 };
 
 	if (gDoSlowMoDuel)
 	{
@@ -2645,14 +2646,26 @@ void G_RunFrame( int levelTime ) {
 	// get any cvar changes
 	G_UpdateCvars();
 
+	G_TvT_SetSpecAllEntsBroadcasts(specAllEntsBroadcastClients);
+
 	//
 	// go through all allocated objects
 	//
 	start = trap_Milliseconds();
 	ent = &g_entities[0];
 	for (i=0 ; i<level.num_entities ; i++, ent++) {
+		if (!ent->client) {
+			// clients have their own handling
+			memset(ent->r.broadcastClients, 0, sizeof(ent->r.broadcastClients));
+		}
 		if ( !ent->inuse ) {
 			continue;
+		}
+
+		if (!ent->client) {
+			// clients have their own handling
+			ent->r.broadcastClients[0] |= specAllEntsBroadcastClients[0];
+			ent->r.broadcastClients[1] |= specAllEntsBroadcastClients[1];
 		}
 
 		// clear events that are too old

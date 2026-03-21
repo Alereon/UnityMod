@@ -19,6 +19,12 @@ void G_TvT_ForcePushItem(gentity_t *item, qboolean pull, vec3_t forward);
 // Spawn loadout
 void G_TvT_SetLoadout(gclient_t *client, qboolean firstSpawn);
 
+// Set every spectator client in the bitmask for r.broadcastClients of entities when tvt_specAllEnts is 1
+void G_TvT_SetSpecAllEntsBroadcasts(int broadcastClients[2]);
+
+// Update broadcasting client to free-floating spectators
+void G_TvT_UpdateSpecAllEntsBroadcasts(gentity_t* self);
+
 // Buffered print to send big strings to clients in chunks.
 // SV_SendServerCommand silently truncates messages over 1022 bytes (MAX_STRING_CHARS - 2).
 // print command format: print "content\n" — 7 prefix + 2 suffix = 9 overhead.

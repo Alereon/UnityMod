@@ -1165,6 +1165,14 @@ void ClientUserinfoChanged( int clientNum ) {
 		client->pers.predictItemPickup = qtrue;
 	}
 
+	// check if it's a demo bot
+	s = Info_ValueForKey( userinfo, "engine" );
+	if ( !Q_stricmpn( s, "jkclient", 8 )) {
+		client->tvt.isHeadlessClient = qtrue;
+	} else {
+		client->tvt.isHeadlessClient = qfalse;
+	}
+
 	// set name
 	Q_strncpyz ( oldname, client->pers.netname, sizeof( oldname ) );
 	s = Info_ValueForKey (userinfo, "name");

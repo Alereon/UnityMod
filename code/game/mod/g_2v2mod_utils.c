@@ -375,3 +375,41 @@ qboolean G_TvT_IsNumericString(const char *s) {
     }
     return qtrue;
 }
+
+
+void G_TvT_SetSpecAllEntsBroadcasts(int broadcastClients[2])
+{
+	int i;
+
+	if (!tvt_specAllEnts.integer) {
+		// if tvt_specAllEnts is off, we don't need this
+		return;
+	}
+
+	// Any clients that are free floating spectators should see this entity
+	// Technically followers would be good too, but vanilla/jk2mv engines check by playerstate clientnum, not actual recipient client num.
+	for (i = 0; i < level.numConnectedClients; i++)
+	{
+		gentity_t* ent = &g_entities[level.sortedClients[i]];
+
+		if (ent->client->sess.sessionTeam != TEAM_SPECTATOR) { // don't create a wallhack for non-spectators
+			continue;
+		}
+
+		if (!ent->client->tvt.isHeadlessClient) { // only send all ents to headless clients, to avoid potentially reaching max snap entities for normal clients
+			continue;
+		}
+
+		// Turn on the broadcast bit for the master and since there is only one
+		// master we are done
+		broadcastClients[ent->s.number / 32] |= (1 << (ent->s.number % 32));
+	}
+}
+
+void G_TvT_UpdateSpecAllEntsBroadcasts(gentity_t* self)
+{
+	G_TvT_SetSpecAllEntsBroadcasts(self->r.broadcastClients);
+	self->r.broadcastClients[self->s.number / 32] &= ~(1 << (self->s.number % 32));
+}
+
+
