@@ -440,7 +440,22 @@ static qboolean G_TvT_ValidateShuffle(gentity_t *ent) {
 static qboolean G_TvT_Cmd_Credits(gentity_t *ent) {
     int cn = TVT_ENT_TO_CN(ent);
 
+    table_t    *t;
+    tableRow_t *row;
+
     G_TvT_Printf(cn, "^%c/^7 2V2MOD ^%c/\nAuthor: ^6/^7god^6/ ^7(Alereon)\nBuilt: " __DATE__ " " __TIME__ "\n", level.tvt.colorChar, level.tvt.colorChar);
+
+    t = TvT_Table_Create();
+    TvT_Table_AddCol(t, "Contributor", ALIGN_LEFT);
+    TvT_Table_AddCol(t, "Description", ALIGN_LEFT);
+
+    row = TvT_Table_AddRow(t);
+    TvT_Table_SetCell(t, row, 0, "TomArrow");
+    TvT_Table_SetCell(t, row, 1, "tvt_specAllEnts cvar");
+
+    G_TvT_TablePrint(t, cn);
+    TvT_Table_Destroy(t);
+
     return qtrue;
 }
 
