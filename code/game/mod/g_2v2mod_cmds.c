@@ -437,24 +437,32 @@ static qboolean G_TvT_ValidateShuffle(gentity_t *ent) {
     return qtrue;
 }
 
-static qboolean G_TvT_Cmd_Credits(gentity_t *ent) {
-    int cn = TVT_ENT_TO_CN(ent);
+static table_t *G_TvT_BuildCreditsTable(void) {
+    static table_t *creditsTable = NULL;
+    tableRow_t     *row;
 
-    table_t    *t;
-    tableRow_t *row;
+    if (creditsTable) {
+        return creditsTable;
+    }
+
+    creditsTable = TvT_Table_Create();
+    TvT_Table_AddCol(creditsTable, "Contributor", ALIGN_LEFT);
+    TvT_Table_AddCol(creditsTable, "Description", ALIGN_LEFT);
+
+    row = TvT_Table_AddRow(creditsTable);
+    TvT_Table_SetCell(creditsTable, row, 0, "TomArrow");
+    TvT_Table_SetCell(creditsTable, row, 1, "tvt_specAllEnts cvar");
+
+    G_TvT_RegisterCachedTable(&creditsTable);
+    return creditsTable;
+}
+
+static qboolean G_TvT_Cmd_Credits(gentity_t *ent) {
+    int      cn = TVT_ENT_TO_CN(ent);
+    table_t *t  = G_TvT_BuildCreditsTable();
 
     G_TvT_Printf(cn, "^%c/^7 2V2MOD ^%c/\nAuthor: ^6/^7god^6/ ^7(Alereon)\nBuilt: " __DATE__ " " __TIME__ "\n", level.tvt.colorChar, level.tvt.colorChar);
-
-    t = TvT_Table_Create();
-    TvT_Table_AddCol(t, "Contributor", ALIGN_LEFT);
-    TvT_Table_AddCol(t, "Description", ALIGN_LEFT);
-
-    row = TvT_Table_AddRow(t);
-    TvT_Table_SetCell(t, row, 0, "TomArrow");
-    TvT_Table_SetCell(t, row, 1, "tvt_specAllEnts cvar");
-
     G_TvT_TablePrint(t, cn);
-    TvT_Table_Destroy(t);
 
     return qtrue;
 }
@@ -466,7 +474,7 @@ static const tvt_Cmd_t tvt_info_subcmds[] = {
     {"votes", "Show voteable items", "info votes [filter]", G_TvT_Cmd_VoteList, NULL, NULL, CMD_CONTEXT_ALL, 0, 1, qfalse, NULL},
     {NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, qfalse, NULL}};
 
-static tvt_Cmd_t tvt_commands[] = {
+static const tvt_Cmd_t tvt_commands[] = {
     {"abort", "Abort the current match", "abort", G_TvT_Cmd_Abort, G_TvT_ValidateAbort, NULL, CMD_CONTEXT_SERVER, 0, 0, qtrue, NULL},
     {"info", "Show mod information", "info <cvars|cmds|votes>", NULL, NULL, tvt_info_subcmds, CMD_CONTEXT_ALL, 0, 0, qfalse, NULL},
     {"mem_stats", "Show memory pool statistics", "mem_stats", G_TvT_Cmd_MemStats, NULL, NULL, CMD_CONTEXT_SERVER, 0, 0, qfalse, NULL},
