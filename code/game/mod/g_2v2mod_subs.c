@@ -260,5 +260,5 @@ void G_TvT_Subs_Load(void) {
     }
 
     free(buf);
-    G_TvT_DebugPrintf("Subs: loaded %d subscribers from %s.\n", count, TVT_SUBS_FILE);
+    G_Printf("Subs: loaded %d subscribers from %s.\n", count, TVT_SUBS_FILE);
 }
