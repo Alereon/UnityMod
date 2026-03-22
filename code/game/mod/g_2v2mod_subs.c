@@ -143,6 +143,10 @@ void G_TvT_Subs_HandlePacket(void) {
     char                 buf[MAX_STRING_CHARS];
     const tvt_SubsCmd_t *cmd;
 
+    if (mvapi < 1) {
+        return;
+    }
+
     if (trap_MVAPI_GetConnectionlessPacket(&addr, buf, sizeof(buf))) {
         return;
     }
@@ -167,7 +171,7 @@ void G_TvT_Subs_SendStats(JSON_t *match) {
     char             *json;
     int               jsonLen;
 
-    if (!level.tvt.subs) {
+    if (mvapi < 1 || !level.tvt.subs) {
         return;
     }
 
@@ -196,6 +200,10 @@ void G_TvT_Subs_Save(void) {
     tvt_Subscriber_t *sub;
     fileHandle_t      f;
 
+    if (mvapi < 1 || !level.tvt.subs) {
+        return;
+    }
+
     trap_FS_FOpenFile(TVT_SUBS_FILE, &f, FS_WRITE);
     if (!f) {
         return;
@@ -222,6 +230,11 @@ void G_TvT_Subs_Load(void) {
     char        *buf;
     int          count;
     int          offset;
+
+    if (mvapi < 1) {
+        G_Printf("^3Subscription api disabled, engine does not support MVAPI level 1\n");
+        return;
+    }
 
     fileLen = trap_FS_FOpenFile(TVT_SUBS_FILE, &f, FS_READ);
     if (!f || fileLen <= 0) {
