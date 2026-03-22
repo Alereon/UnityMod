@@ -93,8 +93,11 @@ static void G_TvT_Subs_Ping(const mvaddr_t *addr) {
     sub = G_TvT_Subs_Find(addr);
     if (sub) {
         sub->expireTime = level.time + tvt_subTtl.integer * 1000;
+        trap_MVAPI_SendConnectionlessPacket(addr, "pong subscribed");
     }
-    trap_MVAPI_SendConnectionlessPacket(addr, "pong");
+    else {
+        trap_MVAPI_SendConnectionlessPacket(addr, "pong unsubscribed");
+    }
 }
 
 static void G_TvT_Subs_SendChunked(const mvaddr_t *addr, const char *type, const char *data, int dataLen) {
