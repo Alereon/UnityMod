@@ -222,8 +222,8 @@ static qboolean G_TvT_Cmd_Shuffle(gentity_t *ent) {
 
 static qboolean G_TvT_Cmd_ModCvars(gentity_t *ent) {
     int         cn = TVT_ENT_TO_CN(ent);
-    tvt_Cvar_t *cv;
-    table_t    *t;
+    const  tvt_Cvar_t *cv;
+	table_t    *t;
     char        search[MAX_TOKEN_CHARS];
 
     t = TvT_Table_Create();
@@ -467,8 +467,44 @@ static qboolean G_TvT_Cmd_Credits(gentity_t *ent) {
     return qtrue;
 }
 
+static qboolean G_TvT_Cmd_SubsApi(gentity_t *ent) {
+    int               cn  = TVT_ENT_TO_CN(ent);
+    const tvt_Cvar_t *ttl = G_TvT_FindCvar("tvt_subTtl");
+
+    G_TvT_Printf(cn,
+        "^%c--- Subscriber API ---^7\n"
+        "External services can subscribe to receive endgame stats via\n"
+        "UDP connectionless packets (OOB).\n"
+        "\n"
+        "^%cWire format:^7 \\xff\\xff\\xff\\xff mvapi <command>\n"
+        "\n"
+        "^%cCommands (client -> server):^7\n"
+        "  subscribe    Register as a subscriber.\n"
+        "  unsubscribe  Remove subscription.\n"
+        "  ping         Refresh TTL, server replies with pong.\n"
+        "\n"
+        "^%cResponses (server -> client):^7\n"
+        "  subscribed       Confirms subscription or TTL refresh.\n"
+        "  pong             Reply to ping.\n"
+        "  <type> N M data  Chunked response, chunk N of M.\n"
+        "                   Currently: ^3stats^7 (endgame JSON).\n"
+        "\n"
+        "Subscriptions expire after ^3tvt_subTtl^7 %d seconds (default: %s).\n"
+        "Send subscribe or ping before expiry to refresh.\n"
+        "Subscriptions persist across map restarts.\n",
+        level.tvt.colorChar,
+        level.tvt.colorChar,
+        level.tvt.colorChar,
+        level.tvt.colorChar,
+        tvt_subTtl.integer,
+        ttl ? ttl->defaultString : "120");
+
+    return qtrue;
+}
+
 static const tvt_Cmd_t tvt_info_subcmds[] = {
     {"credits", "Show mod credits", "info credits", G_TvT_Cmd_Credits, NULL, NULL, CMD_CONTEXT_ALL, 0, 0, qfalse, NULL},
+    {"api", "Show subscriber API documentation", "info api", G_TvT_Cmd_SubsApi, NULL, NULL, CMD_CONTEXT_ALL, 0, 0, qfalse, NULL},
     {"cvars", "Show mod cvar settings", "info cvars [filter]", G_TvT_Cmd_ModCvars, NULL, NULL, CMD_CONTEXT_ALL, 0, 1, qfalse, NULL},
     {"cmds", "List available commands", "info cmds [filter]", G_TvT_Cmd_ListCommands, NULL, NULL, CMD_CONTEXT_ALL, 0, 1, qfalse, NULL},
     {"votes", "Show voteable items", "info votes [filter]", G_TvT_Cmd_VoteList, NULL, NULL, CMD_CONTEXT_ALL, 0, 1, qfalse, NULL},
@@ -599,7 +635,7 @@ static qboolean G_TvT_Cmd_ListCommands(gentity_t *ent) {
 }
 
 static qboolean G_TvT_Cmd_Execute(gentity_t *ent, const char *cmd, cmdContext_t context) {
-    tvt_Cmd_t   *c;
+    const tvt_Cmd_t   *c;
     unsigned int argc;
 
     for (c = tvt_commands; c->name; c++) {
@@ -684,6 +720,6 @@ qboolean G_TvT_ConsoleCommand(const char *cmd) {
     return G_TvT_Cmd_Execute(NULL, cmd, CMD_CONTEXT_SERVER);
 }
 
-tvt_Cmd_t *G_TvT_GetCmdTable(void) {
+const tvt_Cmd_t *G_TvT_GetCmdTable(void) {
     return tvt_commands;
 }

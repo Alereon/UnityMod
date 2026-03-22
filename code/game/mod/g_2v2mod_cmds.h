@@ -28,6 +28,6 @@ typedef struct {
 
 qboolean   G_TvT_ClientCommand(gentity_t *ent, const char *cmd);
 qboolean   G_TvT_ConsoleCommand(const char *cmd);
-tvt_Cmd_t *G_TvT_GetCmdTable(void);
+const tvt_Cmd_t *G_TvT_GetCmdTable(void);
 
 #endif

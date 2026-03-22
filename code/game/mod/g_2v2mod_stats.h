@@ -1,6 +1,9 @@
 #ifndef G_2V2MOD_STATS_H
 #define G_2V2MOD_STATS_H
 
+#define TVT_MATCH_LOG_DIR  "match_logs"
+#define TVT_CASUAL_LOG_DIR "casual_logs"
+
 typedef enum {
     STAT_KILLS,
     STAT_DEATHS,

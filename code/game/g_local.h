@@ -8,6 +8,7 @@
 #include "2v2mod_memory.h"
 #include "2v2mod_utils.h"
 #include "2v2mod_json.h"
+#include "../api/mvapi.h"
 #include "mod/g_2v2mod_main.h"
 
 //==================================================================
@@ -1306,6 +1307,7 @@ void	trap_BotResetWeaponState(int weaponstate);
 int		trap_GeneticParentsAndChildSelection(int numranks, float *ranks, int *parent1, int *parent2, int *child);
 
 void	trap_SnapVector( float *v );
+int		trap_RealTime( qtime_t *qtime );
 
 qboolean trap_SP_RegisterServer( const char *package );
 qboolean trap_SP_Register(char *file );
@@ -1355,7 +1357,6 @@ qboolean trap_MVAPI_ResetServerTime( qboolean enable );                         
 qboolean trap_MVAPI_EnablePlayerSnapshots( qboolean enable );                                                     // Level: 4
 qboolean trap_MVAPI_EnableSubmodelBypass( qboolean enable );                                                      // Level: 4
 
-#include "../api/mvapi.h"
 #include "g_multiversion.h"
 
 #include "mod/g_2v2mod_cvars.h"
@@ -1363,4 +1364,5 @@ qboolean trap_MVAPI_EnableSubmodelBypass( qboolean enable );                    
 #include "mod/g_2v2mod_cmds.h"
 #include "mod/g_2v2mod_vote.h"
 #include "mod/g_2v2mod_stats.h"
+#include "mod/g_2v2mod_subs.h"
 

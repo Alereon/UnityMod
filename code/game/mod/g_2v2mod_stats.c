@@ -1,5 +1,7 @@
 #include "../g_local.h"
 
+static JSON_t *G_TvT_Stats_BuildMatchJSON(tvt_statsGroup_t *groups, int numGroups, qtime_t *time);
+
 void G_TvT_Stats_TrackDamage(gentity_t *targ, gentity_t *attacker, int damage) {
     if (!targ->client || !attacker || !attacker->client || targ == attacker) {
         return;
@@ -300,7 +302,21 @@ qboolean G_TvT_Cmd_Stats(gentity_t *ent) {
     return qtrue;
 }
 
-static void G_TvT_Stats_LogToFile(tvt_statsGroup_t *groups, int numGroups);
+static void G_TvT_Stats_LogToFile(JSON_t *match, qtime_t *time);
+
+static void G_TvT_Stats_Publish(tvt_statsGroup_t *groups, int numGroups) {
+    qtime_t time;
+    JSON_t *match;
+
+    trap_RealTime(&time);
+    match = G_TvT_Stats_BuildMatchJSON(groups, numGroups, &time);
+    if (!match) {
+        return;
+    }
+
+    G_TvT_Subs_SendStats(match);
+    G_TvT_Stats_LogToFile(match, &time);
+}
 
 static void G_TvT_Stats_EndGameFFA(void) {
     tvt_EndGamePlayer_t players[MAX_CLIENTS];
@@ -331,7 +347,7 @@ static void G_TvT_Stats_EndGameFFA(void) {
         free(combined);
     }
 
-    G_TvT_Stats_LogToFile(&group, 1);
+    G_TvT_Stats_Publish(&group, 1);
 }
 
 static void G_TvT_Stats_EndGameTeam(void) {
@@ -377,7 +393,7 @@ static void G_TvT_Stats_EndGameTeam(void) {
         free(combined);
     }
 
-    G_TvT_Stats_LogToFile(groups, numGroups);
+    G_TvT_Stats_Publish(groups, numGroups);
 }
 
 static const char *g_tvt_gametypeNames[] = {"ffa", "holocron", "jedimaster", "duel", "single", "team", "saga", "ctf", "cty"};
@@ -466,21 +482,17 @@ static JSON_t *G_TvT_Stats_BuildMatchJSON(tvt_statsGroup_t *groups, int numGroup
     return match;
 }
 
-static void G_TvT_Stats_LogToFile(tvt_statsGroup_t *groups, int numGroups) {
+static void G_TvT_Stats_LogToFile(JSON_t *match, qtime_t *time) {
     JSON_t       *root    = NULL;
     JSON_t       *matches;
-    JSON_t       *match;
     char         *serialized;
     fileHandle_t  f;
-    qtime_t       time;
     char          filepath[MAX_QPATH];
     int           fileLen;
 
-    trap_RealTime(&time);
-
     Com_sprintf(filepath, sizeof(filepath), "%s/%02d-%02d-%04d.json",
-                tvt_matchMode.integer ? "match_logs" : "casual_logs",
-                time.tm_mday, time.tm_mon + 1, time.tm_year + 1900);
+                tvt_matchMode.integer ? TVT_MATCH_LOG_DIR : TVT_CASUAL_LOG_DIR,
+                time->tm_mday, time->tm_mon + 1, time->tm_year + 1900);
 
     fileLen = trap_FS_FOpenFile(filepath, &f, FS_READ);
     if (fileLen > 0) {
@@ -512,7 +524,6 @@ static void G_TvT_Stats_LogToFile(tvt_statsGroup_t *groups, int numGroups) {
         TvT_JSON_AddItemToObject(root, "matches", matches);
     }
 
-    match = G_TvT_Stats_BuildMatchJSON(groups, numGroups, &time);
     TvT_JSON_AddItemToArray(matches, match);
 
     serialized = TvT_JSON_Serialize(root, qtrue, NULL);

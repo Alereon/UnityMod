@@ -77,8 +77,19 @@ void G_TvT_UpdateCvars(void) {
     }
 }
 
-tvt_Cvar_t *G_TvT_GetCvarTable(void) {
+const tvt_Cvar_t *G_TvT_GetCvarTable(void) {
     return tvtCvarTable;
+}
+
+const tvt_Cvar_t *G_TvT_FindCvar(const char *name) {
+    tvt_Cvar_t *cv;
+
+    for (cv = tvtCvarTable; cv->cvarName; cv++) {
+        if (Q_stricmp(cv->cvarName, name) == 0) {
+            return cv;
+        }
+    }
+    return NULL;
 }
 
 qboolean G_TvT_ValidateColor(const char *value) {

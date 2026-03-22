@@ -26,8 +26,8 @@ static void G_TvT_AddVoteItem(const char *name, const tvt_Cmd_t *cmd, const tvt_
 }
 
 void G_TvT_Vote_Init(void) {
-    tvt_Cmd_t  *cmd;
-    tvt_Cvar_t *cv;
+    const tvt_Cmd_t  *cmd;
+    const tvt_Cvar_t *cv;
 
     tvt_voteItemCount = 0;
 

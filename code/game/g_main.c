@@ -417,6 +417,10 @@ int requestedMvApi = 0;
 		return BotAIStartFrame( arg0 );
 	case GAME_ROFF_NOTETRACK_CALLBACK:
 		G_ROFF_NotetrackCallback( &g_entities[arg0], (const char *)arg1 );
+		break; // This VM call originally fell through to return -1 so add a break to get the same behaviour.
+	case GAME_MVAPI_RECV_CONNECTIONLESSPACKET:
+		G_TvT_Subs_HandlePacket();
+		return 0;
 	}
 
 	return -1;
@@ -919,6 +923,7 @@ G_ShutdownGame
 void G_ShutdownGame( int restart ) {
 	G_Printf ("==== ShutdownGame ====\n");
 
+	G_TvT_Shutdown();
 	G_LogWeaponOutput();
 
 	if ( level.logFile ) {

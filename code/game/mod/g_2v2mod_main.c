@@ -111,4 +111,9 @@ void G_TvT_UpdateCachedTables(void) {
 void G_TvT_Init(void) {
     G_TvT_RegisterCvars();
     G_TvT_Vote_Init();
+    G_TvT_Subs_Load();
+}
+
+void G_TvT_Shutdown(void) {
+    G_TvT_Subs_Save();
 }

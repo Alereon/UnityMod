@@ -46,6 +46,12 @@ typedef struct tvt_CachedTable_s {
     struct tvt_CachedTable_s  *next;
 } tvt_CachedTable_t;
 
+typedef struct tvt_Subscriber_s {
+    mvaddr_t                addr;
+    int                     expireTime;
+    struct tvt_Subscriber_s *next;
+} tvt_Subscriber_t;
+
 // Global mod struct
 typedef struct {
     int                physicsMsec;
@@ -56,9 +62,11 @@ typedef struct {
     tvt_MatchState_t   match;
     char               colorChar;
     tvt_CachedTable_t *cachedTables;
+    tvt_Subscriber_t  *subs;
 } tvt_ModState_t;
 
 void     G_TvT_Init(void);
+void     G_TvT_Shutdown(void);
 qboolean G_TvT_CheckReadyUp(void);
 void     G_TvT_SyncReadyMask(void);
 void     G_TvT_RegisterCachedTable(table_t **tablePtr);
