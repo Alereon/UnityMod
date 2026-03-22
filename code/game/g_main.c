@@ -1807,6 +1807,9 @@ void CheckIntermissionExit( void ) {
 		if ( g_entities[cl->ps.clientNum].r.svFlags & SVF_BOT ) {
 			continue;
 		}
+		if (cl->tvt.isHeadlessClient) { // Skip headless clients.
+			continue;
+		}
 
 		if ( cl->readyToExit ) {
 			ready++;
