@@ -448,7 +448,7 @@ static qboolean G_TvT_Cmd_Credits(gentity_t *ent) {
     int      cn = TVT_ENT_TO_CN(ent);
     table_t *t  = G_TvT_BuildCreditsTable();
 
-    G_TvT_Printf(cn, "^%c/^7 2V2MOD ^%c/\nAuthor: ^6/^7god^6/ ^7(Alereon)\nBuilt: " __DATE__ " " __TIME__ "\n", level.tvt.colorChar, level.tvt.colorChar);
+    G_TvT_Printf(cn, "^%c/^7 2V2MOD ^%c/^7\nAuthor: ^6/^7god^6/ ^7(Alereon)\nBuilt: " __DATE__ " " __TIME__ "\n", level.tvt.colorChar, level.tvt.colorChar);
     G_TvT_TablePrint(t, cn);
 
     return qtrue;
