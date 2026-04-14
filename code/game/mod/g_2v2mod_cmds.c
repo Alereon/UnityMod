@@ -125,7 +125,7 @@ static qboolean G_TvT_Cmd_Shuffle(gentity_t *ent) {
     int          players[MAX_CLIENTS];
     unsigned int newRed, newBlue;
     unsigned int oldRed, oldBlue;
-    int          teamSize, half, priority;
+    int          teamSize, half, priority, attempts;
     int          count, i, cn;
 
     count = G_TvT_CollectPlayers(players, &oldRed, &oldBlue, &priority);
@@ -136,31 +136,15 @@ static qboolean G_TvT_Cmd_Shuffle(gentity_t *ent) {
         half = teamSize;
     }
 
-    newRed = newBlue = 0;
-    for (i = 0; i < count; i++) {
-        if (i < half) {
-            newRed |= (1u << players[i]);
-        }
-        else if (i < half * 2) {
-            newBlue |= (1u << players[i]);
-        }
-    }
-
-    // Alternate which team gets the larger half on odd counts.
-    if (firstTeam & 1) {
-        unsigned int tmp = newRed;
-        newRed = newBlue;
-        newBlue = tmp;
-    }
-
-    // If we landed on the same (or swapped) teams, re-shuffle once.
-    if (newRed == oldRed || newRed == oldBlue) {
-        if (!tvt_specPrio.integer) {
-            G_TvT_FisherYatesShuffle(players, count);
-        }
-        else {
-            G_TvT_FisherYatesShuffle(players, priority);
-            G_TvT_FisherYatesShuffle(players + priority, count - priority);
+    for (attempts = 0; attempts < 10; attempts++) {
+        if (attempts > 0) {
+            if (!tvt_specPrio.integer) {
+                G_TvT_FisherYatesShuffle(players, count);
+            }
+            else {
+                G_TvT_FisherYatesShuffle(players, priority);
+                G_TvT_FisherYatesShuffle(players + priority, count - priority);
+            }
         }
 
         newRed = newBlue = 0;
@@ -173,10 +157,15 @@ static qboolean G_TvT_Cmd_Shuffle(gentity_t *ent) {
             }
         }
 
+        // Alternate which team gets the larger half on odd counts.
         if (firstTeam & 1) {
             unsigned int tmp = newRed;
             newRed = newBlue;
             newBlue = tmp;
+        }
+
+        if (newRed != oldRed && newRed != oldBlue) {
+            break;
         }
     }
 
