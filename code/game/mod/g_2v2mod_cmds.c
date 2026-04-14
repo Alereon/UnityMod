@@ -105,14 +105,12 @@ static int G_TvT_CollectPlayers(int *players, unsigned int *outOldRed, unsigned 
     if (!tvt_specPrio.integer || count + satOut <= totalSlots) {
         // No priority: shuffle everyone together.
         count += satOut;
-        G_TvT_FisherYatesShuffle(players, count);
         *outPriority = count;
     }
     else {
         // Spectator priority: shuffle team slots from sat-out players,
         // then last-round players fill remaining slots / overflow to spec.
         qsort(players, count, sizeof(int), G_TvT_CompareQueueTime);
-        G_TvT_FisherYatesShuffle(players + count, satOut);
         *outPriority = count;
         count += satOut;
     }
@@ -137,14 +135,12 @@ static qboolean G_TvT_Cmd_Shuffle(gentity_t *ent) {
     }
 
     for (attempts = 0; attempts < 10; attempts++) {
-        if (attempts > 0) {
-            if (!tvt_specPrio.integer) {
-                G_TvT_FisherYatesShuffle(players, count);
-            }
-            else {
-                G_TvT_FisherYatesShuffle(players, priority);
-                G_TvT_FisherYatesShuffle(players + priority, count - priority);
-            }
+        if (!tvt_specPrio.integer) {
+            G_TvT_FisherYatesShuffle(players, count);
+        }
+        else {
+            G_TvT_FisherYatesShuffle(players, priority);
+            G_TvT_FisherYatesShuffle(players + priority, count - priority);
         }
 
         newRed = newBlue = 0;
