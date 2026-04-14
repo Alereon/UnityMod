@@ -174,9 +174,11 @@ static qboolean G_TvT_Cmd_Shuffle(gentity_t *ent) {
 
         if (newRed & (1u << cn)) {
             SetTeam(&g_entities[cn], "red", qtrue);
+            level.clients[cn].tvt.queueTime = 0;
         }
         else if (newBlue & (1u << cn)) {
             SetTeam(&g_entities[cn], "blue", qtrue);
+            level.clients[cn].tvt.queueTime = 0;
         }
         else {
             if (level.clients[cn].sess.sessionTeam != TEAM_SPECTATOR) {
