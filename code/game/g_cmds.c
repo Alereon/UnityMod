@@ -695,10 +695,10 @@ void SetTeam( gentity_t *ent, char *s, qboolean bypassTeamLimit ) {
 
 		// Switching between red/blue is always allowed since it doesn't increase the total player count.
 		if ( tvt_teamSize.integer && !bypassTeamLimit && client->sess.sessionTeam == TEAM_SPECTATOR ) {
-			int count = TeamCount( ent->client->ps.clientNum, team );
+			int count = TeamCount( -1, team );
 
 			if ( count >= tvt_teamSize.integer ) {
-				G_TvT_Printf( ent->client->ps.clientNum, "Team is full (%d/%d players).\n", count, tvt_teamSize.integer);
+				G_TvT_Printf( clientNum, "Team is full (%d/%d players).\n", count, tvt_teamSize.integer);
 				return;
 			}
 		}
