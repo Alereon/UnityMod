@@ -335,9 +335,9 @@ static qboolean G_TvT_Cmd_Ready(gentity_t *ent) {
         return qtrue;
     }
 
-    if (cn < 16) {
-        level.tvt.match.readyMask ^= (1 << cn);
-    }
+    // Everyone should be able to use this command, even though the ready state of the first
+    // 16 clients gets networked, for scoreboard support.
+    level.tvt.match.readyMask ^= (1 << cn);
 
     for (i = 0; i < g_maxclients.integer; i++) {
         other = level.clients + i;
